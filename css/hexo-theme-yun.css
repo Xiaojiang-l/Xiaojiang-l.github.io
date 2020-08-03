@@ -1260,6 +1260,15 @@ body::before {
   color: var(--hty-text-color);
   font-weight: 400;
 }
+.markdown-body * {
+  box-sizing: border-box;
+  margin: 0px;
+}
+.markdown-body table td,
+.markdown-body table th {
+  padding: 0px;
+  border: 1px solid var(--smc-secondary, #999);
+}
 .post-nav {
   display: flex;
   justify-content: space-between;
