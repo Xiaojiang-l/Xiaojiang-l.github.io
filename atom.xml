@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-08T08:25:05.360Z</updated>
+  <updated>2020-08-08T09:00:02.998Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,11 +21,11 @@
     <link href="http://yoursite.com/2020/08/08/MyBatisPlus/"/>
     <id>http://yoursite.com/2020/08/08/MyBatisPlus/</id>
     <published>2020-08-08T08:19:14.000Z</published>
-    <updated>2020-08-08T08:25:05.360Z</updated>
+    <updated>2020-08-08T09:00:02.998Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;MyBatis-Plus（简称 MP）是一个MyBatis的增强工具，&lt;strong&gt;在 MyBatis 的基础上只做增强不做改变&lt;/strong&gt;，为简化开发、提高效率而生。可以节省大量的代码和时间。&lt;/p&gt;
+      MyBatis-Plus（简称 MP）是一个MyBatis的增强工具,在 MyBatis 的基础上只做增强不做改变,为简化开发、提高效率而生。可以节省大量的代码和时间
     
     </summary>
     
@@ -185,17 +185,11 @@
     <link href="http://yoursite.com/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/"/>
     <id>http://yoursite.com/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/</id>
     <published>2020-08-02T15:02:47.000Z</published>
-    <updated>2020-08-06T05:16:40.913Z</updated>
+    <updated>2020-08-08T09:07:41.936Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      四级考试单词，持续更新中~
     
     </summary>
     
@@ -272,17 +266,11 @@
     <link href="http://yoursite.com/2020/08/02/ssm/"/>
     <id>http://yoursite.com/2020/08/02/ssm/</id>
     <published>2020-08-02T14:40:07.000Z</published>
-    <updated>2020-08-04T06:22:46.096Z</updated>
+    <updated>2020-08-08T09:08:25.128Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      SSM（Spring+SpringMVC+MyBatis）框架，集由Spring、MyBatis两个开源框架整合而成（SpringMVC是Spring中的部分内容），常作为数据源较简单的web项目的框架
     
     </summary>
     
@@ -417,17 +405,11 @@
     <link href="http://yoursite.com/2020/08/02/springboot/"/>
     <id>http://yoursite.com/2020/08/02/springboot/</id>
     <published>2020-08-02T14:06:10.000Z</published>
-    <updated>2020-08-04T06:22:25.493Z</updated>
+    <updated>2020-08-08T09:00:24.864Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      用来简化新Spring应用的初始搭建以及开发过程，该框架使用了特定的方式来进行配置，使开发人员不再需要定义样板化的配置，通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application development)成为领导者
     
     </summary>
     
@@ -510,17 +492,11 @@
     <link href="http://yoursite.com/2020/08/02/SpringCloud/"/>
     <id>http://yoursite.com/2020/08/02/SpringCloud/</id>
     <published>2020-08-02T12:47:30.000Z</published>
-    <updated>2020-08-04T06:23:17.749Z</updated>
+    <updated>2020-08-08T09:12:32.712Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      快速构建分布式系统中的某些常见模式开发人员可以快速站起来实现这些样板的服务和应用程序。Spring Cloud专注于为典型的用例和扩展机制（包括其他用例）提供良好的开箱即用体验。
     
     </summary>
     
