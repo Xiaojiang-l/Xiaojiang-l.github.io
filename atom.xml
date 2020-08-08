@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-08T09:17:32.173Z</updated>
+  <updated>2020-08-08T09:45:52.279Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,32 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>小程序开发</title>
+    <link href="http://yoursite.com/2020/08/08/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91/"/>
+    <id>http://yoursite.com/2020/08/08/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91/</id>
+    <published>2020-08-08T09:31:45.000Z</published>
+    <updated>2020-08-08T09:45:52.279Z</updated>
+    
+    <summary type="html">
+    
+      微信小程序的基本组件和API介绍
+    
+    </summary>
+    
+    
+      <category term="前端" scheme="http://yoursite.com/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="小程序" scheme="http://yoursite.com/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MyBatisPlus</title>
     <link href="http://yoursite.com/2020/08/08/MyBatisPlus/"/>
     <id>http://yoursite.com/2020/08/08/MyBatisPlus/</id>
     <published>2020-08-08T08:19:14.000Z</published>
-    <updated>2020-08-08T09:17:32.173Z</updated>
+    <updated>2020-08-08T09:28:08.906Z</updated>
     
     <summary type="html">
     
@@ -190,9 +211,9 @@
       <category term="微服务" scheme="http://yoursite.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
     
-      <category term="java" scheme="http://yoursite.com/tags/java/"/>
-    
       <category term="springBoot" scheme="http://yoursite.com/tags/springBoot/"/>
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
     
   </entry>
   
@@ -213,9 +234,9 @@
       <category term="微服务" scheme="http://yoursite.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
     
-      <category term="springcloud" scheme="http://yoursite.com/tags/springcloud/"/>
-    
       <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="springcloud" scheme="http://yoursite.com/tags/springcloud/"/>
     
   </entry>
   
@@ -444,31 +465,6 @@
     <summary type="html">
     
       SpringMVC是Spring Framework的一部分，是基于Java实现MVC的轻量级Web框架。
-    
-    </summary>
-    
-    
-      <category term="SSM" scheme="http://yoursite.com/categories/SSM/"/>
-    
-    
-      <category term="java" scheme="http://yoursite.com/tags/java/"/>
-    
-      <category term="SSM" scheme="http://yoursite.com/tags/SSM/"/>
-    
-      <category term="spring" scheme="http://yoursite.com/tags/spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring</title>
-    <link href="http://yoursite.com/2020/08/02/spring/"/>
-    <id>http://yoursite.com/2020/08/02/spring/</id>
-    <published>2020-08-02T12:35:16.000Z</published>
-    <updated>2020-08-08T09:19:09.561Z</updated>
-    
-    <summary type="html">
-    
-      Spring:春天--&gt;给软件行业带来了春天
     
     </summary>
     
