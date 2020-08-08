@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-03T03:16:39.487Z</updated>
+  <updated>2020-08-08T08:25:05.360Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MyBatisPlus</title>
+    <link href="http://yoursite.com/2020/08/08/MyBatisPlus/"/>
+    <id>http://yoursite.com/2020/08/08/MyBatisPlus/</id>
+    <published>2020-08-08T08:19:14.000Z</published>
+    <updated>2020-08-08T08:25:05.360Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MyBatis-Plus（简称 MP）是一个MyBatis的增强工具，&lt;strong&gt;在 MyBatis 的基础上只做增强不做改变&lt;/strong&gt;，为简化开发、提高效率而生。可以节省大量的代码和时间。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="数据库框架" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="MyBatisPlus" scheme="http://yoursite.com/tags/MyBatisPlus/"/>
+    
+  </entry>
   
   <entry>
     <title>数电实验</title>
@@ -572,35 +595,6 @@
       <category term="SSM" scheme="http://yoursite.com/tags/SSM/"/>
     
       <category term="spring" scheme="http://yoursite.com/tags/spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mybatis</title>
-    <link href="http://yoursite.com/2020/08/02/mybatis/"/>
-    <id>http://yoursite.com/2020/08/02/mybatis/</id>
-    <published>2020-08-02T03:09:24.000Z</published>
-    <updated>2020-08-02T13:38:27.734Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="SSM" scheme="http://yoursite.com/categories/SSM/"/>
-    
-    
-      <category term="java" scheme="http://yoursite.com/tags/java/"/>
-    
-      <category term="SSM" scheme="http://yoursite.com/tags/SSM/"/>
     
   </entry>
   
