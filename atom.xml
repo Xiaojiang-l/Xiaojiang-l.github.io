@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-11T07:26:14.340Z</updated>
+  <updated>2020-08-12T15:45:26.831Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux</title>
+    <link href="http://yoursite.com/2020/08/12/Linux/"/>
+    <id>http://yoursite.com/2020/08/12/Linux/</id>
+    <published>2020-08-12T15:39:49.000Z</published>
+    <updated>2020-08-12T15:45:26.831Z</updated>
+    
+    <summary type="html">
+    
+      基于Vmware和云服务器的Linux命令学习，可以直接使用虚拟机进行练习，也可以购买云服务器学习项目部署。
+    
+    </summary>
+    
+    
+      <category term="微服务" scheme="http://yoursite.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Vmware" scheme="http://yoursite.com/tags/Vmware/"/>
+    
+      <category term="云服务器" scheme="http://yoursite.com/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>学习例会</title>
@@ -450,31 +475,6 @@
       <category term="json" scheme="http://yoursite.com/tags/json/"/>
     
       <category term="jquery" scheme="http://yoursite.com/tags/jquery/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SpringCloud</title>
-    <link href="http://yoursite.com/2020/08/02/SpringCloud/"/>
-    <id>http://yoursite.com/2020/08/02/SpringCloud/</id>
-    <published>2020-08-02T12:47:30.000Z</published>
-    <updated>2020-08-11T02:51:14.777Z</updated>
-    
-    <summary type="html">
-    
-      快速构建分布式系统中的某些常见模式开发人员可以快速站起来实现这些样板的服务和应用程序。Spring Cloud专注于为典型的用例和扩展机制（包括其他用例）提供良好的开箱即用体验。
-    
-    </summary>
-    
-    
-      <category term="微服务" scheme="http://yoursite.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
-    
-    
-      <category term="java" scheme="http://yoursite.com/tags/java/"/>
-    
-      <category term="spring" scheme="http://yoursite.com/tags/spring/"/>
-    
-      <category term="微服务" scheme="http://yoursite.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
