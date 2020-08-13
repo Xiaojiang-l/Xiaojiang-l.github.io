@@ -1285,6 +1285,19 @@ input {
 #footer {
   color: #fff;
 }
+.markdown-body code {
+  padding: 3px 6px;
+  font-size: 0.85rem;
+  color: #fff;
+  background: #008000;
+  border-radius: 5px;
+}
+.markdown-body blockquote {
+  margin: 1rem 0;
+  padding: 0.7rem;
+  background: #f8f8f8;
+  border-left: 0.3em solid #0be716;
+}
 .post-nav {
   display: flex;
   justify-content: space-between;
