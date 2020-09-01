@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-13T13:50:26.540Z</updated>
+  <updated>2020-09-01T12:20:00.066Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis指令</title>
+    <link href="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/"/>
+    <id>http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/</id>
+    <published>2020-09-01T12:12:59.000Z</published>
+    <updated>2020-09-01T12:20:00.066Z</updated>
+    
+    <summary type="html">
+    
+      Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言 编写、支持网络、可基于内存亦可持久化的日志型、Key-Value 数据库，并提供多种语言的API。
+    
+    </summary>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="nosql" scheme="http://yoursite.com/tags/nosql/"/>
+    
+  </entry>
   
   <entry>
     <title>Git指令</title>
@@ -44,7 +67,7 @@
     <link href="http://yoursite.com/2020/08/12/Linux/"/>
     <id>http://yoursite.com/2020/08/12/Linux/</id>
     <published>2020-08-12T15:39:49.000Z</published>
-    <updated>2020-08-13T02:45:38.380Z</updated>
+    <updated>2020-08-14T03:31:40.221Z</updated>
     
     <summary type="html">
     
@@ -446,31 +469,6 @@
       <category term="java" scheme="http://yoursite.com/tags/java/"/>
     
       <category term="spring" scheme="http://yoursite.com/tags/spring/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>docsify</title>
-    <link href="http://yoursite.com/2020/08/02/docsify/"/>
-    <id>http://yoursite.com/2020/08/02/docsify/</id>
-    <published>2020-08-02T14:01:34.000Z</published>
-    <updated>2020-08-11T02:50:08.683Z</updated>
-    
-    <summary type="html">
-    
-      将本地的MarkDown文件转换成一个在线文档的形式，可以方便的同步自己的笔记
-    
-    </summary>
-    
-    
-      <category term="前端" scheme="http://yoursite.com/categories/%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="MarkDown" scheme="http://yoursite.com/tags/MarkDown/"/>
-    
-      <category term="站点" scheme="http://yoursite.com/tags/%E7%AB%99%E7%82%B9/"/>
-    
-      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
   </entry>
   

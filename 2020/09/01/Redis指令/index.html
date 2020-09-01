@@ -1,0 +1,1395 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>Redis指令 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => <!-- hexo-inject:begin --><!-- hexo-inject:end -->{
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script class="meting-script-marker" src="https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言 编写、支持网络、可基于内存亦可持久化的日志型、Key-Value 数据库，并提供多种语言的API。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis指令">
+<meta property="og:url" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI C语言 编写、支持网络、可基于内存亦可持久化的日志型、Key-Value 数据库，并提供多种语言的API。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814121249432.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814122038262.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814125149609.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814132519056.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826213411681.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826214821249.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215231236.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215432790.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215552558.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215708869.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215926421.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826220209011.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826220454502.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221422703.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221559966.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221802275.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826222314336.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223145364.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223204836.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223446206.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223820154.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826224217895.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826224633203.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225007772.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225222539.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225414446.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225444079.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826231111771.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826231424672.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826232006738.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826232451733.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200827130209111.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200827175006013.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200901145552120.png">
+<meta property="article:published_time" content="2020-09-01T12:12:59.000Z">
+<meta property="article:modified_time" content="2020-09-01T12:20:00.066Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="nosql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814121249432.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">26</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">30</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis"><span class="toc-text">Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Nosql%E6%A6%82%E8%BF%B0"><span class="toc-text">1、Nosql概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFNosql"><span class="toc-text">1.1、什么是Nosql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81Nosql"><span class="toc-text">1.2、为什么需要Nosql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E3%80%81NoSQL%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="toc-text">1.3、NoSQL的四大分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Redis%E5%85%A5%E9%97%A8"><span class="toc-text">2、Redis入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">2.1、简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81Windows%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-text">2.2、Windows下安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81Linux%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-text">2.3、Linux下安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E6%B5%8B%E8%AF%95%E6%80%A7%E8%83%BD"><span class="toc-text">2.4、测试性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-text">2.5、基础知识</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、五大数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81String%EF%BC%88%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%89"><span class="toc-text">3.1、String（字符串）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81List%EF%BC%88%E5%88%97%E8%A1%A8%EF%BC%89"><span class="toc-text">3.2、List（列表）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81Set%EF%BC%88%E9%9B%86%E5%90%88%EF%BC%89"><span class="toc-text">3.3、Set（集合）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81Hash%EF%BC%88%E5%93%88%E5%B8%8C%EF%BC%89"><span class="toc-text">3.4、Hash（哈希）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5%E3%80%81Zset%EF%BC%88%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%EF%BC%89"><span class="toc-text">3.5、Zset（有序集合）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">4、三种特殊数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81Geospatial%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE"><span class="toc-text">4.1、Geospatial地理位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81Hyperloglog"><span class="toc-text">4.2、Hyperloglog</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81Bitmap"><span class="toc-text">4.3、Bitmap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E4%BA%8B%E5%8A%A1"><span class="toc-text">5、事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81Watch%E7%9B%91%E6%8E%A7"><span class="toc-text">6、Watch监控</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Redis指令</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2020-09-01 20:12:59" itemprop="dateCreated datePublished" datetime="2020-09-01T20:12:59+08:00">2020-09-01</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">数据库</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">数据库</span></a><a class="tag" href="/tags/nosql/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">nosql</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://www.gravatar.com/avatar/e5f5f8c0a25752c0deb58c83ad143e37?s=20&amp;d=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2FYunYouJun%2Fcdn%2Fimg%2Favatar%2Fnone.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h2 id="1、Nosql概述"><a href="#1、Nosql概述" class="headerlink" title="1、Nosql概述"></a>1、Nosql概述</h2><h3 id="1-1、什么是Nosql"><a href="#1-1、什么是Nosql" class="headerlink" title="1.1、什么是Nosql"></a>1.1、什么是Nosql</h3><p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814121249432.png" alt="image-20200814121249432" loading="lazy"></p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p><code>NoSQL</code> = Not Only SQL（不只是SQL）</p>
+<p><code>NoSQL</code>：<strong>泛指非关系型的数据库</strong></p>
+<p><strong>关系型数据库</strong>：表格、行、列</p>
+<p>随着互联网<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/web2.0/97695">web2.0</a>网站的兴起，传统的关系数据库在处理web2.0网站，特别是超大规模和高并发的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/SNS/10242">SNS</a>类型的web2.0纯<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E7%BD%91">动态网</a>站已经显得力不从心，出现了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常迅速的发展。</p>
+<p>NoSQL数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题。</p>
+<p>很多数据类型用户的个人信息，社区网络，地理位置。这些数据的存储不需要一个固定的格式！不需要过多的操作就可以横向扩展。</p>
+<blockquote>
+<p>NoSQL特点</p>
+</blockquote>
+<ol>
+<li><p>方便扩展（数据之间没有关系，很好扩展）</p>
+</li>
+<li><p>大数据量高性能（Redis一秒写8万次，读取11万，NoSQL的缓存记录，是一种细粒度的缓存，性能会比较高）</p>
+</li>
+<li><p>数据类型是多样型的（不需要事先设计数据库）</p>
+</li>
+<li><p>传统RDBMS 和 NoSQL</p>
+<pre class=" language-markdown"><code class="language-markdown">传统的RDBMS
+<span class="token list punctuation">-</span> 结构化组织
+<span class="token list punctuation">-</span> SQL
+<span class="token list punctuation">-</span> 数据和关系都存在单独的表中
+<span class="token list punctuation">-</span> 严格的事务
+<span class="token list punctuation">-</span> ……</code></pre>
+<pre class=" language-markdown"><code class="language-markdown">Nosql
+<span class="token list punctuation">-</span> 不仅仅是数据
+<span class="token list punctuation">-</span> 没有固定的查询语言
+<span class="token list punctuation">-</span> 键值对存储，列存储，文档存储，图形数据库
+<span class="token list punctuation">-</span> 最终一致性
+<span class="token list punctuation">-</span> CAP定理和BASE
+<span class="token list punctuation">-</span> 高性能，高可用，高可扩
+<span class="token list punctuation">-</span> ……</code></pre>
+</li>
+</ol>
+<blockquote>
+<p>了解： 3V + 3高</p>
+</blockquote>
+<p><strong>大数据时代的3V：</strong>主要描述的问题</p>
+<ol>
+<li>海量Velume</li>
+<li>多样Variety</li>
+<li>实时Velocity</li>
+</ol>
+<p><strong>大数据时代的3高：</strong>主要是对程序的要求</p>
+<ol>
+<li>高并发</li>
+<li>高可扩</li>
+<li>高性能 </li>
+</ol>
+<p>真正在公司的实践：NoSQL + RDBMS 一起使用</p>
+<h3 id="1-2、为什么需要Nosql"><a href="#1-2、为什么需要Nosql" class="headerlink" title="1.2、为什么需要Nosql"></a>1.2、为什么需要Nosql</h3><blockquote>
+<p>单机MySQL时代</p>
+</blockquote>
+<p>在单机MySQL时代<em>（90年代）</em>中，一个基本的网站访问量不会太大，单个数据库完全足够，那时候更多的是使用静态网页HTML，服务器没有那么大的压力！</p>
+<p>而随着网站的发展出现了以下问题：</p>
+<ol>
+<li>数据量太大了，一个机器放不下</li>
+<li>数据的索引（B + Tree），一个机器内存也放不下</li>
+<li>访问量（读写混合），一个服务器承受不了</li>
+</ol>
+<p>只要一个网站出现以上的三种情况之一的时候，就需要对网站进行升级！</p>
+<blockquote>
+<p>Memcached（缓存） + MySQL + 垂直拆分（读写分离）</p>
+</blockquote>
+<p><code>Memcached</code>：是一套<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%88%86%E5%B8%83%E5%BC%8F">分布式</a>的<strong>高速缓存系统</strong>，由<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/LiveJournal">LiveJournal</a>的Brad Fitzpatrick开发，但被许多网站使用。这是一套<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BC%80%E6%94%BE%E6%BA%90%E4%BB%A3%E7%A0%81">开放源代码</a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BD%AF%E4%BB%B6">软件</a>，以BSD license授权发布。</p>
+<p>因为网站80%的情况都是在读，每次都要查询数据库的话就十分麻烦，并占用过多资源！所以可以使用缓存来提高效率！</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814122038262.png" alt="image-20200814122038262" loading="lazy"></p>
+<blockquote>
+<p>分库分表 + 水平拆分 +  MySQL 集群</p>
+</blockquote>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814125149609.png" alt="image-20200814125149609" loading="lazy"></p>
+<blockquote>
+<p>如今情况</p>
+</blockquote>
+<p>MySQL等关系型数据库就不够用了！数据量很多，变化很快！</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200814132519056.png" alt="image-20200814132519056" loading="lazy"></p>
+<p>用户的个人信息，社交网络，地理位置。用户自己产生的数据，用户日志等等爆发增长！</p>
+<p>这时候我们就需要使用NoSQL数据库，NoSQL可以很多的处理以上问题！</p>
+<h3 id="1-3、NoSQL的四大分类"><a href="#1-3、NoSQL的四大分类" class="headerlink" title="1.3、NoSQL的四大分类"></a>1.3、NoSQL的四大分类</h3><p><strong>KV键值对</strong></p>
+<ul>
+<li>Redis</li>
+</ul>
+<p><strong>文档型数据库（bson格式和json一样）</strong></p>
+<ul>
+<li>MongoDB<ul>
+<li>MongoDB是一个基于分布式文件存储的数据库，C++编写，主要用来处理大量的文档</li>
+<li>MongoDB是一个介于关系型数据库和非关系型数据库的中间产品，最像关系型数据库</li>
+</ul>
+</li>
+<li>CouchDB</li>
+</ul>
+<p><strong>列存储数据库</strong></p>
+<ul>
+<li>HBase</li>
+<li>分布式文件系统</li>
+</ul>
+<p><strong>图形关系数据库</strong></p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826213411681.png" alt="image-20200826213411681" loading="lazy"></p>
+<ul>
+<li><strong>不是存图形的，是存放关系的</strong>，例如：朋友圈社交网络，广告推荐！</li>
+<li>Neo4j，InfoGrid</li>
+</ul>
+<h2 id="2、Redis入门"><a href="#2、Redis入门" class="headerlink" title="2、Redis入门"></a>2、Redis入门</h2><h3 id="2-1、简介"><a href="#2-1、简介" class="headerlink" title="2.1、简介"></a>2.1、简介</h3><blockquote>
+<p>Redis官网：<a target="_blank" rel="noopener" href="https://redis.io/">https://redis.io/</a></p>
+<p>Redis中文网：<a target="_blank" rel="noopener" href="http://www.redis.cn/">http://www.redis.cn/</a></p>
+</blockquote>
+<p>​    Redis（Remote Dictionary Server )，即远程字典服务，是一个开源的使用ANSI <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/C%E8%AF%AD%E8%A8%80">C语言</a>编写、支持网络、可基于内存亦可持久化的日志型、Key-Value<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E5%BA%93/103728">数据库</a>，并提供多种语言的API。</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826214821249.png" alt="image-20200826214821249" loading="lazy"></p>
+<p>​    Redis 是一个高性能的key-value数据库。 redis的出现，很大程度补偿了<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/memcached">memcached</a>这类key/value存储的不足，在部 分场合可以对关系数据库起到很好的补充作用。它提供了Java，C/C++，C#，PHP，JavaScript，Perl，Object-C，Python，Ruby，Erlang等客户端，使用很方便。</p>
+<h3 id="2-2、Windows下安装"><a href="#2-2、Windows下安装" class="headerlink" title="2.2、Windows下安装"></a>2.2、Windows下安装</h3><ol>
+<li><p>下载安装包：<a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis">https://github.com/dmajkic/redis</a></p>
+</li>
+<li><p>下载完毕得到压缩包</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215231236.png" alt="image-20200826215231236" loading="lazy"></p>
+</li>
+<li><p>解压到电脑上的目录下即可</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215432790.png" alt="image-20200826215432790" loading="lazy"></p>
+</li>
+<li><p>开启Redis，双击<code>redis-server.exe</code>运行服务即可</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215552558.png" alt="image-20200826215552558" loading="lazy"></p>
+<p>默认端口为：6379</p>
+</li>
+<li><p>使用redis客户端来连接，打开<code>redis-cli.exe</code>，必须先开着服务端</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215708869.png" alt="image-20200826215708869" loading="lazy"></p>
+</li>
+<li><p>测试使用</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826215926421.png" alt="image-20200826215926421" loading="lazy"></p>
+</li>
+</ol>
+<p>在Windows下使用比较简单，但Redis推荐我们使用Linux</p>
+<p>   <img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826220209011.png" alt="image-20200826220209011" loading="lazy"></p>
+<h3 id="2-3、Linux下安装"><a href="#2-3、Linux下安装" class="headerlink" title="2.3、Linux下安装"></a>2.3、Linux下安装</h3><ol>
+<li><p>下载安装包：<a target="_blank" rel="noopener" href="https://redis.io/">https://redis.io/</a></p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826220454502.png" alt="image-20200826220454502" loading="lazy"></p>
+</li>
+<li><p>上传到Linux服务器上的<code>/opt</code>目录下</p>
+</li>
+<li><p>进行解压</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">tar</span> -zxvf redis-6.0.6.tar.gz</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221422703.png" alt="image-20200826221422703" loading="lazy"></p>
+</li>
+<li><p>进入解压后的文件，可以看到redis的配置文件</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221559966.png" alt="image-20200826221559966" loading="lazy"></p>
+</li>
+<li><p>基本的环境安装</p>
+<pre class=" language-bash"><code class="language-bash">yum <span class="token function">install</span> gcc-c++</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826221802275.png" alt="image-20200826221802275" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">make</span>    <span class="token comment" spellcheck="true"># 安装配置环境，需要一点时间</span></code></pre>
+<p>如果报了如下错误</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826222314336.png" alt="image-20200826222314336" loading="lazy"></p>
+<p>参考网站：<a target="_blank" rel="noopener" href="https://www.freesion.com/article/8060652360/">https://www.freesion.com/article/8060652360/</a></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#查看gcc的版本是否在 5.3以上，centos7默认是4.8.5.我这里的就是4.8.5</span>
+gcc -v
+
+<span class="token comment" spellcheck="true">#升级到 5.3及以上版本</span>
+yum -y <span class="token function">install</span> centos-release-scl
+yum -y <span class="token function">install</span> devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
+
+scl <span class="token function">enable</span> devtoolset-9 <span class="token function">bash</span>
+
+<span class="token comment" spellcheck="true">#scl命令启用只是临时的，推出xshell或者重启就会恢复到原来的gcc版本。如果要长期生效的话，执行如下</span>
+<span class="token keyword">echo</span> <span class="token string">"source /opt/rh/devtoolset-9/enable"</span> <span class="token operator">>></span>/etc/profile
+
+<span class="token comment" spellcheck="true"># 重新安装环境配置，进入redis目录下</span>
+<span class="token function">make</span></code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223145364.png" alt="image-20200826223145364" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">make</span> <span class="token function">install</span></code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223204836.png" alt="image-20200826223204836" loading="lazy"></p>
+</li>
+<li><p>redis默认安装路径<code>usr/local/bin</code></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> /usr/local/bin</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223446206.png" alt="image-20200826223446206" loading="lazy"></p>
+</li>
+<li><p>创建文件夹，将redis配置文件复制到目录下</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">mkdir</span> myconfig
+
+<span class="token function">cp</span> /opt/redis-6.0.6/redis.conf myconfig</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826223820154.png" alt="image-20200826223820154" loading="lazy"></p>
+</li>
+<li><p>修改配置文件</p>
+<blockquote>
+<p>默认不是后台启动的，我们需要修改配置文件</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">vim redis.conf </code></pre>
+<p>找到<code>daemonize</code>，然后按<code>insert</code>键，将no改为yes（最后按<code>Esc</code> : wq保存退出）</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826224217895.png" alt="image-20200826224217895" loading="lazy"></p>
+</li>
+<li><p>启动服务</p>
+<pre class=" language-bash"><code class="language-bash">redis-server myconfig/redis.conf</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826224633203.png" alt="image-20200826224633203" loading="lazy"></p>
+</li>
+<li><p>测试连接</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 连接本机的指定端口号</span>
+redis-cli -p 6379
+
+<span class="token comment" spellcheck="true"># 获取所有键</span>
+keys *</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225007772.png" alt="image-20200826225007772" loading="lazy"></p>
+</li>
+<li><p>查看redis进程是否开启</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">ps</span> -ef<span class="token operator">|</span><span class="token function">grep</span> redis</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225222539.png" alt="image-20200826225222539" loading="lazy"></p>
+</li>
+<li><p>如何关闭Redis服务<code>shutdown</code></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 关闭redis</span>
+<span class="token function">shutdown</span>
+<span class="token comment" spellcheck="true"># 退出</span>
+<span class="token keyword">exit</span></code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225414446.png" alt="image-20200826225414446" loading="lazy"></p>
+<p>再次查看进程</p>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826225444079.png" alt="image-20200826225444079" loading="lazy"></p>
+</li>
+</ol>
+<h3 id="2-4、测试性能"><a href="#2-4、测试性能" class="headerlink" title="2.4、测试性能"></a>2.4、测试性能</h3><p><strong>redis-benchmark</strong>是一个压力测试工具，官方自带的性能测试工具！</p>
+<p>redis 性能测试工具可选参数如下所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">选项</th>
+<th align="left">描述</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>-h</strong></td>
+<td align="left">指定服务器主机名</td>
+<td align="left">127.0.0.1</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>-p</strong></td>
+<td align="left">指定服务器端口</td>
+<td align="left">6379</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>-s</strong></td>
+<td align="left">指定服务器 socket</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>-c</strong></td>
+<td align="left">指定并发连接数</td>
+<td align="left">50</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>-n</strong></td>
+<td align="left">指定请求数</td>
+<td align="left">10000</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>-d</strong></td>
+<td align="left">以字节的形式指定 SET/GET 值的数据大小</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><strong>-k</strong></td>
+<td align="left">1=keep alive 0=reconnect</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><strong>-r</strong></td>
+<td align="left">SET/GET/INCR 使用随机 key, SADD 使用随机值</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><strong>-P</strong></td>
+<td align="left">通过管道传输 <numreq> 请求</numreq></td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><strong>-q</strong></td>
+<td align="left">强制退出 redis。仅显示 query/sec 值</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><strong>–csv</strong></td>
+<td align="left">以 CSV 格式输出</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><strong>-l</strong></td>
+<td align="left">生成循环，永久执行测试</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left"><strong>-t</strong></td>
+<td align="left">仅运行以逗号分隔的测试命令列表。</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left"><strong>-I</strong></td>
+<td align="left">Idle 模式。仅打开 N 个 idle 连接并等待。</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>测试</strong></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 开启redis</span>
+redis-server myconfig/redis.conf
+
+<span class="token comment" spellcheck="true"># 测试100个并发连接 100000请求</span>
+redis-benchmark -h localhost -p 6379 -c 100 -n 100000</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826231111771.png" alt="image-20200826231111771" loading="lazy"></p>
+<p>每毫秒处理45578.85个请求</p>
+<h3 id="2-5、基础知识"><a href="#2-5、基础知识" class="headerlink" title="2.5、基础知识"></a>2.5、基础知识</h3><blockquote>
+<p>redis默认有16个数据库</p>
+</blockquote>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826231424672.png" alt="image-20200826231424672" loading="lazy"></p>
+<p>默认使用的是第0个，可以使用select进行切换</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 选择第三个数据库</span>
+SELECT 3
+
+<span class="token comment" spellcheck="true"># 查看数据大小</span>
+DBSIZE
+
+<span class="token comment" spellcheck="true"># 判断是否存在</span>
+EXISTS name
+
+<span class="token comment" spellcheck="true"># 查看所有的key</span>
+keys *
+
+<span class="token comment" spellcheck="true"># 设置值</span>
+<span class="token keyword">set</span> name xiaojiang
+
+<span class="token comment" spellcheck="true"># 获取值</span>
+get name
+
+<span class="token comment" spellcheck="true"># 移除值，1代表从当前数据库移除</span>
+move name 1
+
+<span class="token comment" spellcheck="true"># 设置10秒后过期，设置单点登录时间</span>
+EXPIRE name 10
+
+<span class="token comment" spellcheck="true"># 查看剩余时间</span>
+ttl name
+
+<span class="token comment" spellcheck="true"># 查看数据类型</span>
+<span class="token function">type</span> name</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826232006738.png" alt="image-20200826232006738" loading="lazy"></p>
+<p>不同数据库的内容不会相互影响</p>
+<blockquote>
+<p>清空当前数据库</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">FLUSHDB</code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200826232451733.png" alt="image-20200826232451733" loading="lazy"></p>
+<blockquote>
+<p>清空所有数据库</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">FLUSHALL</code></pre>
+<blockquote>
+<p>Redis 是单线程的</p>
+</blockquote>
+<p>Redis是基于内存操作，CPU不是Redis性能瓶颈，Redis的瓶颈是根据机器的内存和网络带宽。</p>
+<p><strong>Redis为什么单线程还这么快？</strong></p>
+<ul>
+<li><p>多线程（单CPU上下文进行切换）不一定比单线程效率高！</p>
+</li>
+<li><p>redis是将所有的数据全部放在内存中的，所以使用单线程去操作效率就是最高的，多线程（CPU上下文切换：耗时的操作），对于内存系统来说，如果没有上下文切换效率就是最高的。多次读写都是在一个CPU上，在内存情况下，这就是最佳的方案！</p>
+</li>
+</ul>
+<h2 id="3、五大数据类型"><a href="#3、五大数据类型" class="headerlink" title="3、五大数据类型"></a>3、五大数据类型</h2><blockquote>
+<p>Redis可用的类型如下</p>
+</blockquote>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200827130209111.png" alt="image-20200827130209111" loading="lazy"></p>
+<p>翻译：</p>
+<p>​    Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作<strong>数据库</strong>、<strong>缓存</strong>和<strong>消息中间件</strong>。 它支持多种类型的数据结构，如 <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#strings">字符串（strings）</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#hashes">散列（hashes）</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#lists">列表（lists）</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#sets">集合（sets）</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#sorted-sets">有序集合（sorted sets）</a> 与范围查询， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#bitmaps">bitmaps</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/data-types-intro.html#hyperloglogs">hyperloglogs</a> 和 <a target="_blank" rel="noopener" href="http://www.redis.cn/commands/geoadd.html">地理空间（geospatial）</a> 索引半径查询。 Redis 内置了 <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/replication.html">复制（replication）</a>，<a target="_blank" rel="noopener" href="http://www.redis.cn/commands/eval.html">LUA脚本（Lua scripting）</a>， <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/lru-cache.html">LRU驱动事件（LRU eviction）</a>，<a target="_blank" rel="noopener" href="http://www.redis.cn/topics/transactions.html">事务（transactions）</a> 和不同级别的 <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/persistence.html">磁盘持久化（persistence）</a>， 并通过 <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/sentinel.html">Redis哨兵（Sentinel）</a>和自动 <a target="_blank" rel="noopener" href="http://www.redis.cn/topics/cluster-tutorial.html">分区（Cluster）</a>提供高可用性（high availability）。</p>
+<blockquote>
+<p>可以查看Redis命令介绍：<a target="_blank" rel="noopener" href="http://www.redis.cn/">http://www.redis.cn/</a></p>
+</blockquote>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200827175006013.png" alt="image-20200827175006013" loading="lazy"></p>
+<h3 id="3-1、String（字符串）"><a href="#3-1、String（字符串）" class="headerlink" title="3.1、String（字符串）"></a>3.1、String（字符串）</h3><p>90% 的java程序员使用redis只会使用String类型</p>
+<blockquote>
+<p>设置值</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置值</span>
+<span class="token keyword">set</span> name xiaojiang
+
+<span class="token comment" spellcheck="true"># 获取值</span>
+get name
+
+<span class="token comment" spellcheck="true"># 查看所有key</span>
+keys *
+
+<span class="token comment" spellcheck="true"># 追加字符串，如果name不存在，那会自动创建</span>
+APPEND name <span class="token string">"hello"</span>
+
+<span class="token comment" spellcheck="true"># 获取字符串长度</span>
+STRLEN name</code></pre>
+<blockquote>
+<p>自动的浏览量incr</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置自动的浏览量</span>
+<span class="token keyword">set</span> views 0
+
+<span class="token comment" spellcheck="true"># 加一，会输出1</span>
+incr views
+
+<span class="token comment" spellcheck="true"># 减一</span>
+decr views
+
+<span class="token comment" spellcheck="true"># 设置步长，每次加10</span>
+INCRBY views 10
+
+<span class="token comment" spellcheck="true"># 设置步长，每次减10</span>
+DECRBY views 10</code></pre>
+<blockquote>
+<p>获取字范围字符串GETRANGE</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取字范围字符串GETRANGE</span>
+<span class="token comment" spellcheck="true"># 设置长字符串</span>
+<span class="token keyword">set</span> name <span class="token string">"hello, xiaojiang"</span>
+
+<span class="token comment" spellcheck="true"># 截取从0到3的字符[0,3]</span>
+GETRANGE name 0 3
+
+<span class="token comment" spellcheck="true"># 截取全部字符，和get key一样</span>
+GETRANGE name 0 -1</code></pre>
+<blockquote>
+<p>替换指定位置字符SETRANGE</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 替换指定位置字符SETRANGE</span>
+
+<span class="token comment" spellcheck="true"># 设置长字符串</span>
+<span class="token keyword">set</span> name <span class="token string">"hello, xiaojiang"</span>
+
+<span class="token comment" spellcheck="true"># 将第一个字符替换为XX</span>
+SETRANGE name 0 XX</code></pre>
+<blockquote>
+<p>设置过期时间setex 和 条件设置setnx</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># setex(set with expire)    # 设置过期时间</span>
+<span class="token comment" spellcheck="true"># setnx(set if not exist)    # 如果不存在就设置返回1，存在就不会返回0，从而不会覆盖原来的值</span>
+
+<span class="token comment" spellcheck="true"># 设置30秒后过期</span>
+setex name 30 <span class="token string">"xiaojiang"</span>
+
+<span class="token comment" spellcheck="true"># 查看剩余时间</span>
+ttl name
+
+<span class="token comment" spellcheck="true"># 设置值，如果key2不存在就设置成功，返回1</span>
+setnx key2 <span class="token string">"hello"</span></code></pre>
+<blockquote>
+<p>批量设置mset和获取mget</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 批量设置值，这样就设置了k1, k2, k3的值</span>
+mset k1 v1 k2 v2 k3 v3 
+
+<span class="token comment" spellcheck="true"># 批量获取</span>
+mget k1 k2 k3
+
+<span class="token comment" spellcheck="true"># 设置msetnx，如果有一个已经存在就会都创建失败</span>
+msetnx k1 v1 k4 v4 </code></pre>
+<blockquote>
+<p>设置对象</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置user:1对象，1为id，值为json字符串来保存一个对象！</span>
+<span class="token keyword">set</span> user:1 <span class="token punctuation">{</span> name:zhangsan, age:3<span class="token punctuation">}</span> 
+
+<span class="token comment" spellcheck="true"># 这个方式也一样</span>
+mset user:1:name zhangsan user:1:age 3</code></pre>
+<blockquote>
+<p>获取之后再设置</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 先设置值</span>
+<span class="token keyword">set</span> name zhangsan
+
+<span class="token comment" spellcheck="true"># 获取之后再设置，这时候获取zhangsan，然后再设置name为redis，如果为空时，返回为空但会设置新的值</span>
+getset name redis</code></pre>
+<p>String类似的使用场景：value除了是字符串还可以是数字</p>
+<ul>
+<li>计数器</li>
+<li>统计多单位的数量</li>
+<li>粉丝数</li>
+<li>对象缓存存储</li>
+</ul>
+<h3 id="3-2、List（列表）"><a href="#3-2、List（列表）" class="headerlink" title="3.2、List（列表）"></a>3.2、List（列表）</h3><p>在Redis中，可以把List当成栈、队列、阻塞队列，所有的list密令都是<code>L</code>或<code>R</code>开头的</p>
+<blockquote>
+<p>倒序存值LPUSH、取值LRANGE（先放的后出）</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 存放值，放到列表的头部</span>
+LPUSH list one
+
+LPUSH list two
+
+LPUSH list three
+
+<span class="token comment" spellcheck="true"># 取值，先放的后出</span>
+LRANGE list 0 -1
+<span class="token string">"three"</span>
+<span class="token string">"two"</span>
+<span class="token string">"one"</span></code></pre>
+<blockquote>
+<p>正序存值RPUSH（即最后输出）</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 追加值，放到列表的尾部</span>
+RPUSH list right
+
+<span class="token comment" spellcheck="true"># 取值</span>
+LRANGE list 0 -1
+<span class="token string">"three"</span>
+<span class="token string">"two"</span>
+<span class="token string">"one"</span>
+<span class="token string">"right"</span></code></pre>
+<blockquote>
+<p>移除元素</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 移除头个元素，即"three"</span>
+LPOP list
+
+<span class="token comment" spellcheck="true"># 移除最后一个元素，即"right"</span>
+RPOP list</code></pre>
+<blockquote>
+<p>LINDEX 通过坐标获取值</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看当前的值</span>
+<span class="token string">"two"</span>
+<span class="token string">"one"</span>
+
+<span class="token comment" spellcheck="true"># 获取第二个值</span>
+lindex list 1
+<span class="token string">"one"</span>
+
+<span class="token comment" spellcheck="true"># 获取第一个值</span>
+lindex list 0
+<span class="token string">"two"</span></code></pre>
+<blockquote>
+<p>查看长度LLEN</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 返回列表的长度</span>
+LLEN list </code></pre>
+<blockquote>
+<p>移除指定的值LREM</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 移除值为 one 的第一个元素，因为值可以重复</span>
+lrem list 1 one
+
+<span class="token comment" spellcheck="true"># 添加重复的值</span>
+LPUSH list <span class="token string">"four"</span>
+LPUSH list <span class="token string">"four"</span>
+
+<span class="token comment" spellcheck="true"># 移除两个值</span>
+lrem list 2 four</code></pre>
+<blockquote>
+<p>截取指定位置ltrim</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 截取第二第三个出来</span>
+ltrim list 1 2</code></pre>
+<blockquote>
+<p>移除列表的最后一个元素，并将值添加到另一个列表中</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 插入值</span>
+rpush mylist <span class="token string">"hello"</span>
+rpush mylist <span class="token string">"hello1"</span>
+rpush mylist <span class="token string">"hello2"</span>
+
+<span class="token comment" spellcheck="true"># 移除最后一个元素，并添加到myohterlist</span>
+rpoplpush mylist myotherlist
+
+<span class="token comment" spellcheck="true"># 此时查询mylist</span>
+lrange mylist 0 -1
+<span class="token string">"hello"</span>
+<span class="token string">"hello1"</span>
+
+<span class="token comment" spellcheck="true"># 查看myohterlist，自动创建，并添加了值"hello2"</span>
+lrange myohterlist 0 -1
+<span class="token string">"hello2"</span></code></pre>
+<blockquote>
+<p>更新列表指定下标的值lset</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置值</span>
+lpush list value
+
+<span class="token comment" spellcheck="true"># 更新值，将value改为item，0为下标，如果不存在就会报错</span>
+lset list 0 item</code></pre>
+<blockquote>
+<p>插入一个值linsert</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建一个新列表</span>
+RPUSH mylist <span class="token string">"hello"</span>
+
+<span class="token comment" spellcheck="true"># 往列表的前面插入值</span>
+linsert mylist before <span class="token string">"hello"</span> <span class="token string">"before"</span>
+
+<span class="token comment" spellcheck="true"># 往后面插入值</span>
+linsert mylist after <span class="token string">"hello"</span> <span class="token string">"after"</span>
+
+<span class="token comment" spellcheck="true"># 查询所有值</span>
+RANGE mylist 0 -1
+<span class="token string">"before"</span>
+<span class="token string">"hello"</span>
+<span class="token string">"after"</span></code></pre>
+<blockquote>
+<p>小结</p>
+</blockquote>
+<p>List实际上就是一个链表，在两边插入或者改动值效率最高！中间元素，相对来说效率会低一点~</p>
+<p>可用作：</p>
+<ul>
+<li>消息队列（Lpush、Rpop）</li>
+<li>栈（ltrim）可以截断队列</li>
+</ul>
+<h3 id="3-3、Set（集合）"><a href="#3-3、Set（集合）" class="headerlink" title="3.3、Set（集合）"></a>3.3、Set（集合）</h3><p>与List最大的区别是，Set中的值是不会重复的，以<code>S</code>开头</p>
+<blockquote>
+<p>存值sadd，取值smembers</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置集合的值，设置成功返回1，失败（重复值）则返回0</span>
+sadd myset <span class="token string">"hello"</span>
+sadd myset <span class="token string">"world"</span>
+
+<span class="token comment" spellcheck="true"># 查看集合所有值</span>
+smembers myset 
+<span class="token string">"hello"</span>
+<span class="token string">"world"</span>
+
+<span class="token comment" spellcheck="true"># 判读值是否存在，存在则返回1，不存在返回0</span>
+sismenber myset hello </code></pre>
+<blockquote>
+<p>获取集合中元素的个数scard</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看个数</span>
+scard myset</code></pre>
+<blockquote>
+<p>移除srem</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 移除值为hello的元素</span>
+srem myset hello</code></pre>
+<blockquote>
+<p>抽取随机的值srandmenber</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 随机取出集合中的一个元素</span>
+srandmenber myset
+
+<span class="token comment" spellcheck="true"># 随机取出集合中的2个元素</span>
+srandmenber myset 2</code></pre>
+<blockquote>
+<p>随机删除一个key</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 随机删除一个元素</span>
+spop myset</code></pre>
+<blockquote>
+<p>将一个指定的值，移动到另一个集合中</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置集合1</span>
+sadd myset <span class="token string">"hello"</span>
+sadd myset <span class="token string">"world"</span>
+<span class="token comment" spellcheck="true"># 设置集合2</span>
+sadd myset2 <span class="token string">"set2"</span>
+
+<span class="token comment" spellcheck="true"># 移动元素，将集合1的"world"元素移动到集合2中，所以myset就只剩"hello"</span>
+smove myset myset2 <span class="token string">"world"</span></code></pre>
+<blockquote>
+<p>数字集合类</p>
+</blockquote>
+<p>微博，A用户将所有关注的人放在一个set集合中！将他的粉丝也放在一个集合中！实现共同关注，共同爱好！</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置集合1</span>
+sadd key1 a
+sadd key1 b
+sadd key1 c
+<span class="token comment" spellcheck="true"># 设置集合2</span>
+sadd key1 c
+sadd key1 d
+sadd key1 e
+
+<span class="token comment" spellcheck="true"># 获取差集</span>
+SDIFF key1 key2
+1<span class="token punctuation">)</span><span class="token string">"b"</span>
+2<span class="token punctuation">)</span><span class="token string">"a"</span>
+
+<span class="token comment" spellcheck="true"># 获取交集，可用作共同关注</span>
+SINTER key1 key2
+1<span class="token punctuation">)</span><span class="token string">"c"</span>
+
+<span class="token comment" spellcheck="true"># 获取并集</span>
+SUNION key1 key2
+1<span class="token punctuation">)</span><span class="token string">"b"</span>
+2<span class="token punctuation">)</span><span class="token string">"c"</span>
+3<span class="token punctuation">)</span><span class="token string">"e"</span>
+4<span class="token punctuation">)</span><span class="token string">"a"</span>
+5<span class="token punctuation">)</span><span class="token string">"d"</span></code></pre>
+<h3 id="3-4、Hash（哈希）"><a href="#3-4、Hash（哈希）" class="headerlink" title="3.4、Hash（哈希）"></a>3.4、Hash（哈希）</h3><p>Map集合，key-map，这时候这个值是一个map集合！（跟字符串类似，只是将值变为map）</p>
+<blockquote>
+<p>创建和获取</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置一个hash（key-value）</span>
+hset myhash field1 hello
+
+<span class="token comment" spellcheck="true"># 获取值</span>
+hget myhash field1
+
+<span class="token comment" spellcheck="true"># 同时设置多个hash（key-value）</span>
+hmset myhash field2 world filed3 redis
+
+<span class="token comment" spellcheck="true"># 同时获取多个字段值</span>
+hmget myhash field1 field2 filed3
+1<span class="token punctuation">)</span><span class="token string">"hello"</span>
+1<span class="token punctuation">)</span><span class="token string">"world"</span>
+1<span class="token punctuation">)</span><span class="token string">"redis"</span>
+
+<span class="token comment" spellcheck="true"># 获取所有的键值对</span>
+hgetall myhash
+1<span class="token punctuation">)</span><span class="token string">"field1"</span>    <span class="token comment" spellcheck="true"># 输出键</span>
+2<span class="token punctuation">)</span><span class="token string">"hello"</span>    <span class="token comment" spellcheck="true"># 输出值</span>
+3<span class="token punctuation">)</span><span class="token string">"field2"</span>
+4<span class="token punctuation">)</span><span class="token string">"world"</span>
+5<span class="token punctuation">)</span><span class="token string">"field3"</span>
+6<span class="token punctuation">)</span><span class="token string">"redis"</span></code></pre>
+<blockquote>
+<p>删除指定键值</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 删除field1键值对</span>
+hdel myhash field1 
+
+<span class="token comment" spellcheck="true"># 查询所有的键值对</span>
+hgetall myhash
+1<span class="token punctuation">)</span><span class="token string">"field2"</span>
+2<span class="token punctuation">)</span><span class="token string">"world"</span>
+3<span class="token punctuation">)</span><span class="token string">"field3"</span>
+4<span class="token punctuation">)</span><span class="token string">"redis"</span></code></pre>
+<blockquote>
+<p>获取总键值对数量</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看有多少键值对</span>
+hlen myhaset
+1<span class="token punctuation">)</span>2</code></pre>
+<blockquote>
+<p>判断某个键值是否存在</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 判读field1该键值对是否存在，存在返回1</span>
+hexists myhash field1</code></pre>
+<blockquote>
+<p>只获取所有key，或value</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取所有的keys</span>
+hkeys myhash
+1<span class="token punctuation">)</span><span class="token string">"field2"</span>
+2<span class="token punctuation">)</span><span class="token string">"field3"</span>
+
+<span class="token comment" spellcheck="true"># 获取所有的value</span>
+hvals myhash
+1<span class="token punctuation">)</span><span class="token string">"world"</span>
+2<span class="token punctuation">)</span><span class="token string">"redis"</span></code></pre>
+<blockquote>
+<p>指定自增、自减</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建数字值</span>
+hset myhash field4 5
+
+<span class="token comment" spellcheck="true"># 自增一</span>
+hincrby myhash field4 1
+
+<span class="token comment" spellcheck="true"># 自减一</span>
+hincrby myhash field4 -1</code></pre>
+<blockquote>
+<p>判断是否存在后再创建，如果存在则创建失败返回0</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 如果存在field5，就创建失败，返回0</span>
+hsetnx myhash field5 hello
+1<span class="token punctuation">)</span>0</code></pre>
+<blockquote>
+<p>hash变更的数据user name age，用户信息类的保存，使用hash比String存储更快</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置用户1的信息</span>
+hset user:1 name xiaojiang
+
+<span class="token comment" spellcheck="true"># 获取用户信息</span>
+hget user:1 name
+<span class="token string">"xiaojiang"</span></code></pre>
+<p>所以字符串使用String，对象使用hash</p>
+<h3 id="3-5、Zset（有序集合）"><a href="#3-5、Zset（有序集合）" class="headerlink" title="3.5、Zset（有序集合）"></a>3.5、Zset（有序集合）</h3><p>在set的基础上，增加一个值，set k1 v1 , zset k1 score1 v1</p>
+<blockquote>
+<p>存值、取值</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置值，数字是为了区分和排序</span>
+zadd myset 1 one 
+
+<span class="token comment" spellcheck="true"># 设置多个值</span>
+zadd myset 2 two 3 three
+
+<span class="token comment" spellcheck="true"># 获取所有的值</span>
+zrange myset 0 -1
+1<span class="token punctuation">)</span><span class="token string">"one"</span>
+2<span class="token punctuation">)</span><span class="token string">"two"</span>
+3<span class="token punctuation">)</span><span class="token string">"three"</span></code></pre>
+<blockquote>
+<p>升序排序</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置工资集合</span>
+zadd salary 2500 xiaohong
+zadd salary 2000 xiaoming
+zadd salary 3500 zhangsan
+
+<span class="token comment" spellcheck="true"># 按照工资排序（升序），从负无穷到正无穷的范围内查询</span>
+zrangebyscore salary -inf +inf
+1<span class="token punctuation">)</span><span class="token string">"xiaoming"</span>
+2<span class="token punctuation">)</span><span class="token string">"xiaohong"</span>
+3<span class="token punctuation">)</span><span class="token string">"zhangsan"</span>
+
+<span class="token comment" spellcheck="true"># 将工资数也输出出来</span>
+zrangebyscore salary -inf +inf withscores
+1<span class="token punctuation">)</span><span class="token string">"xiaoming"</span>
+2<span class="token punctuation">)</span><span class="token string">"2000"</span>
+3<span class="token punctuation">)</span><span class="token string">"xiaohong"</span>
+4<span class="token punctuation">)</span><span class="token string">"2500"</span>
+5<span class="token punctuation">)</span><span class="token string">"zhangsan"</span>
+6<span class="token punctuation">)</span><span class="token string">"3500"</span>
+
+<span class="token comment" spellcheck="true"># 查询工资在2500以内的</span>
+zrangebyscore salary -inf 2500 withscores
+1<span class="token punctuation">)</span><span class="token string">"xiaoming"</span>
+2<span class="token punctuation">)</span><span class="token string">"2000"</span>
+3<span class="token punctuation">)</span><span class="token string">"xiaohong"</span>
+4<span class="token punctuation">)</span><span class="token string">"2500"</span></code></pre>
+<blockquote>
+<p>降序排列</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 按照工资排序（降序）</span>
+zrevrange salary 0 -1 
+1<span class="token punctuation">)</span><span class="token string">"zhangsan"</span>
+2<span class="token punctuation">)</span><span class="token string">"xiaohong"</span>
+3<span class="token punctuation">)</span><span class="token string">"xiaoming"</span></code></pre>
+<blockquote>
+<p>移除元素</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 移除xiaohong这个元素</span>
+zrem salary xiaohong</code></pre>
+<blockquote>
+<p>查看有序集合中元素数量</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看总数量</span>
+zcard salary
+2</code></pre>
+<blockquote>
+<p>获取指定区间的数量</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取指定工资区间的数量</span>
+zcount salary 2000 3500 
+2</code></pre>
+<p>案例：</p>
+<ul>
+<li>存储班级成绩</li>
+<li>工资表排序</li>
+<li>加权排序：普通消息1，重要消息2</li>
+<li>排行榜应用</li>
+</ul>
+<p>其余的一些API，可以通过查看官方文档：<a target="_blank" rel="noopener" href="http://www.redis.cn/commands.html">http://www.redis.cn/commands.html</a></p>
+<h2 id="4、三种特殊数据类型"><a href="#4、三种特殊数据类型" class="headerlink" title="4、三种特殊数据类型"></a>4、三种特殊数据类型</h2><h3 id="4-1、Geospatial地理位置"><a href="#4-1、Geospatial地理位置" class="headerlink" title="4.1、Geospatial地理位置"></a>4.1、Geospatial地理位置</h3><p>可用作朋友的定位，附近的人，打车距离计算</p>
+<p>geospatial可以推算地理位置的信息，两地之间的距离，方圆几里的人！</p>
+<p>查询测试经度纬度数据网站：<a target="_blank" rel="noopener" href="http://www.toolzl.com/tools/gps.html">http://www.toolzl.com/tools/gps.html</a></p>
+<p><strong>只有六个命令：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/geoadd.html">GEOADD</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/geodist.html">GEODIST</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/geohash.html">GEOHASH</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/geopos.html">GEOPOS</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/georadius.html">GEORADIUS</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.redis.cn/commands/georadiusbymember.html">GEORADIUSBYMEMBER</a></li>
+</ul>
+<blockquote>
+<p>geoadd添加地理位置</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># geoadd 添加地理位置</span>
+<span class="token comment" spellcheck="true"># 规则：南北极无法直接添加，一般会下载城市数据，通过java程序一次性导入</span>
+<span class="token comment" spellcheck="true"># 参数：key value（经度、纬度、名称）</span>
+<span class="token comment" spellcheck="true"># 有效的经度从-180度到180度</span>
+<span class="token comment" spellcheck="true"># 有效的纬度从-85.05112878度到85.05112878度，不然报下面错误</span>
+<span class="token comment" spellcheck="true"># 127.0.0.1:6379> geoadd china:city 39.90 116.40 beijin</span>
+<span class="token comment" spellcheck="true"># (error) ERR invalid longitude,latitude pair 39.900000,116.400000</span>
+
+127.0.0.1:6379<span class="token operator">></span> geoadd china:city 116.40 39.90 beijin
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> geoadd china:city 121.47 31.23 shanghai
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> geoadd china:city 106.50 29.53 chongqing 114.05 22.52 shenzhen
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 2
+127.0.0.1:6379<span class="token operator">></span> geoadd china:city 120.16 30.24 hangzhou 108.96 34.26 xian
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 2</code></pre>
+<blockquote>
+<p>geopos获取地理位置</p>
+</blockquote>
+<p>获得当前定位：一定是一个坐标值！</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取一个指定城市的经度和纬度</span>
+127.0.0.1:6379<span class="token operator">></span> geopos china:city beijin
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.39999896287918091"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"39.90000009167092543"</span>
+
+<span class="token comment" spellcheck="true"># 获取多个城市的经度纬度</span>
+127.0.0.1:6379<span class="token operator">></span> geopos china:city beijin
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.39999896287918091"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"39.90000009167092543"</span></code></pre>
+<blockquote>
+<p>geodist获取直线距离</p>
+</blockquote>
+<p>返回两个给定位置之间的距离。</p>
+<p>如果两个位置之间的其中一个不存在， 那么命令返回空值。</p>
+<p>指定单位的参数 unit 必须是以下单位的其中一个：</p>
+<ul>
+<li><strong>m</strong> 表示单位为米。</li>
+<li><strong>km</strong> 表示单位为千米。</li>
+<li><strong>mi</strong> 表示单位为英里。</li>
+<li><strong>ft</strong> 表示单位为英尺。</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取北京到上海的距离，单位默认为m</span>
+127.0.0.1:6379<span class="token operator">></span> GEODIST china:city beijin shanghai
+<span class="token string">"1067378.7564"</span>
+
+<span class="token comment" spellcheck="true"># 获取北京到上海的距离，单位设置为km</span>
+127.0.0.1:6379<span class="token operator">></span> GEODIST china:city beijin shanghai km
+<span class="token string">"1067.3788"</span></code></pre>
+<blockquote>
+<p>georedius获取附近信息</p>
+</blockquote>
+<p>查看附近的人（先获取所有附近的人的地址，定位！）通过半径来查询</p>
+<p>以给定的经纬度为中心， 返回键包含的位置元素当中， 与中心的距离不超过给定最大距离的所有位置元素。</p>
+<p>范围可以使用以下其中一个单位：</p>
+<ul>
+<li><strong>m</strong> 表示单位为米。</li>
+<li><strong>km</strong> 表示单位为千米。</li>
+<li><strong>mi</strong> 表示单位为英里。</li>
+<li><strong>ft</strong> 表示单位为英尺。</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 所有的数据应该都录入到china:city才会有结果出来</span>
+<span class="token comment" spellcheck="true"># 查询在110 30位置（可以替换为自己的定位）方圆500km的城市</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUS china:city 110 30 500 km
+1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+2<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+
+<span class="token comment" spellcheck="true"># 获取附近城市的经纬度</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUS china:city 110 30 500 km withcoord
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"106.49999767541885376"</span>
+      2<span class="token punctuation">)</span> <span class="token string">"29.52999957900659211"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"108.96000176668167114"</span>
+      2<span class="token punctuation">)</span> <span class="token string">"34.25999964418929977"</span>
+
+<span class="token comment" spellcheck="true"># 获取附近城市的距离</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUS china:city 110 30 500 km withdist
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"341.9374"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"483.8340"</span>
+
+<span class="token comment" spellcheck="true"># 上面两个也可以同时使用</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUS china:city 110 30 500 km withcoord withdist
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"341.9374"</span>
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"106.49999767541885376"</span>
+      2<span class="token punctuation">)</span> <span class="token string">"29.52999957900659211"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+   2<span class="token punctuation">)</span> <span class="token string">"483.8340"</span>
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"108.96000176668167114"</span>
+      2<span class="token punctuation">)</span> <span class="token string">"34.25999964418929977"</span>
+
+<span class="token comment" spellcheck="true"># 也可以指定获取最近的几个</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUS china:city 110 30 500 km count 1
+1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span></code></pre>
+<blockquote>
+<p>georandusbymember指定城市附近的信息</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取北京附近1000km的城市，可以添加上方一样的参数</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUSBYMEMBER china:city beijin 1000 km
+1<span class="token punctuation">)</span> <span class="token string">"beijin"</span>
+2<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+
+<span class="token comment" spellcheck="true"># 获取伤害附近400km的城市</span>
+127.0.0.1:6379<span class="token operator">></span> GEORADIUSBYMEMBER china:city shanghai 400 km
+1<span class="token punctuation">)</span> <span class="token string">"hangzhou"</span>
+2<span class="token punctuation">)</span> <span class="token string">"shanghai"</span></code></pre>
+<blockquote>
+<p>geohash命令，返回一个或多个位置元素的Geohash表示</p>
+</blockquote>
+<p>该命令将返回11个字符的Geohash字符串</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 将二维的经纬度转换为一维的字符串，如果两个字符串越接近，则距离越近</span>
+127.0.0.1:6379<span class="token operator">></span> GEOHASH china:city beijin shanghai
+1<span class="token punctuation">)</span> <span class="token string">"wx4fbxxfke0"</span>
+2<span class="token punctuation">)</span> <span class="token string">"wtw3sj5zbj0"</span></code></pre>
+<p> GEO底层的实现原理其实就是Zset！</p>
+<blockquote>
+<p>位置查看和删除</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看所有位置信息</span>
+127.0.0.1:6379<span class="token operator">></span> ZRANGE china:city 0 -1
+1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+2<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+3<span class="token punctuation">)</span> <span class="token string">"shenzhen"</span>
+4<span class="token punctuation">)</span> <span class="token string">"hangzhou"</span>
+5<span class="token punctuation">)</span> <span class="token string">"shanghai"</span>
+6<span class="token punctuation">)</span> <span class="token string">"beijin"</span>
+
+<span class="token comment" spellcheck="true"># 删除位置信息</span>
+127.0.0.1:6379<span class="token operator">></span> ZREM china:city beijin
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+
+<span class="token comment" spellcheck="true"># 再次查看</span>
+127.0.0.1:6379<span class="token operator">></span> ZRANGE china:city 0 -1
+1<span class="token punctuation">)</span> <span class="token string">"chongqing"</span>
+2<span class="token punctuation">)</span> <span class="token string">"xian"</span>
+3<span class="token punctuation">)</span> <span class="token string">"shenzhen"</span>
+4<span class="token punctuation">)</span> <span class="token string">"hangzhou"</span>
+5<span class="token punctuation">)</span> <span class="token string">"shanghai"</span></code></pre>
+<h3 id="4-2、Hyperloglog"><a href="#4-2、Hyperloglog" class="headerlink" title="4.2、Hyperloglog"></a>4.2、Hyperloglog</h3><blockquote>
+<p>简介</p>
+</blockquote>
+<p>Redis Hyperloglog 基数统计的算法！</p>
+<p><strong>优点：占用的内存十固定，2^64不同的元素的技术，只需要用12KB内存！</strong></p>
+<p><strong>例如：网页的UV（一个人访问一个网站多次，但还是算作一个人）</strong></p>
+<p>传统的方式，set保存用户的id，然后可以统计set中的元素数量作为标准判断这个方式如果保存了大量的用户id，就会比较麻烦！</p>
+<p>0.81%的错误率！统计UV任务可以忽略不计！</p>
+<blockquote>
+<p>测试使用</p>
+</blockquote>
+<p>计算并集数量，可用作统计网站访问量，允许容错就可以使用该方法！</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置第一组hyperloglog</span>
+127.0.0.1:6379<span class="token operator">></span> PFADD mykey a b c d e f
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+<span class="token comment" spellcheck="true"># 获取该组的数量</span>
+127.0.0.1:6379<span class="token operator">></span> PFCOUNT mykey
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 6
+
+<span class="token comment" spellcheck="true"># 设置第二组hyperloglog</span>
+127.0.0.1:6379<span class="token operator">></span> PFADD mykey2 e f g h i j
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+<span class="token comment" spellcheck="true"># 获取该组的数量</span>
+127.0.0.1:6379<span class="token operator">></span> PFCOUNT mykey2
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 6
+
+<span class="token comment" spellcheck="true"># 讲第一组和第二组做并集操作，生成key3</span>
+127.0.0.1:6379<span class="token operator">></span> PFMERGE mykey3 mykey mykey2
+OK
+<span class="token comment" spellcheck="true"># 获取key3的数量</span>
+127.0.0.1:6379<span class="token operator">></span> PFCOUNT mykey3
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 10、</code></pre>
+<h3 id="4-3、Bitmap"><a href="#4-3、Bitmap" class="headerlink" title="4.3、Bitmap"></a>4.3、Bitmap</h3><blockquote>
+<p>为存储</p>
+</blockquote>
+<p>统计用户信息，活跃、不活跃、登录、未登录、打卡！（两个状态的都可以使用Bitmaps位图，都是操作二进制来进行记录，只有0和1两个状态）</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>使用bitmap来记录周一到周日的打卡！</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 周一用0表示，1表示已打卡</span>
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 0 1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 1 1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 2 0
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 3 1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 4 0
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 5 1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+127.0.0.1:6379<span class="token operator">></span> SETBIT sign 6 0
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+
+<span class="token comment" spellcheck="true"># 查看某一天是否有打卡</span>
+127.0.0.1:6379<span class="token operator">></span> GETBIT sign 3
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> GETBIT sign 6
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+
+<span class="token comment" spellcheck="true"># 查看打卡的天数</span>
+127.0.0.1:6379<span class="token operator">></span> BITCOUNT sign
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4</code></pre>
+<h2 id="5、事务"><a href="#5、事务" class="headerlink" title="5、事务"></a>5、事务</h2><p>Redis 事物本质：一组命令的集合！一个事务中的所有命令都会被序列化，在事务执行过程中，会按照顺序执行！</p>
+<p>一次性、顺序性、排他性！执行一些列的命令！</p>
+<p><strong>Redis 事务没有隔离级别的概念！所有的命令在事务中并没有直接被执行！只有发起执行命令的时候才会执行！</strong></p>
+<p><strong>Redis 单条命令是保存原子性的，但是事物不保存原子性！</strong></p>
+<p>redis事务：</p>
+<ul>
+<li>开启事务（mult）</li>
+<li>命令入队（……）</li>
+<li>执行事务（exec）</li>
+</ul>
+<blockquote>
+<p>正常执行事务</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> MULTI
+OK
+
+<span class="token comment" spellcheck="true"># 以下命令都会进入到事务中</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> key1 v1 
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> key2 v2
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> key3 v3
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> get key1
+QUEUED
+
+<span class="token comment" spellcheck="true"># 执行事务，并输出上面的命令结果，所以事务结束</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+1<span class="token punctuation">)</span> OK
+2<span class="token punctuation">)</span> OK
+3<span class="token punctuation">)</span> OK
+4<span class="token punctuation">)</span> <span class="token string">"v1"</span></code></pre>
+<blockquote>
+<p>放弃事务</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+
+<span class="token comment" spellcheck="true"># 命令入队</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> key4 v4 
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> key5 v5
+QUEUED
+
+<span class="token comment" spellcheck="true"># 放弃事务</span>
+127.0.0.1:6379<span class="token operator">></span> DISCARD
+OK
+
+<span class="token comment" spellcheck="true"># 由于事务被放弃了，下列将获取不到</span>
+127.0.0.1:6379<span class="token operator">></span> get key4
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+127.0.0.1:6379<span class="token operator">></span> get key5
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>编译型异常（代码有问题！命令有错!），事务中所有的命令都不会被执行</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+
+<span class="token comment" spellcheck="true"># 命令入队</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k1 v1
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k2 v2
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k3 v3
+QUEUED
+<span class="token comment" spellcheck="true"># 执行错误命令getset</span>
+127.0.0.1:6379<span class="token operator">></span> getset k3
+<span class="token punctuation">(</span>error<span class="token punctuation">)</span> ERR wrong number of arguments <span class="token keyword">for</span> <span class="token string">'getset'</span> <span class="token function">command</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k4 v4
+QUEUED
+
+<span class="token comment" spellcheck="true"># 提交事务</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+<span class="token punctuation">(</span>error<span class="token punctuation">)</span> EXECABORT Transaction discarded because of previous errors.
+
+<span class="token comment" spellcheck="true"># 发现事务中的所有命令都没有被执行</span>
+127.0.0.1:6379<span class="token operator">></span> get k2
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+127.0.0.1:6379<span class="token operator">></span> get k4
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>运行时错误（1/0），如果事务队列中存在语法性错误，那么执行命令的时候，其他命令是可以正常执行的，错误命令抛出异常！</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 先设置一个字符串</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k1 <span class="token string">"v1"</span>
+OK
+
+<span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+<span class="token comment" spellcheck="true"># 让字符串加1，语法没错但运行会报错</span>
+127.0.0.1:6379<span class="token operator">></span> INCR k1
+QUEUED
+<span class="token comment" spellcheck="true"># 设置k2、k3的值</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k2 v2 
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> k3 v3
+QUEUED
+
+<span class="token comment" spellcheck="true"># 提交事务，第一条命令的语法报错了</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+1<span class="token punctuation">)</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> ERR value is not an integer or out of range
+2<span class="token punctuation">)</span> OK
+3<span class="token punctuation">)</span> OK
+
+<span class="token comment" spellcheck="true"># 查询设置的值，发现语法报错还是成功提交正确的命令</span>
+127.0.0.1:6379<span class="token operator">></span> get k2
+<span class="token string">"v2"</span>
+127.0.0.1:6379<span class="token operator">></span> get k3
+<span class="token string">"v3"</span></code></pre>
+<h2 id="6、Watch监控"><a href="#6、Watch监控" class="headerlink" title="6、Watch监控"></a>6、Watch监控</h2><blockquote>
+<p>加锁</p>
+</blockquote>
+<p><strong>悲观锁:</strong></p>
+<ul>
+<li>无论做什么都会加锁！</li>
+<li>效率低下</li>
+</ul>
+<p><strong>乐观锁：</strong></p>
+<ul>
+<li>无论做什么都不会上锁！更新数据的时候去判断一下，在此期间是否有人修改过这个数据</li>
+<li>获取version</li>
+<li>更新的时候比较version</li>
+</ul>
+<blockquote>
+<p>Redis监视测试</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 设置余额和消费</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> money 100
+OK
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> out 0
+OK
+
+<span class="token comment" spellcheck="true"># 监视money对象</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">watch</span> money
+OK
+
+<span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+<span class="token comment" spellcheck="true"># 余额自减20</span>
+127.0.0.1:6379<span class="token operator">></span> DECRBY money 20
+QUEUED
+<span class="token comment" spellcheck="true"># 消费自增20</span>
+127.0.0.1:6379<span class="token operator">></span> INCRBY out 20
+QUEUED
+
+<span class="token comment" spellcheck="true"># 提交事务，输出结果，数据期间没有发生变动就正常执行成功！</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 80
+2<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 20</code></pre>
+<p>测试多线程修改值，使用watch可以当作redis的乐观锁</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 监视money</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">watch</span> money
+OK
+
+<span class="token comment" spellcheck="true"># 开启事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+127.0.0.1:6379<span class="token operator">></span> DECRBY money 10
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> INCRBY out 10
+QUEUED
+
+<span class="token comment" spellcheck="true"># 在提交事务之前在另一个线程中执行修改money的操作，此时检测到数据被修改（不是上面监视的时候的值），所以数据会提交失败</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 此时获取money的值是被修改之后的</span>
+127.0.0.1:6379<span class="token operator">></span> get money
+<span class="token string">"1000"</span></code></pre>
+<p><img src="/2020/09/01/Redis%E6%8C%87%E4%BB%A4/image-20200901145552120.png" alt="image-20200901145552120" loading="lazy"></p>
+<blockquote>
+<p>加锁和解锁</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 监视money是否为当前的值</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">watch</span> money
+OK
+
+<span class="token comment" spellcheck="true"># 故意修改了money的值</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token keyword">set</span> money 100
+OK
+
+<span class="token comment" spellcheck="true"># 发现不加事务的时候还是可以正常执行命令</span>
+127.0.0.1:6379<span class="token operator">></span> DECRBY money 10
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 90
+
+<span class="token comment" spellcheck="true"># 开启事务则会发现提交失败</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+127.0.0.1:6379<span class="token operator">></span> DECRBY money 10
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 取消监视</span>
+127.0.0.1:6379<span class="token operator">></span> unwatch
+OK
+<span class="token comment" spellcheck="true"># 重新设置监视的值</span>
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">watch</span> money
+OK
+
+<span class="token comment" spellcheck="true"># 开启事务，这次可以正常执行事务</span>
+127.0.0.1:6379<span class="token operator">></span> multi
+OK
+127.0.0.1:6379<span class="token operator">></span> DECRBY money 10
+QUEUED
+127.0.0.1:6379<span class="token operator">></span> <span class="token function">exec</span>
+1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 80</code></pre>
+<p>所以，如果执行失败就获取新的监视值</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/" title="Redis指令">http://yoursite.com/2020/09/01/Redis%E6%8C%87%E4%BB%A4/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/08/13/Git%E6%8C%87%E4%BB%A4/" rel="next" title="Git指令"><span class="post-nav-text">Git指令</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
