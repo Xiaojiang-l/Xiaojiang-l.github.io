@@ -44,7 +44,7 @@
     <link href="https://lxjblog.gitee.io/2020/09/10/Hexo/"/>
     <id>https://lxjblog.gitee.io/2020/09/10/Hexo/</id>
     <published>2020-09-10T15:28:09.000Z</published>
-    <updated>2020-09-10T16:01:31.646Z</updated>
+    <updated>2020-09-10T16:05:43.631Z</updated>
     
     <summary type="html">
     
@@ -353,9 +353,9 @@
       <category term="微服务" scheme="https://lxjblog.gitee.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
     
-      <category term="springBoot" scheme="https://lxjblog.gitee.io/tags/springBoot/"/>
-    
       <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+      <category term="springBoot" scheme="https://lxjblog.gitee.io/tags/springBoot/"/>
     
   </entry>
   
@@ -376,9 +376,9 @@
       <category term="微服务" scheme="https://lxjblog.gitee.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
     
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
-    
       <category term="springcloud" scheme="https://lxjblog.gitee.io/tags/springcloud/"/>
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
     
   </entry>
   
