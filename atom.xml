@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2020-09-10T15:44:17.000Z</updated>
+  <updated>2020-10-06T05:22:51.081Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis的使用</title>
+    <link href="https://lxjblog.gitee.io/2020/10/06/Redis%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://lxjblog.gitee.io/2020/10/06/Redis%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
+    <published>2020-10-06T05:20:59.000Z</published>
+    <updated>2020-10-06T05:22:51.081Z</updated>
+    
+    <summary type="html">
+    
+      在Java中集成使用Redis
+    
+    </summary>
+    
+    
+      <category term="数据库" scheme="https://lxjblog.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="数据库" scheme="https://lxjblog.gitee.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+      <category term="nosql" scheme="https://lxjblog.gitee.io/tags/nosql/"/>
+    
+      <category term="jedis" scheme="https://lxjblog.gitee.io/tags/jedis/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>protues元件库</title>
+    <link href="https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/"/>
+    <id>https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/</id>
+    <published>2020-09-11T09:19:59.000Z</published>
+    <updated>2020-09-11T09:22:37.282Z</updated>
+    
+    <summary type="html">
+    
+      Proteus元件库元件名称及中英对照
+    
+    </summary>
+    
+    
+      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
+    
+    
+      <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
+    
+      <category term="工具" scheme="https://lxjblog.gitee.io/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>MpVue小程序</title>
@@ -115,7 +165,7 @@
     <link href="https://lxjblog.gitee.io/2020/08/12/Linux/"/>
     <id>https://lxjblog.gitee.io/2020/08/12/Linux/</id>
     <published>2020-08-12T15:39:49.000Z</published>
-    <updated>2020-08-14T03:31:40.221Z</updated>
+    <updated>2020-10-06T05:12:25.137Z</updated>
     
     <summary type="html">
     
@@ -318,7 +368,7 @@
     <link href="https://lxjblog.gitee.io/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/"/>
     <id>https://lxjblog.gitee.io/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/</id>
     <published>2020-08-02T15:02:47.000Z</published>
-    <updated>2020-08-11T02:54:10.748Z</updated>
+    <updated>2020-10-06T05:11:40.552Z</updated>
     
     <summary type="html">
     
@@ -387,7 +437,7 @@
     <link href="https://lxjblog.gitee.io/2020/08/02/ssm/"/>
     <id>https://lxjblog.gitee.io/2020/08/02/ssm/</id>
     <published>2020-08-02T14:40:07.000Z</published>
-    <updated>2020-08-11T02:53:12.321Z</updated>
+    <updated>2020-10-06T05:11:57.669Z</updated>
     
     <summary type="html">
     
@@ -425,52 +475,6 @@
       <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
     
       <category term="安全" scheme="https://lxjblog.gitee.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>shiro</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/shiro/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/shiro/</id>
-    <published>2020-08-02T14:31:53.000Z</published>
-    <updated>2020-08-11T02:50:49.970Z</updated>
-    
-    <summary type="html">
-    
-      Apache Shiro是一个强大且易用的Java安全框架,执行身份验证、授权、密码和会话管理
-    
-    </summary>
-    
-    
-      <category term="微服务" scheme="https://lxjblog.gitee.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
-    
-    
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
-    
-      <category term="安全" scheme="https://lxjblog.gitee.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>POI和easyExcel</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/POI%E5%92%8CeasyExcel/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/POI%E5%92%8CeasyExcel/</id>
-    <published>2020-08-02T14:26:03.000Z</published>
-    <updated>2020-08-11T02:50:42.582Z</updated>
-    
-    <summary type="html">
-    
-      使用编程方式对Excel进行快捷处理
-    
-    </summary>
-    
-    
-      <category term="实用类" scheme="https://lxjblog.gitee.io/categories/%E5%AE%9E%E7%94%A8%E7%B1%BB/"/>
-    
-    
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
-    
-      <category term="excel" scheme="https://lxjblog.gitee.io/tags/excel/"/>
     
   </entry>
   
