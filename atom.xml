@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2020-10-20T13:54:23.559Z</updated>
+  <updated>2020-11-07T02:59:34.448Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>薄膜材料题库</title>
+    <link href="https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/"/>
+    <id>https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/</id>
+    <published>2020-11-07T02:28:52.000Z</published>
+    <updated>2020-11-07T02:59:34.448Z</updated>
+    
+    <summary type="html">
+    
+      薄膜材料期中考试题库
+    
+    </summary>
+    
+    
+      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
+    
+    
+      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
+    
+      <category term="薄膜材料" scheme="https://lxjblog.gitee.io/tags/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99/"/>
+    
+  </entry>
   
   <entry>
     <title>JUC并发编程</title>
@@ -450,29 +473,6 @@
       <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
     
       <category term="物理光学" scheme="https://lxjblog.gitee.io/tags/%E7%89%A9%E7%90%86%E5%85%89%E5%AD%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>四级单词</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/%E5%9B%9B%E7%BA%A7%E8%80%83%E8%AF%95/</id>
-    <published>2020-08-02T15:02:47.000Z</published>
-    <updated>2020-10-06T05:11:40.552Z</updated>
-    
-    <summary type="html">
-    
-      四级考试单词，持续更新中~
-    
-    </summary>
-    
-    
-      <category term="考试" scheme="https://lxjblog.gitee.io/categories/%E8%80%83%E8%AF%95/"/>
-    
-    
-      <category term="四级" scheme="https://lxjblog.gitee.io/tags/%E5%9B%9B%E7%BA%A7/"/>
-    
-      <category term="学习" scheme="https://lxjblog.gitee.io/tags/%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
