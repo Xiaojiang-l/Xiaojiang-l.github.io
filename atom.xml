@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2020-11-07T08:01:22.141Z</updated>
+  <updated>2020-12-07T10:53:59.279Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>形势与政策题库</title>
+    <link href="https://lxjblog.gitee.io/2020/12/07/%E5%BD%A2%E5%8A%BF%E4%B8%8E%E6%94%BF%E7%AD%96%E9%A2%98%E5%BA%93/"/>
+    <id>https://lxjblog.gitee.io/2020/12/07/%E5%BD%A2%E5%8A%BF%E4%B8%8E%E6%94%BF%E7%AD%96%E9%A2%98%E5%BA%93/</id>
+    <published>2020-12-07T10:21:51.000Z</published>
+    <updated>2020-12-07T10:53:59.279Z</updated>
+    
+    <summary type="html">
+    
+      2020-2021学年第一学期形势与政策期末考试题库
+    
+    </summary>
+    
+    
+      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
+    
+    
+      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
+    
+      <category term="政治" scheme="https://lxjblog.gitee.io/tags/%E6%94%BF%E6%B2%BB/"/>
+    
+  </entry>
   
   <entry>
     <title>薄膜材料题库</title>
@@ -450,29 +473,6 @@
       <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
     
       <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>物理光学</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/%E7%89%A9%E7%90%86%E5%85%89%E5%AD%A6/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/%E7%89%A9%E7%90%86%E5%85%89%E5%AD%A6/</id>
-    <published>2020-08-02T15:13:05.000Z</published>
-    <updated>2020-08-11T02:54:18.934Z</updated>
-    
-    <summary type="html">
-    
-      光电信息课程之一，多图慎入~
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
-    
-      <category term="物理光学" scheme="https://lxjblog.gitee.io/tags/%E7%89%A9%E7%90%86%E5%85%89%E5%AD%A6/"/>
     
   </entry>
   
