@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2020-12-07T10:53:59.279Z</updated>
+  <updated>2020-12-11T16:03:30.220Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>微信开发工具连接Gitee</title>
+    <link href="https://lxjblog.gitee.io/2020/12/12/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E8%BF%9E%E6%8E%A5Gitee/"/>
+    <id>https://lxjblog.gitee.io/2020/12/12/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E8%BF%9E%E6%8E%A5Gitee/</id>
+    <published>2020-12-11T16:00:37.000Z</published>
+    <updated>2020-12-11T16:03:30.220Z</updated>
+    
+    <summary type="html">
+    
+      使用微信开发者工具连接Gitee，进行版本控制，避免出现误删代码无法回退的问题
+    
+    </summary>
+    
+    
+      <category term="小程序" scheme="https://lxjblog.gitee.io/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+    
+    
+      <category term="Gitee" scheme="https://lxjblog.gitee.io/tags/Gitee/"/>
+    
+      <category term="微信开发工具" scheme="https://lxjblog.gitee.io/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>形势与政策题库</title>
@@ -450,29 +473,6 @@
     
     
       <category term="Vue" scheme="https://lxjblog.gitee.io/tags/Vue/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数字电子技术</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/%E6%95%B0%E7%94%B5/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/%E6%95%B0%E7%94%B5/</id>
-    <published>2020-08-02T15:17:59.000Z</published>
-    <updated>2020-08-11T02:53:55.048Z</updated>
-    
-    <summary type="html">
-    
-      光电信息课程之一，多图慎入~
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
-    
-      <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
     
   </entry>
   
