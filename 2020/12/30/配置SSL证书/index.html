@@ -16,11 +16,11 @@
 <meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234030432.png">
 <meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234105252.png">
 <meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234203083.png">
-<meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234325494.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201230232834134.png">
 <meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234857182.png">
 <meta property="og:image" content="https://lxjblog.gitee.io/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104235212997.png">
 <meta property="article:published_time" content="2020-12-30T11:45:00.000Z">
-<meta property="article:modified_time" content="2020-12-30T11:51:09.556Z">
+<meta property="article:modified_time" content="2020-12-30T15:30:56.045Z">
 <meta property="article:author" content="晓江">
 <meta property="article:tag" content="springBoot">
 <meta property="article:tag" content="网站">
@@ -46,14 +46,14 @@
 </blockquote>
 <ol>
 <li><p>将下载的证书中的 .pfx 文件复制到项目的<code>resources</code>目录下</p>
-<p><img src="/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201104234325494.png" alt="image-20201104234325494" loading="lazy"></p>
+<p><img src="/2020/12/30/%E9%85%8D%E7%BD%AESSL%E8%AF%81%E4%B9%A6/image-20201230232834134.png" alt="image-20201230232834134" loading="lazy"></p>
 </li>
 <li><p>在<code>application.properties</code>中进行配置</p>
 <pre class=" language-properties"><code class="language-properties"><span class="token attr-name">http.port</span><span class="token punctuation">=</span><span class="token attr-value">80</span>
 
 <span class="token attr-name">server.port</span><span class="token punctuation">=</span><span class="token attr-value">443</span>
 <span class="token attr-name">server.ssl.key-store</span><span class="token punctuation">=</span><span class="token attr-value">classpath:4718733_www.lxjstudy.club.pfx</span>
-<span class="token attr-name">server.ssl.key-store-password</span><span class="token punctuation">=</span><span class="token attr-value">s8Ag96T4</span>
+<span class="token attr-name">server.ssl.key-store-password</span><span class="token punctuation">=</span><span class="token attr-value">XXX    # 查看下载的证书目录下的另一个文件</span>
 <span class="token attr-name">server.ssl.key-store-type</span><span class="token punctuation">=</span><span class="token attr-value">PKCS12</span></code></pre>
 </li>
 <li><p>在启动类中进行配置，设置域名重定向</p>
