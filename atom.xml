@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2020-12-30T15:30:56.045Z</updated>
+  <updated>2021-02-22T05:46:49.508Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java基础题</title>
+    <link href="https://lxjblog.gitee.io/2021/02/22/java%E5%9F%BA%E7%A1%80%E9%A2%98/"/>
+    <id>https://lxjblog.gitee.io/2021/02/22/java%E5%9F%BA%E7%A1%80%E9%A2%98/</id>
+    <published>2021-02-22T05:45:35.000Z</published>
+    <updated>2021-02-22T05:46:49.508Z</updated>
+    
+    <summary type="html">
+    
+      Java相关基础题
+    
+    </summary>
+    
+    
+      <category term="java基础" scheme="https://lxjblog.gitee.io/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>配置SSL证书</title>
@@ -454,27 +475,6 @@
       <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
     
       <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Vue-cli</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/Vue-cli/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/Vue-cli/</id>
-    <published>2020-08-02T15:25:16.000Z</published>
-    <updated>2020-08-11T02:53:39.180Z</updated>
-    
-    <summary type="html">
-    
-      Vue-cli在IDEA中的使用
-    
-    </summary>
-    
-    
-      <category term="前端" scheme="https://lxjblog.gitee.io/categories/%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="Vue" scheme="https://lxjblog.gitee.io/tags/Vue/"/>
     
   </entry>
   
