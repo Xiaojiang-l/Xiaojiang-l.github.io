@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>protues元件库 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => <!-- hexo-inject:begin --><!-- hexo-inject:end -->{
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="Proteus元件库元件名称及中英对照">
+<meta property="og:type" content="article">
+<meta property="og:title" content="protues元件库">
+<meta property="og:url" content="https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="Proteus元件库元件名称及中英对照">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-11T09:19:59.000Z">
+<meta property="article:modified_time" content="2020-09-11T09:22:37.282Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="电路">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">40</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">15</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">44</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Proteus%E5%85%83%E4%BB%B6%E5%BA%93%E5%85%83%E4%BB%B6%E5%90%8D%E7%A7%B0%E5%8F%8A%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7"><span class="toc-text">Proteus元件库元件名称及中英对照</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">protues元件库</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2020-09-11 17:19:59" itemprop="dateCreated datePublished" datetime="2020-09-11T17:19:59+08:00">2020-09-11</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">光电课程</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E7%94%B5%E8%B7%AF/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">电路</span></a><a class="tag" href="/tags/%E5%B7%A5%E5%85%B7/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">工具</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://img-blog.csdnimg.cn/20210628000220859.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Proteus元件库元件名称及中英对照"><a href="#Proteus元件库元件名称及中英对照" class="headerlink" title="Proteus元件库元件名称及中英对照"></a>Proteus元件库元件名称及中英对照</h2><p>AND 与门<br> ANTENNA 天线<br> BATTERY 直流电源<br> BELL 铃,钟<br> BVC 同轴电缆接插件<br> BRIDEG 1 整流桥(二极管)<br> BRIDEG 2 整流桥(集成块)<br> BUFFER 缓冲器<br> BUZZER 蜂鸣器<br> CAP 电容<br> CAPACITOR 电容<br> CAPACITOR POL 有极性电容<br> CAPVAR 可调电容<br> CIRCUIT BREAKER 熔断丝<br> COAX 同轴电缆<br> CON 插口<br> CRYSTAL 晶体整荡器<br> DB 并行插口<br> DIODE 二极管<br> DIODE SCHOTTKY 稳压二极管<br> DIODE VARACTOR 变容二极管<br> DPY_3-SEG 3段LED<br> DPY_7-SEG 7段LED<br> DPY_7-SEG_DP 7段LED(带小数点)<br> ELECTRO 电解电容<br> FUSE 熔断器<br> INDUCTOR 电感<br> INDUCTOR IRON 带铁芯电感<br> INDUCTOR3 可调电感<br> JFET N N沟道场效应管<br> JFET P P沟道场效应管<br> LAMP 灯泡<br> LAMP NEDN 起辉器<br> LED 发光二极管<br> METER 仪表<br> MICROPHONE 麦克风<br> MOSFET MOS管<br> MOTOR AC 交流电机<br> MOTOR SERVO 伺服电机<br> NAND 与非门<br> NOR 或非门<br> NOT 非门<br> NPN NPN三极管<br> NPN-PHOTO 感光三极管<br> OPAMP 运放<br> OR 或门<br> PHOTO 感光二极管<br> PNP 三极管<br> NPN DAR NPN三极管<br> PNP DAR PNP三极管<br> POT 滑线变阻器<br> PELAY-DPDT 双刀双掷继电器<br> RES1.2 电阻<br> RES3.4 可变电阻<br> RESISTOR BRIDGE ? 桥式电阻<br> RESPACK ? 电阻<br> SCR 晶闸管<br> PLUG ? 插头<br> PLUG AC FEMALE 三相交流插头<br> SOCKET ? 插座<br> SOURCE CURRENT 电流源<br> SOURCE VOLTAGE 电压源<br> SPEAKER 扬声器<br> SW ? 开关<br> SW-DPDY ? 双刀双掷开关<br> SW-SPST ? 单刀单掷开关<br> SW-PB 按钮<br> THERMISTOR 电热调节器<br> TRANS1 变压器<br> TRANS2 可调变压器<br> TRIAC ? 三端双向可控硅<br> TRIODE ? 三极真空管<br> VARISTOR 变阻器<br> ZENER ? 齐纳二极管<br> DPY_7-SEG_DP 数码管<br> SW-PB 开关</p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>元件名称 中文名 说明<br> 7407 驱动门<br> 1N914 二极管<br> 74Ls00 与非门<br> 74LS04 非门<br> 74LS08 与门<br> 74LS390 TTL 双十进制计数器<br> 7SEG 4针BCD-LED 输出从0-9 对应于4根线的BCD码<br> 7SEG 3-8译码器电路</p>
+<p>BCD-7SEG转换电路<br> AlterNATOR 交流发电机<br> AMMETER-MILLI mA安培计<br> AND 与门<br> BATTERY 电池/电池组<br> BUS 总线<br> CAP 电容<br> CAPACITOR 电容器<br> CLOCK 时钟信号源<br> CRYSTAL 晶振 </p>
+<p>Compim 串口<br> D-FLIPFLOP D触发器<br> FUSE 保险丝<br> GROUND 地<br> LAMP 灯<br> LED-RED 红色发光二极管<br> LM016L 2行16列液晶 可显示2行16列英文字符，有8位数据总线D0-D7，RS，R/W，EN三个控制端口（共14线），工作电压为5V。没背光，和常用的1602B功能和引脚一样（除了调背光的二个线脚）<br> LOGIC ANALYSER 逻辑分析器<br> LOGICPROBE 逻辑探针<br> LOGICPROBE[BIG] 逻辑探针 用来显示连接位置的逻辑状态<br> LOGICSTATE 逻辑状态 用鼠标点击,可改变该方框连接位置的逻辑状态<br> LOGICTOGGLE 逻辑触发<br> MASTERSWITCH 按钮 手动闭合,立即自动打开<br> MOTOR 马达<br> OR 或门<br> POT-LIN 三引线可变电阻器<br> POWER 电源<br> RES 电阻<br> RESISTOR 电阻器<br> SWITCH 按钮 手动按一下一个状态<br> SWITCH-SPDT 二选通一按钮<br> VOLTMETER 伏特计<br> VOLTMETER-MILLI mV伏特计<br> VTERM 串行口终端<br> Electromechanical 电机<br> Inductors 变压器<br> Laplace Primitives 拉普拉斯变换<br> Memory Ics<br> Microprocessor Ics<br> Miscellaneous 各种器件</p>
+<p>AERIAL-天线；ATAHDD；ATMEGA64；BATTERY；CELL；CRYSTAL-晶振；FUSE；METER-仪表；<br> Modelling Primitives 各种仿真器件 是典型的基本元器模拟，不表示具体型号，只用于仿真，没有PCB<br> Optoelectronics 各种发光器件 发光二极管，LED，液晶等等<br> PLDs &amp; FPGAs<br> Resistors 各种电阻<br> Simulator Primitives 常用的器件<br> Speakers &amp; Sounders<br> Switches &amp; Relays 开关，继电器，键盘<br> Switching Devices 晶阊管<br> Transistors 晶体管（三极管，场效应管）<br> TTL 74 series<br> TTL 74ALS series<br> TTL 74AS series<br> TTL 74F series<br> TTL 74HC series<br> TTL 74HCT series<br> TTL 74LS series<br> TTL 74S series<br> Analog Ics 模拟电路集成芯片<br> Capacitors 电容集合<br> CMOS 4000 series<br> Connectors 排座，排插<br> Data Converters ADC,DAC<br> Debugging Tools 调试工具<br> ECL 10000 Series 各种常用集成电路</p>
+<p>7407 驱动门 </p>
+<p>1N914 二极管 </p>
+<p>74Ls00 与非门 </p>
+<p>74LS04 非门 </p>
+<p>74LS08 与门 </p>
+<p>74LS390 TTL 双十进制计数器 </p>
+<p>7SEG 4针BCD-LED 输出从0-9 对应于4根线的BCD码</p>
+<p>7SEG 3-8译码器电路BCD-7SEG转换电路 </p>
+<p>ALTERNATOR 交流发电机 </p>
+<p>AMMETER-MILLI mA安培计 </p>
+<p>AND 与门 </p>
+<p>BATTERY 电池/电池组 </p>
+<p>BUS 总线 </p>
+<p>CAP 电容 </p>
+<p>CAPACITOR 电容器 </p>
+<p>CLOCK 时钟信号源 </p>
+<p>CRYSTAL 晶振 </p>
+<p>D-FLIPFLOP D触发器 </p>
+<p>FUSE 保险丝 </p>
+<p>GROUND 地 </p>
+<p>LAMP 灯 </p>
+<p>LED-RED 红色发光二极管 </p>
+<p>LM016L <a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>行16列液晶 可显示<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>行16列英文字符，有8位数据总线D0-D7，RS，R/W，EN三个控制端口（共14线），工作电压为5V。没背光，和常用的160<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>B功能和引脚一样（除了调背光的二个线脚）</p>
+<p>LOGIC ANALYSER 逻辑分析器 </p>
+<p>LOGICPROBE 逻辑探针 </p>
+<p>LOGICPROBE[BIG] 逻辑探针 用来显示连接位置的逻辑状态</p>
+<p>LOGICSTATE 逻辑状态 用鼠标点击,可改变该方框连接位置的逻辑状态</p>
+<p>LOGICTOGGLE 逻辑触发 </p>
+<p>MASTERSWITCH 按钮 手动闭合,立即自动打开</p>
+<p>MOTOR 马达 </p>
+<p>OR 或门 </p>
+<p>POT-LIN 三引线可变电阻器 </p>
+<p>POWER 电源 </p>
+<p>RES 电阻 </p>
+<p>RESISTOR 电阻器 </p>
+<p>SWITCH 按钮 手动按一下一个状态</p>
+<p>SW-SPDT-mom 二选通一按钮 </p>
+<p>触发开关BUTTON</p>
+<p>VOLTMETER 伏特计 </p>
+<p>VOLTMETER-MILLI mV伏特计 </p>
+<p>VTERM 串行口终端 </p>
+<p>Electromechanical 电机 </p>
+<p>Inductors 变压器 </p>
+<p>Laplace Primitives 拉普拉斯变换 </p>
+<p>Memory Ics </p>
+<p>Microprocessor Ics </p>
+<p>Miscellaneous 各种器件 AERIAL-天线；ATAHDD；ATMEGA64；BATTERY；CELL；CRYSTAL-晶振；FUSE；METER-仪表；</p>
+<p>Modelling Primitives 各种仿真器件 是典型的基本元器模拟，不表示具体型号，只用于仿真，没有PCB</p>
+<p>Optoelectronics 各种发光器件 发光二极管，LED，液晶等等</p>
+<p>PLDs &amp; FPGAs </p>
+<p>Resistors 各种电阻 </p>
+<p>Simulator Primitives 常用的器件 </p>
+<p>Speakers &amp; Sounders </p>
+<p>Switches &amp; Relays 开关，继电器，键盘 </p>
+<p>BUTTON 触发开关</p>
+<p>Switching Devices 晶阊管 </p>
+<p>Transistors 晶体管（三极管，场效应管） </p>
+<p>TTL 74 series </p>
+<p>TTL 74ALS series </p>
+<p>TTL 74AS series </p>
+<p>TTL 74F series </p>
+<p>TTL 74HC series </p>
+<p>TTL 74HCT series </p>
+<p>TTL 74LS series </p>
+<p>TTL 74S series </p>
+<p>Analog Ics 模拟电路集成芯片 </p>
+<p>Capacitors 电容集合 </p>
+<p>CMOS 4000 series </p>
+<p>Connectors 排座，排插 </p>
+<p>Data Converters ADC,DAC </p>
+<p>Debugging Tools 调试工具 </p>
+<p>7SEG   数码管</p>
+<p>ECL 10000 Series 各种常用集成电路</p>
+<p>1.电阻<br> 固定电阻：RES<br> 半导体电阻：RESSEMT<br> 电位计；POT<br> 变电阻；RVAR<br> 可调电阻;res1<br> 可变电阻 pot<br> <a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>.电容<br> 定值无极性电容；CAP<br> 定值有极性电容;CAP<br> 半导体电容：CAPSEMI<br> 可调电容：CAPVAR </p>
+<p> 3.电感：INDUCTOR </p>
+<p> 4.二极管：DIODE.LIB<br> 发光二极管：LED </p>
+<p> 5.三极管 :NPN1 </p>
+<p> 6.结型场效应管：JFET.lib </p>
+<p> 7.MOS场效应管 </p>
+<p> 8.MES场效应管 </p>
+<p> 9.继电器：PELAY. LIB </p>
+<p> 10.灯泡:LAMP </p>
+<p> <a target="_blank" rel="noopener" href="http://www.mcuend.cn/">11</a>.运放:OPAMP </p>
+<p> 1<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>.数码管： 7-SEG_DP (MISCELLANEOUS DEVICES.LIB)<br> 13.开关;sw_pb<br> 原理图常用库文件：<br> Miscellaneous Devices.ddb<br> Dallas Microprocessor.ddb<br> Intel Databooks.ddb<br> Protel DOS Schematic Libraries.ddb </p>
+<p> PCB元件常用库：<br> Advpcb.ddb<br> General IC.ddb<br> Miscellaneous.ddb </p>
+<p> 部分 分立元件库元件名称及中英对照<br> AND 与门<br> ANTENNA 天线<br> BATTERY 直流电源<br> BELL 铃,钟<br> BVC 同轴电缆接插件<br> BRIDEG 1 整流桥(二极管)<br> BRIDEG <a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a> 整流桥(集成块)<br> BUFFER 缓冲器<br> BUZZER 蜂鸣器<br> CAP 电容<br> CAPACITOR 电容<br> CAPACITOR POL 有极性电容<br> CAPVAR 可调电容<br> CIRCUIT BREAKER 熔断丝<br> COAX 同轴电缆<br> CON 插口<br> CRYSTAL 晶体整荡器<br> DB 并行插口<br> DIODE 二极管<br> DIODE SCHOTTKY 稳压二极管<br> DIODE VARACTOR 变容二极管<br> DPY_3-SEG 3段LED<br> DPY_7-SEG 7段LED<br> DPY_7-SEG_DP 7段LED(带小数点)<br> ELECTRO 电解电容<br> FUSE 熔断器<br> INDUCTOR 电感<br> INDUCTOR IRON 带铁芯电感<br> INDUCTOR3 可调电感<br> JFET N N沟道场效应管<br> JFET P P沟道场效应管<br> LAMP 灯泡<br> LAMP NEDN 起辉器<br> LED 发光二极管<br> METER 仪表<br> MICROPHONE 麦克风<br> MOSFET MOS管<br> MOTOR AC 交流电机<br> MOTOR SERVO 伺服电机<br> NAND 与非门<br> NOR 或非门<br> NOT 非门<br> NPN NPN三极管<br> NPN-PHOTO 感光三极管<br> OPAMP 运放<br> OR 或门<br> PHOTO 感光二极管<br> PNP 三极管<br> NPN DAR NPN三极管<br> PNP DAR PNP三极管<br> POT 滑线变阻器<br> PELAY-DPDT 双刀双掷继电器<br> RES1.<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a> 电阻<br> RES3.4 可变电阻<br> RESISTOR BRIDGE ? 桥式电阻<br> RESPACK ? 电阻<br> SCR 晶闸管<br> PLUG ? 插头<br> PLUG AC FEMALE 三相交流插头<br> SOCKET ? 插座<br> SOURCE CURRENT 电流源<br> SOURCE VOLTAGE 电压源<br> SPEAKER 扬声器<br> SW ? 开关<br> SW-DPDY ? 双刀双掷开关<br> SW-SPST ? 单刀单掷开关<br> SW-PB 按钮<br> THERMISTOR 电热调节器<br> TRANS1 变压器<br> TRANS<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a> 可调变压器<br> TRIAC ? 三端双向可控硅<br> TRIODE ? 三极真空管<br> VARISTOR 变阻器<br> ZENER ? 齐纳二极管<br> DPY_7-SEG_DP 数码管<br> SW-PB 开关 </p>
+<p> 其他元件库<br> Protel Dos Schematic 4000 Cmos .Lib （40.系列CMOS管集成块元件库）<br> 4013 D 触发器<br> 40<a target="_blank" rel="noopener" href="http://www.mcuend.cn/">2</a>7 JK 触发器<br> Protel Dos Schematic Analog Digital.Lib（模拟数字式集成块元件库）<br> AD系列 DAC系列 HD系列 MC系列<br> Protel Dos Schematic Comparator.Lib（比较放大器元件库）<br> Protel Dos Shcematic Intel.Lib（INTEL公司生产的80系列CPU集成块元件库）<br> Protel Dos Schematic Linear.lib（线性元件库）<br> 例555<br> Protel Dos Schemattic Memory Devices.Lib（内存存储器元件库）<br> Protel Dos Schematic SYnertek.Lib（SY系列集成块元件库）<br> Protes Dos Schematic Motorlla.Lib（摩托罗拉公司生产的元件库）<br> Protes Dos Schematic NEC.lib（NEC公司生产的集成块元件库）<br> Protes Dos Schematic Operationel Amplifers.lib（运算放大器元件库）<br> Protes Dos Schematic TTL.Lib（晶体管集成块元件库 74系列）<br> Protel Dos Schematic Voltage Regulator.lib（电压调整集成块元件库）<br> Protes Dos Schematic Zilog.Lib（齐格格公司生产的Z80系列CPU集成块元件库） </p>
+<p> 元件属性对话框中英文对照<br> Lib ref 元件名称<br> Footprint 器件封装<br> Designator 元件称号<br> Part 器件类别或标示值<br> Schematic Tools 主工具栏<br> Writing Tools 连线工具栏<br> Drawing Tools 绘图工具栏 </p>
+<p> 稳压二极管 ZENER DIODE<br> 肖特基二极管 SCHOTTKY DIODE<br> 二极管 DIODE<br> 变容二极管 VARIODE<br> 三极管 TRANSISTOR<br> 电感 INDUCTOR<br> 磁环 EMIFIL<br> 电阻 RESISTOR<br> 电容 CAPACITY<br> 晶振 CRYSTAL<br> 涤纶电容 MYLAR CAP<br> 电解电容 ELECT CAP<br> 瓷片电容 CERAMIC CAP<br> 安规电容 FILM CAP<br> 元件名称 中文名 说明<br> 7407    驱动门<br> 1N914    二极管<br> 74Ls00    与非门<br> 74LS04    非门<br> 74LS08    与门<br> 74LS390    TTL 双十进制计数器<br> 7SEG    4针BCD-LED 输出从0-9 对应于4根线的BCD码<br> 7SEG    3-8译码器电路BCD-7SEG[size=+0]转换电路<br> ALTERNATOR 交流发电机<br> AMMETER-MILLI mA安培计<br> AND    与门<br> BATTERY    电池/电池组<br> BUS    总线<br> CAP    电容<br> CAPACITOR 电容器<br> CLOCK    时钟信号源<br> CRYSTAL    晶振<br> D-FLIPFLOP D触发器<br> FUSE    保险丝<br> GROUND    地<br> LAMP    灯<br> LED-RED    红色发光二极管<br> LM016L    2行16列液晶 可显示2行16列英文字符，有8位数据总线D0-D7，RS，R/W，EN三个控制端口（共14线），工作电压为5V。没背光，和常用的1602B功能和引脚一样（除了调背光的二个线脚）<br> LOGIC ANALYSER 逻辑分析器<br> LOGICPROBE 逻辑探针<br> LOGICPROBE[BIG] 逻辑探针 用来显示连接位置的逻辑状态<br> LOGICSTATE 逻辑状态 用鼠标点击,可改变该方框连接位置的逻辑状态<br> LOGICTOGGLE 逻辑触发<br> MASTERSWITCH 按钮 手动闭合,立即自动打开<br> MOTOR    马达<br> OR    或门<br> POT-LIN    三引线可变电阻器<br> POWER    电源<br> RES    电阻<br> RESISTOR 电阻器<br> SWITCH    按钮 手动按一下一个状态<br> SWITCH-SPDT 二选通一按钮<br> VOLTMETER 伏特计<br> VOLTMETER-MILLI mV伏特计<br> VTERM    串行口终端<br> Electromechanical 电机<br> Inductors 变压器<br> Laplace Primitives 拉普拉斯变换<br> Memory Ics<br> Microprocessor Ics<br> Miscellaneous 各种器件 AERIAL-天线；ATAHDD；ATMEGA64；BATTERY；CELL；CRYSTAL-晶振；FUSE；METER-仪表；<br> Modelling Primitives 各种仿真器件 是典型的基本元器模拟，不表示具体型号，只用于仿真，没有PCB<br> Optoelectronics 各种发光器件 发光二极管，LED，液晶等等<br> PLDs &amp; FPGAs<br> Resistors 各种电阻<br> Simulator Primitives 常用的器件<br> Speakers &amp; Sounders<br> Switches &amp; Relays 开关，继电器，键盘<br> Switching Devices 晶阊管<br> Transistors 晶体管（三极管，场效应管）<br> TTL 74 series<br> TTL 74ALS series<br> TTL 74AS series<br> TTL 74F series<br> TTL 74HC series<br> TTL 74HCT series<br> TTL 74LS series<br> TTL 74S series<br> Analog Ics 模拟电路集成芯片<br> Capacitors 电容集合<br> CMOS 4000 series<br> Connectors 排座，排插<br> Data Converters ADC,DAC<br> Debugging Tools 调试工具<br> ECL 10000 Serie**<br>** AND 与门<br> ANTENNA 天线<br> BATTERY 直流电源<br> BELL 铃,钟<br> BVC 同轴电缆接插件<br> BRIDEG 1 整流桥(二极管)<br> BRIDEG 2 整流桥(集成块)<br> BUFFER 缓冲器<br> BUZZER 蜂鸣器<br> CAP 电容<br> CAPACITOR 电容<br> CAPACITOR POL 有极性电容<br> CAPVAR 可调电容<br> CIRCUIT BREAKER 熔断丝<br> COAX 同轴电缆<br> CON 插口<br> CRYSTAL 晶体整荡器<br> DB 并行插口<br> DIODE 二极管<br> DIODE SCHOTTKY 稳压二极管<br> DIODE VARACTOR 变容二极管<br> DPY_3-SEG 3段LED<br> DPY_7-SEG 7段LED<br> DPY_7-SEG_DP 7段LED(带小数点)<br> ELECTRO 电解电容<br> FUSE 熔断器<br> INDUCTOR 电感<br> INDUCTOR IRON 带铁芯电感<br> INDUCTOR3 可调电感<br> JFET N N沟道场效应管<br> JFET P P沟道场效应管<br> LAMP 灯泡<br> LAMP NEDN 起辉器<br> LED 发光二极管<br> METER 仪表<br> MICROPHONE 麦克风<br> MOSFET MOS管<br> MOTOR AC 交流电机<br> MOTOR SERVO 伺服电机<br> NAND 与非门<br> NOR 或非门<br> NOT 非门<br> NPN NPN三极管<br> NPN-PHOTO 感光三极管<br> OPAMP 运放<br> OR 或门<br> PHOTO 感光二极管<br> PNP 三极管<br> NPN DAR NPN三极管<br> PNP DAR PNP三极管<br> POT 滑线变阻器<br> PELAY-DPDT 双刀双掷继电器<br> RES1.2 电阻<br> RES3.4 可变电阻<br> RESISTOR BRIDGE ? 桥式电阻<br> RESPACK ? 电阻<br> SCR 晶闸管<br> PLUG ? 插头<br> PLUG AC FEMALE 三相交流插头<br> SOCKET ? 插座<br> SOURCE CURRENT 电流源<br> SOURCE VOLTAGE 电压源<br> SPEAKER 扬声器<br> SW ? 开关<br> SW-DPDY ? 双刀双掷开关<br> SW-SPST ? 单刀单掷开关<br> SW-PB 按钮<br> THERMISTOR 电热调节器<br> TRANS1 变压器<br> TRANS2 可调变压器<br> TRIAC ? 三端双向可控硅<br> TRIODE ? 三极真空管<br> VARISTOR 变阻器<br> ZENER ? 齐纳二极管<br> DPY_7-SEG_DP 数码管<br> SW-PB 开关<br> Device.lib      包括电阻、电容、二极管、三极管和PCB的连接器符号<br> ACTIVE.LIB      包括虚拟仪器和有源器件<br> DIODE.LIB     包括二极管和整流桥<br> DISPLAY.LIB    包括LCD、LED<br> BIPOLAR.LIB    包括三极管<br> FET.LIB         包括场效应管<br> ASIMMDLS.LIB  包括模拟元器件<br> VALVES .LIB      包括电子管<br> ANALOG.LIB      包括电源调节器、运放和数据采样IC<br> CAPACITORS.LIB 包括电容<br> COMS.LIB       包括  4000系列<br> ECL.LIB        包括ECL10000系列<br> MICRO.LIB       包括 通用微处理器<br> OPAMP.LIB       包括 运算放大器<br> RESISTORS.LIB  包括 电阻<br> FAIRCHLD .LIB    包括FAIRCHLD 半导体公司的分立器件<br> LINTEC.LIB       包括 LINTEC公司的运算放大器<br> NATDAC.LIB     包括 国家半导体公司的数字采样器件<br> NATOA.LIB       包括 国家半导体公司 的运算放大器<br> TECOOR.LIB     包括TECOOR公司的 SCR 和TRIAC<br> TEXOAC.LIB       包括 德州仪器公司的运算放大器和比较器<br> ZETEX .LIB         包括ZETEX 公司的分立器件</p>
+<p>​                  </p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/" title="protues元件库">https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/10/06/Redis%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="Redis的使用"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">Redis的使用</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/09/10/MpVue%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="next" title="MpVue小程序"><span class="post-nav-text">MpVue小程序</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
