@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2021-02-22T05:46:49.508Z</updated>
+  <updated>2021-06-27T15:17:50.272Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计算机网络</title>
+    <link href="https://lxjblog.gitee.io/2021/06/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    <id>https://lxjblog.gitee.io/2021/06/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</id>
+    <published>2021-06-27T15:14:45.000Z</published>
+    <updated>2021-06-27T15:17:50.272Z</updated>
+    
+    <summary type="html">
+    
+      计算机网络基本知识
+    
+    </summary>
+    
+    
+      <category term="计算机网络" scheme="https://lxjblog.gitee.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    
+      <category term="基本" scheme="https://lxjblog.gitee.io/tags/%E5%9F%BA%E6%9C%AC/"/>
+    
+  </entry>
   
   <entry>
     <title>java基础题</title>
@@ -452,29 +473,6 @@
       <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
     
       <category term="MyBatisPlus" scheme="https://lxjblog.gitee.io/tags/MyBatisPlus/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数电实验</title>
-    <link href="https://lxjblog.gitee.io/2020/08/02/%E6%95%B0%E7%94%B5%E5%AE%9E%E9%AA%8C/"/>
-    <id>https://lxjblog.gitee.io/2020/08/02/%E6%95%B0%E7%94%B5%E5%AE%9E%E9%AA%8C/</id>
-    <published>2020-08-02T15:29:20.000Z</published>
-    <updated>2020-08-11T02:54:02.012Z</updated>
-    
-    <summary type="html">
-    
-      数字电子技术课程实验
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
-    
-      <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
     
   </entry>
   
