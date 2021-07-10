@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2021-06-27T15:47:55.763Z</updated>
+  <updated>2021-07-10T14:27:18.293Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计模式</title>
+    <link href="https://lxjblog.gitee.io/2021/07/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    <id>https://lxjblog.gitee.io/2021/07/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</id>
+    <published>2021-07-10T14:25:29.000Z</published>
+    <updated>2021-07-10T14:27:18.293Z</updated>
+    
+    <summary type="html">
+    
+      Java设计模式简介
+    
+    </summary>
+    
+    
+      <category term="java基础" scheme="https://lxjblog.gitee.io/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="设计模式" scheme="https://lxjblog.gitee.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>计算机网络</title>
@@ -450,29 +471,6 @@
     
     
       <category term="小程序" scheme="https://lxjblog.gitee.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MyBatisPlus</title>
-    <link href="https://lxjblog.gitee.io/2020/08/08/MyBatisPlus/"/>
-    <id>https://lxjblog.gitee.io/2020/08/08/MyBatisPlus/</id>
-    <published>2020-08-08T08:19:14.000Z</published>
-    <updated>2020-10-11T09:52:53.381Z</updated>
-    
-    <summary type="html">
-    
-      MyBatis-Plus（简称 MP）是一个MyBatis的增强工具,在 MyBatis 的基础上只做增强不做改变,为简化开发、提高效率而生。可以节省大量的代码和时间
-    
-    </summary>
-    
-    
-      <category term="持久层框架" scheme="https://lxjblog.gitee.io/categories/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/"/>
-    
-    
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
-    
-      <category term="MyBatisPlus" scheme="https://lxjblog.gitee.io/tags/MyBatisPlus/"/>
     
   </entry>
   
