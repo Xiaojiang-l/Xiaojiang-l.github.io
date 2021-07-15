@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2021-07-14T16:03:13.303Z</updated>
+  <updated>2021-07-15T15:07:33.133Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java基础题</title>
+    <link href="https://lxjblog.gitee.io/2021/07/15/java%E5%9F%BA%E7%A1%80%E9%A2%98/"/>
+    <id>https://lxjblog.gitee.io/2021/07/15/java%E5%9F%BA%E7%A1%80%E9%A2%98/</id>
+    <published>2021-07-15T15:07:35.000Z</published>
+    <updated>2021-07-15T15:07:33.133Z</updated>
+    
+    <summary type="html">
+    
+      Java相关基础题
+    
+    </summary>
+    
+    
+      <category term="java基础" scheme="https://lxjblog.gitee.io/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>java知识点</title>
@@ -76,27 +97,6 @@
     
     
       <category term="基本" scheme="https://lxjblog.gitee.io/tags/%E5%9F%BA%E6%9C%AC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java基础题</title>
-    <link href="https://lxjblog.gitee.io/2021/02/22/java%E5%9F%BA%E7%A1%80%E9%A2%98/"/>
-    <id>https://lxjblog.gitee.io/2021/02/22/java%E5%9F%BA%E7%A1%80%E9%A2%98/</id>
-    <published>2021-02-22T05:45:35.000Z</published>
-    <updated>2021-07-15T15:03:04.774Z</updated>
-    
-    <summary type="html">
-    
-      Java相关基础题
-    
-    </summary>
-    
-    
-      <category term="java基础" scheme="https://lxjblog.gitee.io/categories/java%E5%9F%BA%E7%A1%80/"/>
-    
-    
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
     
   </entry>
   
