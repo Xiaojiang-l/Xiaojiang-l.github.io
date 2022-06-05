@@ -214,29 +214,6 @@
   </entry>
   
   <entry>
-    <title>形势与政策题库</title>
-    <link href="https://lxjblog.gitee.io/2020/12/07/%E5%BD%A2%E5%8A%BF%E4%B8%8E%E6%94%BF%E7%AD%96%E9%A2%98%E5%BA%93/"/>
-    <id>https://lxjblog.gitee.io/2020/12/07/%E5%BD%A2%E5%8A%BF%E4%B8%8E%E6%94%BF%E7%AD%96%E9%A2%98%E5%BA%93/</id>
-    <published>2020-12-07T10:21:51.000Z</published>
-    <updated>2020-12-07T10:53:59.279Z</updated>
-    
-    <summary type="html">
-    
-      2020-2021学年第一学期形势与政策期末考试题库
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
-    
-      <category term="政治" scheme="https://lxjblog.gitee.io/tags/%E6%94%BF%E6%B2%BB/"/>
-    
-  </entry>
-  
-  <entry>
     <title>薄膜材料题库</title>
     <link href="https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/"/>
     <id>https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/</id>
@@ -467,6 +444,29 @@
       <category term="数据库" scheme="https://lxjblog.gitee.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="nosql" scheme="https://lxjblog.gitee.io/tags/nosql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git指令</title>
+    <link href="https://lxjblog.gitee.io/2020/08/13/Git%E6%8C%87%E4%BB%A4/"/>
+    <id>https://lxjblog.gitee.io/2020/08/13/Git%E6%8C%87%E4%BB%A4/</id>
+    <published>2020-08-13T13:46:50.000Z</published>
+    <updated>2020-10-11T09:52:40.642Z</updated>
+    
+    <summary type="html">
+    
+      Git（分布式版本控制系统）是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。
+    
+    </summary>
+    
+    
+      <category term="微服务进阶" scheme="https://lxjblog.gitee.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%9B%E9%98%B6/"/>
+    
+    
+      <category term="git" scheme="https://lxjblog.gitee.io/tags/git/"/>
+    
+      <category term="码云" scheme="https://lxjblog.gitee.io/tags/%E7%A0%81%E4%BA%91/"/>
     
   </entry>
   
