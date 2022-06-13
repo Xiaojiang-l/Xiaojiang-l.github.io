@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>Docker进阶 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => <!-- hexo-inject:begin --><!-- hexo-inject:end -->{
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="Docker容器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker进阶">
+<meta property="og:url" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="Docker容器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611212002445.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611215920739.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611220342275.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611221101348.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612001911578.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612002439621.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612001946180.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612002859554.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612003335260.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612005324530.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612005847888.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011354764.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011438383.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011623260.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011719257.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612135726715.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612141059493.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612143623408.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612145921176.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613212357174.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213054215.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213313928.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213447363.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213645891.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213831821.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613214950514.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613221831826.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613215840966.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613215941902.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613220200383.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613220530169.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235542084.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235845929.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235638633.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614000251199.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001056268.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001826952.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001653698.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001621899.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614002250093.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614003643944.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614003744749.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004433455.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004516065.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004646869.png">
+<meta property="article:published_time" content="2022-06-13T17:04:37.000Z">
+<meta property="article:modified_time" content="2022-06-13T17:06:23.241Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="镜像">
+<meta property="article:tag" content="容器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611212002445.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">45</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">15</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">48</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E8%BF%9B%E9%98%B6"><span class="toc-text">Docker进阶</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81DockerCompose"><span class="toc-text">1、DockerCompose</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%93%E9%AA%8C"><span class="toc-text">体验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yaml%E8%A7%84%E5%88%99"><span class="toc-text">yaml规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E6%B5%8B%E8%AF%95"><span class="toc-text">开源项目测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%EF%BC%9A%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-text">实战：计数器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Docker-Swarm"><span class="toc-text">2、Docker Swarm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-text">工作模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-text">搭建集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Raft-%E5%8D%8F%E8%AE%AE"><span class="toc-text">Raft 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93"><span class="toc-text">概念总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81Docker-Stack"><span class="toc-text">3、Docker Stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81Docker-Secret"><span class="toc-text">4、Docker Secret</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81Docker-Config"><span class="toc-text">5、Docker Config</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Docker进阶</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2022-06-14 01:04:37" itemprop="dateCreated datePublished" datetime="2022-06-14T01:04:37+08:00">2022-06-14</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">服务器</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E9%95%9C%E5%83%8F/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">镜像</span></a><a class="tag" href="/tags/%E5%AE%B9%E5%99%A8/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">容器</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://img-blog.csdnimg.cn/20210628000220859.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Docker进阶"><a href="#Docker进阶" class="headerlink" title="Docker进阶"></a>Docker进阶</h2><h2 id="1、DockerCompose"><a href="#1、DockerCompose" class="headerlink" title="1、DockerCompose"></a>1、DockerCompose</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Docker Compose 用来轻松搞笑的管理容器，定义运行多个容器。</p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/">https://docs.docker.com/compose/</a></p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611212002445.png" alt="image-20220611212002445" loading="lazy"></p>
+<p>Compose 是一个用于定义和运行多容器 Docker 应用程序的工具。使用Compose，您可以使用 YAML 文件来配置应用程序的服务。然后，使用单个命令，您可以从配置中创建并启动所有服务。</p>
+<p>三步骤：</p>
+<ol>
+<li>使用 Dockerfile 定义应用程序的环境，保证项目在任何地方可以运行</li>
+<li>编写 <code>docker-compose.yml</code> 文件，定义组成应用程序的服务</li>
+<li>使用 <code>docker compose up</code>命令启动并运行整个应用程序</li>
+</ol>
+<p>作用：批量容器编排</p>
+<blockquote>
+<p>例子</p>
+</blockquote>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span> 
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"8000:5000"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> .<span class="token punctuation">:</span>/code
+      <span class="token punctuation">-</span> logvolume01<span class="token punctuation">:</span>/var/log
+    <span class="token key atrule">links</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis
+volumes<span class="token punctuation">:</span></code></pre>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/install/compose-plugin/#install-the-plugin-manually">https://docs.docker.com/compose/install/compose-plugin/#install-the-plugin-manually</a></p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611215920739.png" alt="image-20220611215920739" loading="lazy"></p>
+<p>1、下载 DockerCompose</p>
+<pre class=" language-bash"><code class="language-bash">curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+<span class="token comment" spellcheck="true"># 建议使用国内的安装源，速度更快</span>
+curl -SL https://get.daocloud.io/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611220342275.png" alt="image-20220611220342275" loading="lazy"></p>
+<p>2、添加执行权限</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">chmod</span> +x /usr/local/bin/docker-compose</code></pre>
+<p>3、测试是否安装成功</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose -v</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220611221101348.png" alt="image-20220611221101348" loading="lazy"></p>
+<h3 id="体验"><a href="#体验" class="headerlink" title="体验"></a>体验</h3><p>地址：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/gettingstarted/">https://docs.docker.com/compose/gettingstarted/</a></p>
+<p>1、创建路径</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> /usr/local/docker
+<span class="token function">mkdir</span> composetest
+<span class="token function">cd</span> composetest</code></pre>
+<p>2、创建 python 应用<code>app.py</code></p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> time
+
+<span class="token keyword">import</span> redis
+<span class="token keyword">from</span> flask <span class="token keyword">import</span> Flask
+
+app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span>
+cache <span class="token operator">=</span> redis<span class="token punctuation">.</span>Redis<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'redis'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">6379</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">get_hit_count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    retries <span class="token operator">=</span> <span class="token number">5</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> cache<span class="token punctuation">.</span>incr<span class="token punctuation">(</span><span class="token string">'hits'</span><span class="token punctuation">)</span>
+        <span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>ConnectionError <span class="token keyword">as</span> exc<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> retries <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                <span class="token keyword">raise</span> exc
+            retries <span class="token operator">-=</span> <span class="token number">1</span>
+            time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">)</span>
+
+@app<span class="token punctuation">.</span>route<span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    count <span class="token operator">=</span> get_hit_count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token string">'Hello World! I have been seen { }  times.\n'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>count<span class="token punctuation">)</span></code></pre>
+<p>3、创建 <code>requirements.txt</code> 文件</p>
+<pre class=" language-bash"><code class="language-bash">flask
+redis</code></pre>
+<p>4、创建 Dockerfile 文件</p>
+<pre class=" language-yaml"><code class="language-yaml">FROM python<span class="token punctuation">:</span>3.7<span class="token punctuation">-</span>alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add <span class="token punctuation">-</span><span class="token punctuation">-</span>no<span class="token punctuation">-</span>cache gcc musl<span class="token punctuation">-</span>dev linux<span class="token punctuation">-</span>headers
+COPY requirements.txt requirements.txt
+RUN pip install <span class="token punctuation">-</span>r requirements.txt
+EXPOSE 5000
+COPY . .
+CMD <span class="token punctuation">[</span><span class="token string">"flask"</span><span class="token punctuation">,</span> <span class="token string">"run"</span><span class="token punctuation">]</span></code></pre>
+<p>5、编写 docker-compose.yml 文件</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"9000:5000"</span>
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> <span class="token string">"redis:alpine"</span></code></pre>
+<p>6、启动服务测试 <code>docker-compose up</code></p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612001911578.png" alt="image-20220612001911578" loading="lazy"></p>
+<p> Container composetest-redis-1  Recreated                                                    </p>
+<p> Container composetest-web-1    Recreated   </p>
+<p>以上内容代表服务启动起来了，容器的默认命名为 <code>[文件名]-[服务]-[数字]</code>，数字代表多个服务器，_数字 代表副本数量                                          </p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612002439621.png" alt="image-20220612002439621" loading="lazy"></p>
+<p>7、测试</p>
+<pre class=" language-bash"><code class="language-bash">curl localhost:9000</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612001946180.png" alt="image-20220612001946180" loading="lazy"></p>
+<p>8、查看网络规则</p>
+<pre class=" language-bash"><code class="language-bash">docker network <span class="token function">ls</span></code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612002859554.png" alt="image-20220612002859554" loading="lazy"></p>
+<p>自动生成一个网络，项目中的内容都在同个网络下，可通过服务名进行访问，例如 上述例子中 python 代码连接 redis 直接使用服务名称 </p>
+<pre class=" language-python"><code class="language-python">cache <span class="token operator">=</span> redis<span class="token punctuation">.</span>Redis<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'redis'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">6379</span><span class="token punctuation">)</span></code></pre>
+<p>查看网络配置，可看到两个容器服务处于用一个网段中</p>
+<pre class=" language-bash"><code class="language-bash">docker network inspect composetest_default</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612003335260.png" alt="image-20220612003335260" loading="lazy"></p>
+<p>如果在同一个网络下，我们可以直接通过服务名进行连接</p>
+<blockquote>
+<p>compose 服务命令</p>
+</blockquote>
+<p>1、直接启动服务 </p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up</code></pre>
+<p>2、后台启动 </p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up -d</code></pre>
+<p>3、停止后台服务 </p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 在服务的 yml 文件所在的路径执行</span>
+docker-compose stop</code></pre>
+<p>4、停止前台服务直接 ctrl + c 即可</p>
+<p>5、移除容器并删除使用的数据卷</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose down --volumes</code></pre>
+<blockquote>
+<p>Docker 小结</p>
+</blockquote>
+<p>1、Docker 镜像，run =&gt; 容器</p>
+<p>2、Dockerfile 构建镜像（服务打包）</p>
+<p>3、docker-compose 启动项目（编排、多个微服务/环境）</p>
+<p>4、Docker 网络配置</p>
+<h3 id="yaml规则"><a href="#yaml规则" class="headerlink" title="yaml规则"></a>yaml规则</h3><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/">https://docs.docker.com/compose/compose-file/compose-file-v3/</a></p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612005324530.png" alt="image-20220612005324530" loading="lazy"></p>
+<blockquote>
+<p>结构</p>
+</blockquote>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true"># 3层结构</span>
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">''</span>        <span class="token comment" spellcheck="true"># 1、版本</span>
+<span class="token key atrule">service</span><span class="token punctuation">:</span>        <span class="token comment" spellcheck="true"># 2、服务</span>
+    <span class="token punctuation">[</span>服务1<span class="token punctuation">]</span><span class="token punctuation">:</span> 
+        <span class="token comment" spellcheck="true"># 服务配置</span>
+        <span class="token key atrule">images</span><span class="token punctuation">:</span>
+        <span class="token key atrule">build</span><span class="token punctuation">:</span>
+        <span class="token key atrule">network</span><span class="token punctuation">:</span>
+        <span class="token punctuation">...</span>
+    <span class="token punctuation">[</span>服务2<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token punctuation">...</span>
+    <span class="token punctuation">[</span>服务3<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token punctuation">...</span>
+<span class="token comment" spellcheck="true"># 3、其他配置 网络/卷、全局配置</span>
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+<span class="token key atrule">networks</span><span class="token punctuation">:</span>
+configs<span class="token punctuation">:</span></code></pre>
+<p>service 层可用命令可在官方文档中查看</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612005847888.png" alt="image-20220612005847888" loading="lazy"></p>
+<blockquote>
+<p>常用服务命令</p>
+</blockquote>
+<p>1、指定路径和 dockerfile 文件</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">build</span><span class="token punctuation">:</span>
+  <span class="token key atrule">context</span><span class="token punctuation">:</span> .
+  <span class="token key atrule">dockerfile</span><span class="token punctuation">:</span> Dockerfile<span class="token punctuation">-</span>alternate</code></pre>
+<p>2、设置容器名称</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">container_name</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>web<span class="token punctuation">-</span>container</code></pre>
+<p>3、设置依赖关系（启动顺序）depends_on</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> db
+      <span class="token punctuation">-</span> redis
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> redis
+  <span class="token key atrule">db</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> postgres</code></pre>
+<p>4、暴漏端口</p>
+<pre class=" language-bash"><code class="language-bash">expose:
+  - <span class="token string">"3000"</span>
+  - <span class="token string">"8000"</span></code></pre>
+<p>总之，在 dockerfile 中使用的命令，在 compose 中同样可以有相应的命令可进行使用</p>
+<h3 id="开源项目测试"><a href="#开源项目测试" class="headerlink" title="开源项目测试"></a>开源项目测试</h3><blockquote>
+<p>博客</p>
+</blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/samples/wordpress/">https://docs.docker.com/samples/wordpress/</a></p>
+<p>1、创建新的文件夹</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> /usr/local/docker
+<span class="token function">mkdir</span> my_wordpress
+<span class="token function">cd</span> my_wordpress</code></pre>
+<p>2、编写 <code>docker-compose.yml</code> 文件</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">db</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> mysql<span class="token punctuation">:</span><span class="token number">5.7</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> db_data<span class="token punctuation">:</span>/var/lib/mysql
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token key atrule">MYSQL_ROOT_PASSWORD</span><span class="token punctuation">:</span> somewordpress
+      <span class="token key atrule">MYSQL_DATABASE</span><span class="token punctuation">:</span> wordpress
+      <span class="token key atrule">MYSQL_USER</span><span class="token punctuation">:</span> wordpress
+      <span class="token key atrule">MYSQL_PASSWORD</span><span class="token punctuation">:</span> wordpress
+
+  <span class="token key atrule">wordpress</span><span class="token punctuation">:</span>
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> db
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> wordpress<span class="token punctuation">:</span>latest
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> wordpress_data<span class="token punctuation">:</span>/var/www/html
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"9000:80"</span>
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token key atrule">WORDPRESS_DB_HOST</span><span class="token punctuation">:</span> db
+      <span class="token key atrule">WORDPRESS_DB_USER</span><span class="token punctuation">:</span> wordpress
+      <span class="token key atrule">WORDPRESS_DB_PASSWORD</span><span class="token punctuation">:</span> wordpress
+      <span class="token key atrule">WORDPRESS_DB_NAME</span><span class="token punctuation">:</span> wordpress
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token key atrule">db_data</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span> 
+  <span class="token key atrule">wordpress_data</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span> </code></pre>
+<p>3、启动项目</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011354764.png" alt="image-20220612011354764" loading="lazy"></p>
+<p>4、访问测试</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011438383.png" alt="image-20220612011438383" loading="lazy"></p>
+<p>5、进行基本的配置之后就可以登录到博客的后台了</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011623260.png" alt="image-20220612011623260" loading="lazy"></p>
+<p>6、只要再次访问 9000 端口就可以进行博客的首页</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612011719257.png" alt="image-20220612011719257" loading="lazy"></p>
+<h3 id="实战：计数器"><a href="#实战：计数器" class="headerlink" title="实战：计数器"></a>实战：计数器</h3><p>1、创建 SpringBoot 项目，选择 web 和 redis</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612135726715.png" alt="image-20220612135726715" loading="lazy"></p>
+<p>2、创建 Controller 层</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612141059493.png" alt="image-20220612141059493" loading="lazy"></p>
+<p>3、修改配置文件 application.yml</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">application</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> <span class="token string">"compose_test"</span>
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">host</span><span class="token punctuation">:</span> redis        <span class="token comment" spellcheck="true"># 直接使用容器名作为 host，所以不能本地启动</span>
+<span class="token key atrule">server</span><span class="token punctuation">:</span>
+  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">9000</span></code></pre>
+<p>4、创建 Dockerfile 文件</p>
+<pre class=" language-tex"><code class="language-tex">FROM java:8
+
+COPY *.jar /app.jar
+
+CMD ["--server.port=8080"]
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]</code></pre>
+<p>5、创建 docker-compose.yml 文件</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span> .
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> redis
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"9000:8080"</span>
+  <span class="token key atrule">redis</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> <span class="token string">"redis"</span></code></pre>
+<p>6、进行项目打包并将 jar、Dcokerfile、docker-compose.yml 上传到服务器上</p>
+<p>7、一键启动</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612143623408.png" alt="image-20220612143623408" loading="lazy"></p>
+<p>8、连接测试</p>
+<pre class=" language-bash"><code class="language-bash">curl localhost:9000/hello</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220612145921176.png" alt="image-20220612145921176" loading="lazy"></p>
+<p>9、项目重新部署打包</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up --build</code></pre>
+<p>发现重启 compose 之后，还是直接启动之前的容器，会保存之前的数据</p>
+<h2 id="2、Docker-Swarm"><a href="#2、Docker-Swarm" class="headerlink" title="2、Docker Swarm"></a>2、Docker Swarm</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/swarm/">https://docs.docker.com/engine/swarm/</a></p>
+<h3 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h3><p>Docker Engine 1.12引入了swarm模式，允许您创建一个由一个或多个Docker引擎组成的集群，称为swarm。swarm由一个或多个节点组成。</p>
+<p>有两种类型的节点：管理节点（managers）和工作节点（workers）</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613212357174.png" alt="image-20220613212357174" loading="lazy"></p>
+<p>manager 节点才能进行集群的操作</p>
+<h3 id="搭建集群"><a href="#搭建集群" class="headerlink" title="搭建集群"></a>搭建集群</h3><blockquote>
+<p>常用命令</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">docker swarm --help</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213054215.png" alt="image-20220613213054215" loading="lazy"></p>
+<blockquote>
+<p>初始化集群</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">docker swarm init --help</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213313928.png" alt="image-20220613213313928" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 获取内网地址</span>
+ip addr</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213447363.png" alt="image-20220613213447363" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># --advertise-addr 配置内网地址</span>
+docker swarm init --advertise-addr 172.16.188.148
+
+<span class="token comment" spellcheck="true"># 执行完成之后可以得到一个命令，在其他服务器上执行即可加入这个节点</span>
+docker swarm <span class="token function">join</span> --token SWMTKN-1-05omhvuv44nfctrsm6jqsq0cokxs0uz734due8rr07xlsggcuw-cwx00zgvejflq0py5br086s4z 172.16.188.148:2377
+
+<span class="token comment" spellcheck="true"># 并且可通过以下方式获取加入节点的命令</span>
+docker swarm join-token manager        <span class="token comment" spellcheck="true"># 加入成为管理员节点</span>
+docker swarm join-token worker        <span class="token comment" spellcheck="true"># 加入成为工作节点</span></code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213645891.png" alt="image-20220613213645891" loading="lazy"></p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613213831821.png" alt="image-20220613213831821" loading="lazy"></p>
+<blockquote>
+<p>查看节点列表</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 只有管理员节点才能执行</span>
+docker swarm node <span class="token function">ls</span></code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613214950514.png" alt="image-20220613214950514" loading="lazy"></p>
+<h3 id="Raft-协议"><a href="#Raft-协议" class="headerlink" title="Raft 协议"></a>Raft 协议</h3><p>保证大多数节点存活才可以用，集群至少大于3台</p>
+<p>例如：当前有三个主机一个从机，挂了一台主机还能正常使用，而当挂了两台主机，则整个集群不能正常使用了</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613221831826.png" alt="image-20220613221831826" loading="lazy"></p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>使用双主双重集群的情况下，将 leader 主机停止之后，另一台主机并不能使用</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613215840966.png" alt="image-20220613215840966" loading="lazy"></p>
+<p>重启 leader 主机之后，发现这个主机还存在集群中，但是 leader 节点成为另一台主机</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613215941902.png" alt="image-20220613215941902" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 从机离开集群，发现状态会变成 Down</span>
+docker swarm leave</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613220200383.png" alt="image-20220613220200383" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 从机以管理员身份再次加入节点，发现会新增一个节点记录</span>
+docker swarm <span class="token function">join</span> --token SWMTKN-1-5ys7gikiqane73bcyuotibkc20amvmiuq2ddnkakii24exws94-1t8ozj44ia7fey9c63o2rw3fo 119.23.209.205:2377</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613220530169.png" alt="image-20220613220530169" loading="lazy"></p>
+<p>集群，保证可用，至少需要3个主节点，大于1台管理节点存活</p>
+<p>Raft协议：保证大多数节点存活，才可以使用，高可用</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>弹性、扩缩容</p>
+<blockquote>
+<p>创建服务</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 类似 run 一个镜像</span>
+docker <span class="token function">service</span> create -p 9000:80 --name my-nginx nginx</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235542084.png" alt="image-20220613235542084" loading="lazy"></p>
+<blockquote>
+<p>查看服务信息</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看所有服务，replicas 显示副本数量</span>
+docker <span class="token function">service</span> <span class="token function">ls</span></code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235845929.png" alt="image-20220613235845929" loading="lazy"></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看服务信息</span>
+docker <span class="token function">service</span> <span class="token function">ps</span> my-nginx</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220613235638633.png" alt="image-20220613235638633" loading="lazy"></p>
+<p>可以查看该服务运行在那个节点上，如果在节点服务器上进行 docker rm 删除容器，并不会对服务进行影响，还是会重新生成一个容器运行</p>
+<p>服务运行的节点是随机分布的，也就是在第一台主机启动的服务，可能会运行在第二台从机上</p>
+<blockquote>
+<p>更新服务</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 更新服务为 3 个副本，进行负载均衡，副本数量可以多于服务器数量</span>
+docker <span class="token function">service</span> update --replicas 3 my-nginx
+
+<span class="token comment" spellcheck="true"># 只要再次更新为 1 个副本，则多余的副本容器会自动删除</span>
+docker <span class="token function">service</span> update --replicas 1 my-nginx</code></pre>
+<p>因为当前只配置了一台机器，所以 3 个副本都运行在一台机器上</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614000251199.png" alt="image-20220614000251199" loading="lazy"></p>
+<p>如果配置了集群，只要使用集群中的任意一台机器就可以进行访问该服务</p>
+<p>一个服务可以有多个副本，从而实现动态扩缩容，高可用</p>
+<blockquote>
+<p>扩缩容</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 跟 update 更新副本数差不多</span>
+docker <span class="token function">service</span> scale my-nginx<span class="token operator">=</span>5</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001056268.png" alt="image-20220614001056268" loading="lazy"></p>
+<h3 id="概念总结"><a href="#概念总结" class="headerlink" title="概念总结"></a>概念总结</h3><blockquote>
+<p>概念</p>
+</blockquote>
+<p><strong>swarm</strong></p>
+<p>集群的管理和编号，docker 可以初始化一个 swarm 集群，其他节点可以加入（管理节点、工作节点）</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001826952.png" alt="image-20220614001826952" loading="lazy"></p>
+<p>命令 -&gt; 管理 -&gt; api -&gt; 调度 -&gt; 工作节点（创建Task容器维护）</p>
+<p><strong>node</strong></p>
+<p>就是一个 docker 节点，多个节点就组成了一个网络集群</p>
+<p><strong>service</strong></p>
+<p>服务，可以在管理节点或者工作节点来运行，用户访问</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001653698.png" alt="image-20220614001653698" loading="lazy"></p>
+<p><strong>task</strong></p>
+<p>容器内的命令，细节人物</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614001621899.png" alt="image-20220614001621899" loading="lazy"></p>
+<blockquote>
+<p>服务副本与全局服务</p>
+</blockquote>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614002250093.png" alt="image-20220614002250093" loading="lazy"></p>
+<p>调整 service 以什么方式运行 <code>replicated</code> 和 <code>global</code></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 在创建服务的时候可以执行工作模式</span>
+docker <span class="token function">service</span> create --mode replicated --name mytom1 tomcat:7    <span class="token comment" spellcheck="true"># 默认</span>
+docker <span class="token function">service</span> create --mode global --name mytom2 tomcat:7</code></pre>
+<p>replicated 只有在工作节点才可以使用</p>
+<p>global 所有节点可以使用</p>
+<blockquote>
+<p>查看 Docker 网络</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">docker network <span class="token function">ls</span></code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614003643944.png" alt="image-20220614003643944" loading="lazy"></p>
+<p>ingress：是特殊的 overlay 网络，具有负载均衡的功能</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看网络配置</span>
+docker network inspect ingress</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614003744749.png" alt="image-20220614003744749" loading="lazy"></p>
+<p>Peers 中可以查看到所有节点的网络信息</p>
+<h2 id="3、Docker-Stack"><a href="#3、Docker-Stack" class="headerlink" title="3、Docker Stack"></a>3、Docker Stack</h2><p>docker-compose 单机部署项目</p>
+<p>Docker Stack 部署，集群部署</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 单机</span>
+docker-compose up -d wordpress.yml
+
+<span class="token comment" spellcheck="true"># 集群</span>
+docker stack deploy wordpress.yml</code></pre>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004433455.png" alt="image-20220614004433455" loading="lazy"></p>
+<h2 id="4、Docker-Secret"><a href="#4、Docker-Secret" class="headerlink" title="4、Docker Secret"></a>4、Docker Secret</h2><p>安全、配置密码、证书</p>
+<p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004516065.png" alt="image-20220614004516065" loading="lazy"></p>
+<h2 id="5、Docker-Config"><a href="#5、Docker-Config" class="headerlink" title="5、Docker Config"></a>5、Docker Config</h2><p><img src="/2022/06/14/Docker%E8%BF%9B%E9%98%B6/image-20220614004646869.png" alt="image-20220614004646869" loading="lazy"></p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/" title="Docker进阶">https://lxjblog.gitee.io/2022/06/14/Docker%E8%BF%9B%E9%98%B6/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2022/06/05/Docker%E5%AE%B9%E5%99%A8/" rel="next" title="Docker容器"><span class="post-nav-text">Docker容器</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
