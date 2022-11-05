@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2022-07-28T15:05:53.310Z</updated>
+  <updated>2022-11-05T06:58:57.173Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>goWeb入门</title>
+    <link href="https://lxjblog.gitee.io/2022/11/05/goWeb%E5%85%A5%E9%97%A8/"/>
+    <id>https://lxjblog.gitee.io/2022/11/05/goWeb%E5%85%A5%E9%97%A8/</id>
+    <published>2022-11-05T06:56:58.000Z</published>
+    <updated>2022-11-05T06:58:57.173Z</updated>
+    
+    <summary type="html">
+    
+      goweb开发入门学习
+    
+    </summary>
+    
+    
+      <category term="后端" scheme="https://lxjblog.gitee.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="golang" scheme="https://lxjblog.gitee.io/tags/golang/"/>
+    
+  </entry>
   
   <entry>
     <title>Git 服务器</title>
@@ -438,29 +459,6 @@
       <category term="nosql" scheme="https://lxjblog.gitee.io/tags/nosql/"/>
     
       <category term="jedis" scheme="https://lxjblog.gitee.io/tags/jedis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>protues元件库</title>
-    <link href="https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/"/>
-    <id>https://lxjblog.gitee.io/2020/09/11/protues%E5%85%83%E4%BB%B6%E5%BA%93/</id>
-    <published>2020-09-11T09:19:59.000Z</published>
-    <updated>2020-09-11T09:22:37.282Z</updated>
-    
-    <summary type="html">
-    
-      Proteus元件库元件名称及中英对照
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="电路" scheme="https://lxjblog.gitee.io/tags/%E7%94%B5%E8%B7%AF/"/>
-    
-      <category term="工具" scheme="https://lxjblog.gitee.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
