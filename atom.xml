@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2022-11-05T06:58:57.173Z</updated>
+  <updated>2022-12-06T14:27:08.283Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RabbitMQ入门</title>
+    <link href="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/"/>
+    <id>https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/</id>
+    <published>2022-12-06T14:24:37.000Z</published>
+    <updated>2022-12-06T14:27:08.283Z</updated>
+    
+    <summary type="html">
+    
+      rabbitmq简介及其在springboot中的基本使用
+    
+    </summary>
+    
+    
+      <category term="消息队列" scheme="https://lxjblog.gitee.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
+    
+    
+      <category term="rabbitmq" scheme="https://lxjblog.gitee.io/tags/rabbitmq/"/>
+    
+  </entry>
   
   <entry>
     <title>goWeb入门</title>
@@ -432,33 +453,6 @@
       <category term="饥荒" scheme="https://lxjblog.gitee.io/tags/%E9%A5%A5%E8%8D%92/"/>
     
       <category term="阿里云" scheme="https://lxjblog.gitee.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis的使用</title>
-    <link href="https://lxjblog.gitee.io/2020/10/06/Redis%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
-    <id>https://lxjblog.gitee.io/2020/10/06/Redis%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
-    <published>2020-10-06T05:20:59.000Z</published>
-    <updated>2020-10-11T09:52:13.177Z</updated>
-    
-    <summary type="html">
-    
-      在Java中集成使用Redis
-    
-    </summary>
-    
-    
-      <category term="数据库" scheme="https://lxjblog.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
-    
-      <category term="数据库" scheme="https://lxjblog.gitee.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-      <category term="nosql" scheme="https://lxjblog.gitee.io/tags/nosql/"/>
-    
-      <category term="jedis" scheme="https://lxjblog.gitee.io/tags/jedis/"/>
     
   </entry>
   

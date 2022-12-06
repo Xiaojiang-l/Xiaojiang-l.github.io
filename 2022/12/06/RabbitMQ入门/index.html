@@ -1,0 +1,449 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>RabbitMQ入门 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => <!-- hexo-inject:begin --><!-- hexo-inject:end -->{
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="rabbitmq简介及其在springboot中的基本使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ入门">
+<meta property="og:url" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="rabbitmq简介及其在springboot中的基本使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206194448869.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195135620.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195339946.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195426231.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195944778.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210813535.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210833292.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210931534.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206211517907.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206211529764.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206213718188.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214134038.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214623027.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214706942.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214736519.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206220428842.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221504431.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221543203.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221619629.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221703815.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221735527.png">
+<meta property="article:published_time" content="2022-12-06T14:24:37.000Z">
+<meta property="article:modified_time" content="2022-12-06T14:27:08.283Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="rabbitmq">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206194448869.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">50</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">52</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-text">消息队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">1、概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81AMQP%E5%8D%8F%E8%AE%AE"><span class="toc-text">2、AMQP协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%B8%B8%E7%94%A8%E4%BA%A4%E6%8D%A2%E5%99%A8"><span class="toc-text">3、常用交换器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-Exchange"><span class="toc-text">Direct Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Topic-Exchange"><span class="toc-text">Topic Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fanout-Exchange"><span class="toc-text">Fanout Exchange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Headers-Exchange"><span class="toc-text">Headers Exchange</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81rabbitmq-%E5%AE%89%E8%A3%85"><span class="toc-text">4、rabbitmq 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E5%9C%A8-sprinboot-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text">5、在 sprinboot 中使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-%E7%94%A8%E6%B3%95"><span class="toc-text">Direct 用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6"><span class="toc-text">消息确认机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8-ACK"><span class="toc-text">手动 ACK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">使用设计模式</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">RabbitMQ入门</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2022-12-06 22:24:37" itemprop="dateCreated datePublished" datetime="2022-12-06T22:24:37+08:00">2022-12-06</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">消息队列</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/rabbitmq/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">rabbitmq</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://img-blog.csdnimg.cn/20210628000220859.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><blockquote>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>介绍</p>
+</blockquote>
+<p>RabbitMQ是目前非常热门的一款消息中间件，不管是互联网大厂还是中小企业都在大量使用。</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206194448869.png" alt="image-20221206194448869" loading="lazy"></p>
+<p>消息队列提供一个<strong>异步通信机制</strong>，消息的发送者不必一直等待到消息被成功处理才返回，而是立即返回。</p>
+<p>消息中间件负责处理网络通信，如果网络连接不可用，消息被暂存于队列当中，当网络畅通的时候在将消息转发给相应的应用程序或者服务，当然前提是这些服务订阅了该队列。</p>
+<p>如果在商品服务和订单服务之间使用消息中间件，既可以提高并发量，又降低服务之间的耦合度。</p>
+<blockquote>
+<p>特点</p>
+</blockquote>
+<p>RabbitMQ除了像兔子一样跑的很快以外，还有这些特点：</p>
+<ul>
+<li>开源、性能优秀，稳定性保障</li>
+<li>提供可靠性消息投递模式、返回模式</li>
+<li>与Spring AMQP完美整合，API丰富</li>
+<li>集群模式丰富，表达式配置，HA模式，镜像队列模型</li>
+<li>保证数据不丢失的前提做到高可靠性、可用性</li>
+</ul>
+<blockquote>
+<p>应用场景</p>
+</blockquote>
+<ul>
+<li>异步处理：把消息放入消息中间件中，等到需要的时候再去处理。</li>
+<li>流量削峰：例如秒杀活动，在短时间内访问量急剧增加，使用消息队列，当消息队列满了就拒绝响应，跳转到错误页面，这样就可以使得系统不会因为超负载而崩溃。</li>
+<li>日志处理</li>
+<li>应用解耦：使用MQ发布订阅模式</li>
+</ul>
+<h2 id="2、AMQP协议"><a href="#2、AMQP协议" class="headerlink" title="2、AMQP协议"></a>2、AMQP协议</h2><p>AMQP协议是具有现代特征的二进制协议。是一个提供统一消息服务的应用层标准高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。</p>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<ul>
+<li>Server：接收客户端的连接，实现AMQP实体服务</li>
+<li>Connection：连接，应用程序与Server的网络连接，TCP连接</li>
+<li>Channel：信道，消息读写等操作在信道中进行。客户端可以建立多个信道，每个信道代表一个会话任务</li>
+<li>Message：消息，应用程序和服务器之间传送的数据，消息可以非常简单，也可以很复杂。由Properties和Body组成，Properties为外包装，可以对消息进行修饰，比如消息的优先级、延迟等高级特性；Body就是消息体内容。</li>
+<li>Virtual Host：虚拟主机，用于逻辑隔离。一个虚拟主机里面可以有若干个Exchange和Queue，同一个虚拟主机里面不能有相同名称的Exchange或Queue</li>
+<li>Exchange：交换器，接收消息，按照路由规则将消息路由到一个或者多个队列。如果路由不到，或者返回给生产者，或者直接丢弃。RabbitMQ常用的交换器常用类型有direct、topic、fanout、headers四种，后面详细介绍</li>
+<li>Binding：绑定，交换器和消息队列之间的虚拟连接，绑定中可以包含一个或者多个RoutingKey</li>
+<li>RoutingKey：路由键，生产者将消息发送给交换器的时候，会发送一个RoutingKey，用来指定路由规则，这样交换器就知道把消息发送到哪个队列。路由键通常为一个“.”分割的字符串，例如“com.rabbitmq”</li>
+<li>Queue：消息队列，用来保存消息，供消费者消费</li>
+</ul>
+<h2 id="3、常用交换器"><a href="#3、常用交换器" class="headerlink" title="3、常用交换器"></a>3、常用交换器</h2><p>RabbitMQ常用的交换器类型有direct、topic、fanout、headers四种</p>
+<h3 id="Direct-Exchange"><a href="#Direct-Exchange" class="headerlink" title="Direct Exchange"></a>Direct Exchange</h3><p>直连型交换机，该类型的交换器将所有发送到该交换器的消息被转发到RoutingKey指定的队列中，也就是说路由到BindingKey和RoutingKey完全匹配的队列中，一一对应</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195135620.png" alt="image-20221206195135620" loading="lazy"></p>
+<h3 id="Topic-Exchange"><a href="#Topic-Exchange" class="headerlink" title="Topic Exchange"></a>Topic Exchange</h3><p>将所有发送到 Topic Exchange 的消息被转发到所有 RoutingKey 中指定的 Topic 的队列上面</p>
+<p>Exchange 将 RoutingKey 和某 Topic 进行模糊匹配，其中 <code>*</code> 用来匹配一个词，<code>#</code> 用于匹配一个或者多个词</p>
+<p>例如“com.#”能匹配到“com.rabbitmq.oa”和“com.rabbitmq”；而”com.*”只能匹配到“com.rabbitmq”</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195339946.png" alt="image-20221206195339946" loading="lazy"></p>
+<h3 id="Fanout-Exchange"><a href="#Fanout-Exchange" class="headerlink" title="Fanout Exchange"></a>Fanout Exchange</h3><p>该类型不处理路由键，会把所有发送到交换器的消息路由到所有绑定的队列中。优点是转发消息最快，性能最好</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195426231.png" alt="image-20221206195426231" loading="lazy"></p>
+<h3 id="Headers-Exchange"><a href="#Headers-Exchange" class="headerlink" title="Headers Exchange"></a>Headers Exchange</h3><p>该类型的交换器不依赖路由规则来路由消息，而是根据消息内容中的headers属性进行匹配。headers类型交换器性能差，在实际中并不常用</p>
+<h2 id="4、rabbitmq-安装"><a href="#4、rabbitmq-安装" class="headerlink" title="4、rabbitmq 安装"></a>4、rabbitmq 安装</h2><p>建议通过 docker 镜像进行安装，更方便省事</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 安装镜像</span>
+docker pull rabbitmq
+
+<span class="token comment" spellcheck="true"># 运行 rabbitmq </span>
+docker run -d --hostname my-rabbit --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq
+
+<span class="token comment" spellcheck="true"># 查看容器 id</span>
+docker <span class="token function">ps</span>
+
+<span class="token comment" spellcheck="true"># 进入容器中</span>
+docker <span class="token function">exec</span> -it <span class="token operator">&lt;</span>容器id<span class="token operator">></span> /bin/bash
+
+<span class="token comment" spellcheck="true"># 在容器中运行</span>
+rabbitmq-plugins <span class="token function">enable</span> rabbitmq_management</code></pre>
+<p>安装完成之后访问 15672 端口即可进入登录界面，默认账号密码均为 guest</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206195944778.png" alt="image-20221206195944778" loading="lazy"></p>
+<blockquote>
+<p>新增用户</p>
+</blockquote>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210813535.png" alt="image-20221206210813535" loading="lazy"></p>
+<p>点击用户</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210833292.png" alt="image-20221206210833292" loading="lazy"></p>
+<p>进行授权</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206210931534.png" alt="image-20221206210931534" loading="lazy"></p>
+<h2 id="5、在-sprinboot-中使用"><a href="#5、在-sprinboot-中使用" class="headerlink" title="5、在 sprinboot 中使用"></a>5、在 sprinboot 中使用</h2><p>实例代码地址：<a target="_blank" rel="noopener" href="https://gitee.com/lxjblog/rabbitmq-study.git">https://gitee.com/lxjblog/rabbitmq-study.git</a></p>
+<p>创建 springboot 项目，导入依赖</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!--AMQP依赖，包含RabbitMQ--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-amqp<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>修改配置文件 </p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">rabbitmq</span><span class="token punctuation">:</span>
+      <span class="token comment" spellcheck="true"># 需要在 rabbitmq 上新建用户</span>
+    <span class="token key atrule">username</span><span class="token punctuation">:</span> root
+    <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">123456</span>
+    <span class="token key atrule">host</span><span class="token punctuation">:</span> &lt;ip<span class="token punctuation">></span>
+    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">5672</span>
+  <span class="token key atrule">application</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> rabbitMq
+<span class="token key atrule">server</span><span class="token punctuation">:</span>
+  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span></code></pre>
+<h3 id="Direct-用法"><a href="#Direct-用法" class="headerlink" title="Direct 用法"></a>Direct 用法</h3><blockquote>
+<p>定义直连交换机</p>
+</blockquote>
+<p>新建 <code>config</code> 目录，并创建 <code>DirectExchange</code> 配置类</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyDirectExchange</span> <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true">/**
+     * 定义队列
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> Queue <span class="token function">TestDirectQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// true 表示设置队列消息持久化</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Queue</span><span class="token punctuation">(</span><span class="token string">"TestDirectQueue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> Queue <span class="token function">Test2DirectQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// true 表示设置队列消息持久化</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Queue</span><span class="token punctuation">(</span><span class="token string">"Test2DirectQueue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">/**
+     * 定义交换机
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> DirectExchange <span class="token function">TestDirectExchange</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">DirectExchange</span><span class="token punctuation">(</span><span class="token string">"TestDirectExchange"</span><span class="token punctuation">,</span><span class="token boolean">true</span><span class="token punctuation">,</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">/**
+     * 通过 routingKey 绑定交换机和队列
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    Binding <span class="token function">bindingDirect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// TestDirectRouting 作为routingKey</span>
+        <span class="token keyword">return</span> BindingBuilder<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token function">TestDirectQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token function">TestDirectExchange</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">with</span><span class="token punctuation">(</span><span class="token string">"TestDirectRouting"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>创建 <code>controller</code> 目录，新增 <code>RabbitMQController</code> 用于发送队列消息</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RabbitMQController</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> RabbitTemplate rabbitTemplate<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"send"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 指定交换机和路由，并发送消息</span>
+        rabbitTemplate<span class="token punctuation">.</span><span class="token function">convertAndSend</span><span class="token punctuation">(</span><span class="token string">"TestDirectExchange"</span><span class="token punctuation">,</span> <span class="token string">"TestDirectRouting"</span><span class="token punctuation">,</span> <span class="token string">"hello rabbitMq"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"ok!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>创建监听类</p>
+</blockquote>
+<p>在 <code>receiver</code> 目录下创建 <code>DirectReceiver</code></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@RabbitListener</span><span class="token punctuation">(</span>queues <span class="token operator">=</span> <span class="token string">"TestDirectQueue"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DirectReceiver</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@RabbitHandler</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span>String msg<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"DirectReceiver消费者收到消息："</span> <span class="token operator">+</span> msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>启动项目，访问 <a target="_blank" rel="noopener" href="http://localhost:8080/send">http://localhost:8080/send</a></p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206211517907.png" alt="image-20221206211517907" loading="lazy"></p>
+<p>成功输出日志</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206211529764.png" alt="image-20221206211529764" loading="lazy"></p>
+<h3 id="消息确认机制"><a href="#消息确认机制" class="headerlink" title="消息确认机制"></a>消息确认机制</h3><blockquote>
+<p>消息接收的确认机制主要存在三种模式</p>
+</blockquote>
+<ol>
+<li><p>自动确认， 这也是默认的消息确认情况。 RabbitMQ成功将消息发出（即将消息成功写入TCP Socket）中立即认为本次投递已经被正确处理，不管消费者端是否成功处理本次投递</p>
+</li>
+<li><p>根据情况确认</p>
+</li>
+<li><p>手动确认，这个比较关键，也是我们配置接收消息确认机制时，多数选择的模式。消费者收到消息后，手动调用basic.ack/basic.nack/basic.reject后，RabbitMQ收到这些消息后，才认为本次投递成功。</p>
+<ul>
+<li><p>basic.ack用于肯定确认 </p>
+</li>
+<li><p>basic.nack用于否定确认（注意：这是AMQP 0-9-1的RabbitMQ扩展） </p>
+</li>
+<li><p>basic.reject用于否定确认，但与basic.nack相比有一个限制:一次只能拒绝单条消息 </p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="手动-ACK"><a href="#手动-ACK" class="headerlink" title="手动 ACK"></a>手动 ACK</h3><p>1、将直连交换器的监听去掉</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206213718188.png" alt="image-20221206213718188" loading="lazy"></p>
+<p>2、在 <code>receiver</code> 目录下创建新的监听处理类 <code>DirectAckReceiver</code></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DirectAckReceiver</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、在 <code>receiver</code> 目录下创建 ack 监听类 <code>MyAckReceiver</code></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAckReceiver</span> <span class="token keyword">implements</span> <span class="token class-name">ChannelAwareMessageListener</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    DirectAckReceiver directAckReceiver<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessage</span><span class="token punctuation">(</span>Message message<span class="token punctuation">,</span> Channel channel<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">long</span> deliveryTag <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getMessageProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeliveryTag</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+            String queue <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getMessageProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getConsumerQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 获取数据</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> body <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 判断队列内容</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"TestDirectQueue"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                directAckReceiver<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> 
+            <span class="token comment" spellcheck="true">// 消息确认</span>
+            channel<span class="token punctuation">.</span><span class="token function">basicAck</span><span class="token punctuation">(</span>deliveryTag<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token comment" spellcheck="true">// 重新放回队列，容易出现重复消费</span>
+            channel<span class="token punctuation">.</span><span class="token function">basicReject</span><span class="token punctuation">(</span>deliveryTag<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>4、在 <code>config</code> 目录下创建消息监听配置类 <code>MessageListenerConfig</code></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MessageListenerConfig</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> CachingConnectionFactory connectionFactory<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 消息接收处理类
+     */</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> MyAckReceiver myAckReceiver<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> SimpleMessageListenerContainer <span class="token function">simpleMessageListenerContainer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        SimpleMessageListenerContainer container <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleMessageListenerContainer</span><span class="token punctuation">(</span>connectionFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setConcurrentConsumers</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setMaxConcurrentConsumers</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// RabbitMQ默认是自动确认，这里改为手动确认消息</span>
+        container<span class="token punctuation">.</span><span class="token function">setAcknowledgeMode</span><span class="token punctuation">(</span>AcknowledgeMode<span class="token punctuation">.</span>MANUAL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 设置队列，多个队列可用逗号分开</span>
+        container<span class="token punctuation">.</span><span class="token function">setQueueNames</span><span class="token punctuation">(</span><span class="token string">"TestDirectQueue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 交给对应的监听者处理</span>
+        container<span class="token punctuation">.</span><span class="token function">setMessageListener</span><span class="token punctuation">(</span>myAckReceiver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> container<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>配置完成之后重启项目，测试能够再次监听到消息</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214134038.png" alt="image-20221206214134038" loading="lazy"></p>
+<p>添加错误代码进行测试</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214623027.png" alt="image-20221206214623027" loading="lazy"></p>
+<p>再次运行会看到程序报错，并对消息进行多次消费</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214706942.png" alt="image-20221206214706942" loading="lazy"></p>
+<p>而且消息还存在队列中，未被成功消费</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206214736519.png" alt="image-20221206214736519" loading="lazy"></p>
+<h3 id="使用设计模式"><a href="#使用设计模式" class="headerlink" title="使用设计模式"></a>使用设计模式</h3><p>以上使用的手动 ack 方法的代码耦合性较高，新增一个队列的话都需要修改 <code>MessageListenerConfig</code> 和 <code>MyAckReceiver</code> 这两个类的代码，不便于扩展，所以可以引用上 <strong>工厂设计模式</strong> 和 <strong>策略设计模式</strong></p>
+<p>1、创建 <code>factory</code> 目录，新增 <code>ReceiverFactory</code></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReceiverFactory</span> <span class="token punctuation">{</span> 
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Receiver<span class="token operator">></span> strategyMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Receiver <span class="token function">getInvokeStrategy</span><span class="token punctuation">(</span>String key<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> strategyMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">register</span><span class="token punctuation">(</span>String key<span class="token punctuation">,</span> Receiver receiver<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>StringUtils<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">||</span> receiver <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+        strategyMap<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> receiver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Set<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">getKeys</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> strategyMap<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、在 <code>receiver</code> 目录下创建 <code>Receiver</code> 接口，这是策略模式中的面向接口，并继承 <code>InitializingBean</code> 会在项目启动的时候初始化</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Receiver</span> <span class="token keyword">extends</span> <span class="token class-name">InitializingBean</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>3、修改 <code>DirectAckReceiver</code> 监听处理类，实现 <code>Receiver</code> 接口，并重写初始化方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DirectAckReceiver</span> <span class="token keyword">implements</span> <span class="token class-name">Receiver</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 注册到工厂</span>
+        ReceiverFactory<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">"TestDirectQueue"</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>4、修改 <code>MessageListenerConfig</code> 消息监听配置类，修改队列的获取方式</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MessageListenerConfig</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> CachingConnectionFactory connectionFactory<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 消息接收处理类
+     */</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> MyAckReceiver myAckReceiver<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> SimpleMessageListenerContainer <span class="token function">simpleMessageListenerContainer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        SimpleMessageListenerContainer container <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleMessageListenerContainer</span><span class="token punctuation">(</span>connectionFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setConcurrentConsumers</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setMaxConcurrentConsumers</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// RabbitMQ默认是自动确认，这里改为手动确认消息</span>
+        container<span class="token punctuation">.</span><span class="token function">setAcknowledgeMode</span><span class="token punctuation">(</span>AcknowledgeMode<span class="token punctuation">.</span>MANUAL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 设置队列</span>
+        Set<span class="token operator">&lt;</span>String<span class="token operator">></span> keys <span class="token operator">=</span> ReceiverFactory<span class="token punctuation">.</span><span class="token function">getKeys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        container<span class="token punctuation">.</span><span class="token function">setQueueNames</span><span class="token punctuation">(</span>keys<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span>keys<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 指定监听类</span>
+        container<span class="token punctuation">.</span><span class="token function">setMessageListener</span><span class="token punctuation">(</span>myAckReceiver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> container<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>5、修改消息监听类 <code>MyAckReceiver</code>，通过工厂去获取对应的处理类</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyAckReceiver</span> <span class="token keyword">implements</span> <span class="token class-name">ChannelAwareMessageListener</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    DirectAckReceiver directAckReceiver<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessage</span><span class="token punctuation">(</span>Message message<span class="token punctuation">,</span> Channel channel<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">long</span> deliveryTag <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getMessageProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeliveryTag</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+            String queue <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getMessageProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getConsumerQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 获取数据</span>
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> body <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 通过工厂获取对应的处理类</span>
+            Receiver strategy <span class="token operator">=</span> ReceiverFactory<span class="token punctuation">.</span><span class="token function">getInvokeStrategy</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            strategy<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 消息确认</span>
+            channel<span class="token punctuation">.</span><span class="token function">basicAck</span><span class="token punctuation">(</span>deliveryTag<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token comment" spellcheck="true">// 重新放回队列，容易出现重复消费</span>
+            channel<span class="token punctuation">.</span><span class="token function">basicReject</span><span class="token punctuation">(</span>deliveryTag<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>重启项目测试，能够正常运行</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206220428842.png" alt="image-20221206220428842" loading="lazy"></p>
+<blockquote>
+<p>新增其他队列</p>
+</blockquote>
+<p>1、新增队列2</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221504431.png" alt="image-20221206221504431" loading="lazy"></p>
+<p>2、通过 key2 将新队列绑定到交换机上</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221543203.png" alt="image-20221206221543203" loading="lazy"></p>
+<p>3、新增队列2的处理类</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221619629.png" alt="image-20221206221619629" loading="lazy"></p>
+<p>4、在 controller 中向队列2发送消息测试</p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221703815.png" alt="image-20221206221703815" loading="lazy"></p>
+<p>5、访问 <a target="_blank" rel="noopener" href="http://localhost:8080/send2%EF%BC%8C%E6%9F%A5%E7%9C%8B%E8%BE%93%E5%87%BA">http://localhost:8080/send2，查看输出</a></p>
+<p><img src="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/image-20221206221735527.png" alt="image-20221206221735527" loading="lazy"></p>
+<p>自此，就完成了基本的直连型交换机的手动 ACK 代码设计，其他类型的交换器等需要用到的时候在进行测试</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/" title="RabbitMQ入门">https://lxjblog.gitee.io/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2022/11/05/goWeb%E5%85%A5%E9%97%A8/" rel="next" title="goWeb入门"><span class="post-nav-text">goWeb入门</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2022 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
