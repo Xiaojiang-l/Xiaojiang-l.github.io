@@ -1813,7 +1813,7 @@ input {
   text-decoration: underline;
 }
 .search-popup {
-  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/stars-timing-0-blur-30px.jpg");
+  background-image: url("/images/stars-timing-0-blur-30px.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -1964,7 +1964,7 @@ input {
     background-image: url("");
   }
   :root:not([data-user-color-scheme]) .search-popup {
-    background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
+    background-image: url("/images/16pic_5196765_b.jpg");
   }
   :root:not([data-user-color-scheme]) .post-title-link {
     color: #3ca1ff;
@@ -2042,7 +2042,7 @@ input {
   background-image: url("");
 }
 [data-user-color-scheme='dark'] .search-popup {
-  background-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/mountain-blur-30px.jpg");
+  background-image: url("/images/16pic_5196765_b.jpg");
 }
 [data-user-color-scheme='dark'] .post-title-link {
   color: #3ca1ff;
