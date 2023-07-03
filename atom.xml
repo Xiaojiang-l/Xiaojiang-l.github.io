@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2023-07-03T14:42:46.227Z</updated>
+  <updated>2023-07-03T15:16:49.627Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -17,48 +17,44 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>SSO 单点登录</title>
     <link href="https://lxjblog.gitee.io/2023/07/03/SSO%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/"/>
     <id>https://lxjblog.gitee.io/2023/07/03/SSO%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/</id>
-    <published>2023-07-03T14:42:18.128Z</published>
-    <updated>2023-07-03T14:42:46.227Z</updated>
+    <published>2023-07-03T15:16:01.000Z</published>
+    <updated>2023-07-03T15:16:49.627Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      单点登录基本介绍和实现方式
     
     </summary>
     
     
+      <category term="后端" scheme="https://lxjblog.gitee.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
     
   </entry>
   
   <entry>
-    <title></title>
+    <title>Docker 集群</title>
     <link href="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/"/>
     <id>https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/</id>
-    <published>2023-07-03T14:41:10.162Z</published>
-    <updated>2023-07-03T14:41:47.103Z</updated>
+    <published>2023-07-03T15:15:01.000Z</published>
+    <updated>2023-07-03T15:15:53.202Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
-        
-      
+      Docker Swarm 进行集群搭建和灰度发布
     
     </summary>
     
     
+      <category term="服务器" scheme="https://lxjblog.gitee.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+      <category term="docker" scheme="https://lxjblog.gitee.io/tags/docker/"/>
     
   </entry>
   
