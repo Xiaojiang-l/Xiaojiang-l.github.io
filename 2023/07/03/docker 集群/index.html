@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="1、创建集群初始化集群 docker swarm init 加入集群 # 生成工作节点命令 docker swarm join-token worker  # 生成管理节点命令，所有管理节点需要开放 2377 端口 docker swarm join-token manager  # 加入集群 docker swarm join xxxx 2、负载均衡docker swarm 集群默认实现负载均衡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云端小站">
+<meta property="og:url" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="1、创建集群初始化集群 docker swarm init 加入集群 # 生成工作节点命令 docker swarm join-token worker  # 生成管理节点命令，所有管理节点需要开放 2377 端口 docker swarm join-token manager  # 加入集群 docker swarm join xxxx 2、负载均衡docker swarm 集群默认实现负载均衡">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626113755591.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626113824037.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626144421895.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626144524347.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626143521755.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626172826006.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626174932430.png">
+<meta property="article:published_time" content="2023-07-03T14:41:10.162Z">
+<meta property="article:modified_time" content="2023-07-03T14:41:47.103Z">
+<meta property="article:author" content="晓江">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626113755591.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">51</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">17</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">50</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-text">1、创建集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">2、负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83"><span class="toc-text">3、灰度发布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E7%9B%91%E6%B5%8B%E5%B7%A5%E5%85%B7"><span class="toc-text">4、监测工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81docker-stack"><span class="toc-text">5、docker stack</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"></h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2023-07-03 22:41:10" itemprop="dateCreated datePublished" datetime="2023-07-03T22:41:10+08:00">2023-07-03</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="1、创建集群"><a href="#1、创建集群" class="headerlink" title="1、创建集群"></a>1、创建集群</h2><p>初始化集群</p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><pre class=" language-bash"><code class="language-bash">docker swarm init</code></pre>
+<p>加入集群</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 生成工作节点命令</span>
+docker swarm join-token worker
+
+<span class="token comment" spellcheck="true"># 生成管理节点命令，所有管理节点需要开放 2377 端口</span>
+docker swarm join-token manager
+
+<span class="token comment" spellcheck="true"># 加入集群</span>
+docker swarm <span class="token function">join</span> xxxx</code></pre>
+<h2 id="2、负载均衡"><a href="#2、负载均衡" class="headerlink" title="2、负载均衡"></a>2、负载均衡</h2><p>docker swarm 集群默认实现负载均衡，轮询访问服务的不同副本，但需要注意开放对应的端口即可</p>
+<p>1、创建集群并加入</p>
+<pre class=" language-bash"><code class="language-bash">docker swarm init
+
+docker swarm <span class="token function">join</span> <span class="token punctuation">..</span>.</code></pre>
+<p>2、创建服务</p>
+<pre class=" language-bash"><code class="language-bash">docker <span class="token function">service</span> create -p 80:80 --name my-nginx --replicas 2 nginx</code></pre>
+<p>3、修改nginx主页</p>
+<pre class=" language-bash"><code class="language-bash">vim index.html</code></pre>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626113755591.png" alt="image-20230626113755591" loading="lazy"></p>
+<p>4、测试访问，轮询算法的负载均衡，通过命令行的方式访问，如果通过浏览器访问，可能是因为缓存问题，不会有轮询效果</p>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626113824037.png" alt="image-20230626113824037" loading="lazy"></p>
+<p><strong>注意：</strong>如果通过管理节点的ip无法访问，或者不会负载均衡时，应该时端口开放问题，要让 <code>swarm mode routing mesh</code> 生效的话, 在初始化swarm集群前必须开放<code>7946</code>的<code>tcp/udp</code>端口, <code>4789</code>的<code>udp</code>端口</p>
+<pre class=" language-bash"><code class="language-bash">firewall-cmd --permanent --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>7946/tcp
+firewall-cmd --permanent --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>7946/udp
+firewall-cmd --permanent --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>4789/udp
+
+<span class="token comment" spellcheck="true"># 重启防火墙</span>
+firewall-cmd --reload</code></pre>
+<h2 id="3、灰度发布"><a href="#3、灰度发布" class="headerlink" title="3、灰度发布"></a>3、灰度发布</h2><p>这是用于更新服务的方式，用新的系统镜像进行更新</p>
+<p>1、拉取另外的镜像，用于更新替代 nginx</p>
+<pre class=" language-bash"><code class="language-bash">docker pull httpd</code></pre>
+<p>2、进行更新</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 参数含义解释：</span>
+<span class="token comment" spellcheck="true"># –image 指定要更新的镜像</span>
+<span class="token comment" spellcheck="true"># –update-parallelism 指定最大同步更新的任务数</span>
+<span class="token comment" spellcheck="true"># –update-delay 指定更新间隔</span>
+docker <span class="token function">service</span> update --image httpd --update-delay 5s  --update-parallelism 5 my-nginx</code></pre>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626144421895.png" alt="image-20230626144421895" loading="lazy"></p>
+<p>更新完成，将所有的镜像都替换为 httpd，只有将所有服务更新完成之后才会访问到新的内容</p>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626144524347.png" alt="image-20230626144524347" loading="lazy"></p>
+<h2 id="4、监测工具"><a href="#4、监测工具" class="headerlink" title="4、监测工具"></a>4、监测工具</h2><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 拉取镜像</span>
+docker pull dockersamples/visualizer
+
+<span class="token comment" spellcheck="true"># 启动服务</span>
+docker <span class="token function">service</span> create \
+--name<span class="token operator">=</span>viz \
+--publish<span class="token operator">=</span>8080:8080/tcp \
+--constraint<span class="token operator">=</span>node.role<span class="token operator">==</span>manager \
+--mount<span class="token operator">=</span>type<span class="token operator">=</span>bind,src<span class="token operator">=</span>/var/run/docker.sock,dst<span class="token operator">=</span>/var/run/docker.sock \
+dockersamples/visualizer</code></pre>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626143521755.png" alt="image-20230626143521755" loading="lazy"></p>
+<h2 id="5、docker-stack"><a href="#5、docker-stack" class="headerlink" title="5、docker stack"></a>5、docker stack</h2><p>1、与 docker-compose 一样，编写对应的 <code>docker-compose.yml</code> 和 <code>dockerfile</code> 文件，上传对应的 <code>jar</code> 包，但是需要注意<strong>每一台服务器上都需要上传对应的文件</strong>，java 项目配置文件中的数据库 ip 地址直接填写下方的服务名称 <code>xj-mysql</code> 即可</p>
+<p><strong>docker-compose.yml</strong></p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">version</span> <span class="token punctuation">:</span> <span class="token string">'3.8'</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">xj-mysql</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> xj<span class="token punctuation">-</span>mysql
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> mysql<span class="token punctuation">:</span><span class="token number">5.7</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"3306:3306"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ./mysql/conf<span class="token punctuation">:</span>/etc/mysql/conf.d
+      <span class="token punctuation">-</span> ./mysql/logs<span class="token punctuation">:</span>/logs
+      <span class="token punctuation">-</span> ./mysql/data<span class="token punctuation">:</span>/var/lib/mysql
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+          <span class="token string">'mysqld'</span><span class="token punctuation">,</span>
+          <span class="token string">'--innodb-buffer-pool-size=80M'</span><span class="token punctuation">,</span>
+          <span class="token string">'--character-set-server=utf8mb4'</span><span class="token punctuation">,</span>
+          <span class="token string">'--collation-server=utf8mb4_unicode_ci'</span><span class="token punctuation">,</span>
+          <span class="token string">'--default-time-zone=+8:00'</span><span class="token punctuation">,</span>
+          <span class="token string">'--lower-case-table-names=1'</span>
+        <span class="token punctuation">]</span>
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token key atrule">MYSQL_DATABASE</span><span class="token punctuation">:</span> <span class="token string">'shanwei_dfdj_backend'</span>
+      <span class="token key atrule">MYSQL_ROOT_PASSWORD</span><span class="token punctuation">:</span> <span class="token string">'aW0gr1EPMrYV'</span>
+  <span class="token key atrule">xj-system</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> xj<span class="token punctuation">-</span>system
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> docker_xj<span class="token punctuation">-</span>system
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"9200:9200"</span>
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> xj<span class="token punctuation">-</span>mysql
+    <span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+      <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">2</span></code></pre>
+<p><strong>dockerfile</strong></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 基础镜像</span>
+FROM  openjdk:8-jre
+
+<span class="token comment" spellcheck="true"># 挂载目录</span>
+VOLUME /home/xiaojiang
+<span class="token comment" spellcheck="true"># 创建目录</span>
+RUN <span class="token function">mkdir</span> -p /home/xiaojiang
+<span class="token comment" spellcheck="true"># 指定路径</span>
+WORKDIR /home/xiaojiang
+<span class="token comment" spellcheck="true"># 复制jar文件到路径</span>
+COPY ./jar/*.jar /home/xiaojiang/system.jar
+CMD <span class="token punctuation">[</span><span class="token string">"---spring.profiles.active=test"</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true"># 启动网关服务</span>
+ENTRYPOINT <span class="token punctuation">[</span><span class="token string">"java"</span>, <span class="token string">"-jar"</span>, <span class="token string">"system.jar"</span><span class="token punctuation">]</span></code></pre>
+<p>2、只能在 docker-compose.yml 文件中定义对应容器的副本，通过 replicas 属性</p>
+<p>3、在启动之前需要在各个服务器上 pull 或者 创建好对应的镜像，不能像 docker-compose 一样边创建边启动，并且集群中的每个节点都需要用户这个镜像，所以建议将镜像先打包上传到 dockerHub 上，然后再每个节点拉取镜像，确保所有镜像是一致的</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 拉取镜像</span>
+docker pull xxx
+
+<span class="token comment" spellcheck="true"># 构建镜像</span>
+docker build -f dockerfile -t 镜像名:<span class="token punctuation">[</span>tag<span class="token punctuation">]</span> <span class="token punctuation">[</span>文件路径<span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true"># 在主节点上启动服务</span>
+docker stack deploy -c docker-compose.yml my-stack-service</code></pre>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626172826006.png" alt="image-20230626172826006" loading="lazy"></p>
+<p>4、更新服务，直接使用 deploy 就是灰度发布</p>
+<pre class=" language-bash"><code class="language-bash">docker stack deploy -c docker-compose.yml my-stack-service</code></pre>
+<p><img src="/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/image-20230626174932430.png" alt="image-20230626174932430" loading="lazy"></p>
+<p>总结：使用 docker stack 的时候需要提前将需要的镜像都拉取下来，并构建好对应的系统镜像，上传到 dockerhub 上，每个节点都需要重新拉取最新的系统镜像，然后再执行更新命令</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/" title="">https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2023/07/03/SSO%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/" rel="prev" title=""><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text"></span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2022/12/06/RabbitMQ%E5%85%A5%E9%97%A8/" rel="next" title="RabbitMQ入门"><span class="post-nav-text">RabbitMQ入门</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2023 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>

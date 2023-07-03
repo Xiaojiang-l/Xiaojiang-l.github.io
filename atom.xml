@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2022-12-06T14:27:08.283Z</updated>
+  <updated>2023-07-03T14:42:46.227Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://lxjblog.gitee.io/2023/07/03/SSO%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/"/>
+    <id>https://lxjblog.gitee.io/2023/07/03/SSO%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/</id>
+    <published>2023-07-03T14:42:18.128Z</published>
+    <updated>2023-07-03T14:42:46.227Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title></title>
+    <link href="https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/"/>
+    <id>https://lxjblog.gitee.io/2023/07/03/docker%20%E9%9B%86%E7%BE%A4/</id>
+    <published>2023-07-03T14:41:10.162Z</published>
+    <updated>2023-07-03T14:41:47.103Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>RabbitMQ入门</title>
@@ -407,52 +453,6 @@
     
     
       <category term="Pr" scheme="https://lxjblog.gitee.io/tags/Pr/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis进阶</title>
-    <link href="https://lxjblog.gitee.io/2020/10/11/Redis%E8%BF%9B%E9%98%B6/"/>
-    <id>https://lxjblog.gitee.io/2020/10/11/Redis%E8%BF%9B%E9%98%B6/</id>
-    <published>2020-10-11T09:46:50.000Z</published>
-    <updated>2020-10-11T09:51:43.429Z</updated>
-    
-    <summary type="html">
-    
-      Redis配置文件以更多的应用讲解
-    
-    </summary>
-    
-    
-      <category term="数据库" scheme="https://lxjblog.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="数据库" scheme="https://lxjblog.gitee.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-      <category term="nosql" scheme="https://lxjblog.gitee.io/tags/nosql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>饥荒服务器搭建</title>
-    <link href="https://lxjblog.gitee.io/2020/10/07/%E9%A5%A5%E8%8D%92%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA/"/>
-    <id>https://lxjblog.gitee.io/2020/10/07/%E9%A5%A5%E8%8D%92%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA/</id>
-    <published>2020-10-07T15:27:40.000Z</published>
-    <updated>2020-10-07T15:38:20.552Z</updated>
-    
-    <summary type="html">
-    
-      使用阿里云centos服务器搭建饥荒专用服务器
-    
-    </summary>
-    
-    
-      <category term="服务器" scheme="https://lxjblog.gitee.io/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    
-    
-      <category term="饥荒" scheme="https://lxjblog.gitee.io/tags/%E9%A5%A5%E8%8D%92/"/>
-    
-      <category term="阿里云" scheme="https://lxjblog.gitee.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
