@@ -1,0 +1,529 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>ELK | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="ELK 实现日志采集功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK">
+<meta property="og:url" content="https://lxjblog.gitee.io/2023/08/03/ELK/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="ELK 实现日志采集功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105005446974.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105005534974.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105005631110.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105012825013.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105015936121.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105010318766.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105010742880.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105020318719.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105020603742.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105021002526.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123211402820.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123212513042.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123214928274.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123215318006.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123221726591.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123221949229.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220123220506937.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124230211250.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124225501207.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124225559161.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124225902157.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124230053964.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124230756416.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20220124230909002.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/20190812112842645.png">
+<meta property="article:published_time" content="2023-08-03T14:46:22.000Z">
+<meta property="article:modified_time" content="2023-08-03T14:48:08.099Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="elasticsearch">
+<meta property="article:tag" content="logstash">
+<meta property="article:tag" content="kibana">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxjblog.gitee.io/2023/08/03/ELK/image-20211105005446974.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">53</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">55</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ELK%E4%B8%89%E4%BB%B6%E5%A5%97"><span class="toc-text">ELK三件套</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ElasticSearch"><span class="toc-text">ElasticSearch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#window"><span class="toc-text">window</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ElasticSearch-head"><span class="toc-text">ElasticSearch-head</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LogStash"><span class="toc-text">LogStash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kibana"><span class="toc-text">Kibana</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LogStash-1"><span class="toc-text">LogStash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#input"><span class="toc-text">input</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filter"><span class="toc-text">filter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-text">output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Codecs"><span class="toc-text">Codecs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E5%A4%9A%E4%B8%AA%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-text">监听多个类型的文件</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2023/08/03/ELK/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">ELK</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2023-08-03 22:46:22" itemprop="dateCreated datePublished" datetime="2023-08-03T22:46:22+08:00">2023-08-03</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%97%A5%E5%BF%97/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">日志</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/elasticsearch/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">elasticsearch</span></a><a class="tag" href="/tags/logstash/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">logstash</span></a><a class="tag" href="/tags/kibana/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">kibana</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://lxjblog.gitee.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="ELK三件套"><a href="#ELK三件套" class="headerlink" title="ELK三件套"></a>ELK三件套</h2><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><h3 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h3><h4 id="window"><a href="#window" class="headerlink" title="window"></a>window</h4><blockquote>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>安装ElasticSearch</p>
+</blockquote>
+<p>官网：<a target="_blank" rel="noopener" href="https://www.elastic.co/cn/elasticsearch/">https://www.elastic.co/cn/elasticsearch/</a></p>
+<p><img src="/2023/08/03/ELK/image-20211105005446974.png" alt="image-20211105005446974" loading="lazy"></p>
+<p>点击下载，然后选择对应的系统版本</p>
+<p><img src="/2023/08/03/ELK/image-20211105005534974.png" alt="image-20211105005534974" loading="lazy"></p>
+<p>最后解压即可</p>
+<p><img src="/2023/08/03/ELK/image-20211105005631110.png" alt="image-20211105005631110" loading="lazy"></p>
+<p>文件说明：</p>
+<pre><code>bin        启动文件
+config    配置文件
+    log4js    日志配置文件
+    jvm.options    java虚拟机相关配置
+    elasticsearch.yml    elasticsearch的配置文件
+lib        相关jar包
+logs    日志
+modules    功能模块
+plugins    插件</code></pre>
+<p>双击<code>elasticsearch.bat</code>文件就可以启动了</p>
+<p>报错：启动失败</p>
+<pre><code>&quot;could not find java in JAVA_HOME at &quot;C:\Program Files\Java\jdk1.8.0_131;\bin\java.exe&quot;</code></pre>
+<p><img src="/2023/08/03/ELK/image-20211105012825013.png" alt="image-20211105012825013" loading="lazy"></p>
+<p>解决方案：</p>
+<p>上方的错误原因是 <code>jdk1.8.0_131;\bin\</code>多出了一个分号，可以在配置文件中写死，或者配置好JAVA_HOME的路径</p>
+<p>修改<code>elasticsearch-env.bat</code>文件，将 <strong>%JAVA_HOME%</strong> 直接改成 <strong>C:\Program Files\Java\jdk1.8.0_131</strong></p>
+<p><img src="/2023/08/03/ELK/image-20211105015936121.png" alt="image-20211105015936121" loading="lazy"></p>
+<blockquote>
+<p>安装 ElasticSearch-head 可视化</p>
+</blockquote>
+<p>项目网站：<a target="_blank" rel="noopener" href="https://github.com/mobz/elasticsearch-head">https://github.com/mobz/elasticsearch-head</a></p>
+<p>直接下载未压缩包，然后解压</p>
+<p><img src="/2023/08/03/ELK/image-20211105010318766.png" alt="image-20211105010318766" loading="lazy"></p>
+<p>解压完成之后进入文件夹执行如下指令</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 安装依赖</span>
+<span class="token function">npm</span> <span class="token function">install</span>
+<span class="token comment" spellcheck="true"># 启动</span>
+<span class="token function">npm</span> run start</code></pre>
+<p><img src="/2023/08/03/ELK/image-20211105010742880.png" alt="image-20211105010742880" loading="lazy"></p>
+<p>启动完成之后可以访问<a target="_blank" rel="noopener" href="http://localhost:9100/">http://localhost:9100</a></p>
+<p>但是发现点击连接会报错，这是跨域问题</p>
+<p><img src="/2023/08/03/ELK/image-20211105020318719.png" alt="image-20211105020318719" loading="lazy"></p>
+<p>修改ElasticSearch配置文件<code>elasticsearch.yml</code></p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">http.cors.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+<span class="token key atrule">http.cors.allow-origin</span><span class="token punctuation">:</span> <span class="token string">"*"</span></code></pre>
+<p><img src="/2023/08/03/ELK/image-20211105020603742.png" alt="image-20211105020603742" loading="lazy"></p>
+<p>重新启动 ElasticSearch 即可</p>
+<h4 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a><img src="/2023/08/03/ELK/image-20211105021002526.png" alt="image-20211105021002526" loading="lazy">Linux</h4><blockquote>
+<p>下载安装包</p>
+</blockquote>
+<p>1、在<code>/etc</code>目录下创建es文件</p>
+<p>2、下载安装包</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">wget</span> https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.16.3-linux-x86_64.tar.gz</code></pre>
+<p><img src="/2023/08/03/ELK/image-20220123211402820.png" alt="image-20220123211402820" loading="lazy"></p>
+<p>3、解压</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">tar</span> -zxvf elasticsearch-7.16.3-linux-x86_64.tar.gz</code></pre>
+<blockquote>
+<p>修改配置文件</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 1、修改jvm占用</span>
+vim jvm.options
+<span class="token comment" spellcheck="true"># 增加如下配置</span>
+-Xms128m
+-Xmx128m
+
+<span class="token comment" spellcheck="true"># 2、修改elasticsearch.yml 文件</span>
+vim elasticsearch.yml
+<span class="token comment" spellcheck="true"># 配置es的集群名称，默认是elasticsearch</span>
+cluster.name: my-es
+<span class="token comment" spellcheck="true"># 节点名称</span>
+node.name: node-1
+<span class="token comment" spellcheck="true"># 设置当前的ip地址,通过指定相同网段的其他节点会加入该集群中</span>
+network.host: 0.0.0.0
+<span class="token comment" spellcheck="true"># 设置对外服务的http端口</span>
+http.port: 9200
+<span class="token comment" spellcheck="true"># 设置主节点</span>
+cluster.initial_master_nodes: <span class="token punctuation">[</span><span class="token string">"node-1"</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true"># 设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点</span>
+discovery.zen.ping.unicast.hosts: <span class="token punctuation">[</span><span class="token string">"127.0.0.1"</span>,<span class="token string">"10.10.10.34:9200"</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true"># 解决跨域问题</span>
+http.cors.enabled: <span class="token boolean">true</span>
+http.cors.allow-origin: <span class="token string">"*"</span></code></pre>
+<blockquote>
+<p>启动es</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">./elasticsearch</code></pre>
+<p><img src="/2023/08/03/ELK/image-20220123212513042.png" alt="image-20220123212513042" loading="lazy"></p>
+<p>报错：因为安全问题elasticsearch 不让用root用户直接运行，所以要创建新用户</p>
+<blockquote>
+<p>配置子用户</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建用户appadmin</span>
+<span class="token function">useradd</span> appadmin
+<span class="token comment" spellcheck="true"># 为用户appadmin设置密码</span>
+<span class="token function">passwd</span> appadmin
+
+<span class="token comment" spellcheck="true"># 赋予权限</span>
+<span class="token function">chown</span> -R appadmin /etc/es/elasticsearch-7.16.3</code></pre>
+<blockquote>
+<p>修改本地配置</p>
+</blockquote>
+<p><img src="/2023/08/03/ELK/image-20220123214928274.png" alt="image-20220123214928274" loading="lazy"></p>
+<p>如果直接切换用户就启动会报错，因为无法创建本地文件问题，用户最大可创建文件数太小。</p>
+<pre class=" language-bash"><code class="language-bash">vim /etc/security/limits.conf
+<span class="token comment" spellcheck="true"># 添加如下内容</span>
+* soft nofile 65536
+* hard nofile 131072
+* soft nproc 2048
+* hard nproc 4096　　
+<span class="token comment" spellcheck="true"># 注：* 代表Linux所有用户名称（比如 hadoop）</span>
+
+vim /etc/sysctl.conf
+<span class="token comment" spellcheck="true"># 添如下配置</span>
+vm.max_map_count <span class="token operator">=</span> 262145
+<span class="token comment" spellcheck="true"># 刷新配置</span>
+sysctl -p </code></pre>
+<p><img src="/2023/08/03/ELK/image-20220123215318006.png" alt="image-20220123215318006" loading="lazy"></p>
+<blockquote>
+<p>配置安全组</p>
+</blockquote>
+<p>登录阿里云控制台，增加9200端口</p>
+<p><img src="/2023/08/03/ELK/image-20220123221726591.png" alt="image-20220123221726591" loading="lazy"></p>
+<p>在宝塔面板开放服务器端口</p>
+<p><img src="/2023/08/03/ELK/image-20220123221949229.png" alt="image-20220123221949229" loading="lazy"></p>
+<blockquote>
+<p>启动ES</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 切换用户</span>
+<span class="token function">su</span> appadmin
+
+<span class="token comment" spellcheck="true"># 启动es</span>
+bin/elasticsearch</code></pre>
+<p><img src="/2023/08/03/ELK/image-20220123220506937.png" alt="image-20220123220506937" loading="lazy"></p>
+<blockquote>
+<p>后台启动</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 后台启动</span>
+./elasticsearch -d
+
+<span class="token comment" spellcheck="true"># 查看es进程</span>
+jps</code></pre>
+<h3 id="ElasticSearch-head"><a href="#ElasticSearch-head" class="headerlink" title="ElasticSearch-head"></a>ElasticSearch-head</h3><blockquote>
+<p>下载安装包</p>
+</blockquote>
+<p>Github地址：<a target="_blank" rel="noopener" href="https://github.com/mobz/elasticsearch-head">https://github.com/mobz/elasticsearch-head</a></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下载安装包</span>
+<span class="token function">wget</span> https://github.com/mobz/elasticsearch-head/archive/refs/heads/master.zip
+
+<span class="token comment" spellcheck="true"># 解压</span>
+unzip master.zip
+
+<span class="token comment" spellcheck="true"># 安装</span>
+<span class="token function">npm</span> insatll
+
+<span class="token comment" spellcheck="true"># 启动</span>
+<span class="token function">npm</span> run start
+
+<span class="token comment" spellcheck="true"># 后台启动</span>
+<span class="token function">nohup</span> <span class="token function">npm</span> run start <span class="token operator">&amp;</span></code></pre>
+<blockquote>
+<p>查看es数据</p>
+</blockquote>
+<p>访问端口9100，输入es的主机和端口，并连接即可</p>
+<p><img src="/2023/08/03/ELK/image-20220124230211250.png" alt="image-20220124230211250" loading="lazy"></p>
+<p>如果连接不上可以考虑两个问题：</p>
+<ol>
+<li>没有配置es的跨域问题</li>
+<li>es的当前节点没有配置在主节点中</li>
+</ol>
+<h3 id="LogStash"><a href="#LogStash" class="headerlink" title="LogStash"></a>LogStash</h3><blockquote>
+<p>安装logstash</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下载</span>
+<span class="token function">wget</span> https://artifacts.elastic.co/downloads/logstash/logstash-7.16.3-linux-x86_64.tar.gz
+
+<span class="token comment" spellcheck="true"># 解压</span>
+<span class="token function">tar</span> -zxvf logstash-7.16.3-linux-x86_64.tar.gz</code></pre>
+<blockquote>
+<p>修改配置文件</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">vim jvm.options
+
+<span class="token comment" spellcheck="true"># 配置内存</span>
+-Xms128m
+-Xmx128m</code></pre>
+<blockquote>
+<p>创建配置文件</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> conf.d
+vim logstash.conf
+
+<span class="token comment" spellcheck="true"># 输入如下内容</span>
+input <span class="token punctuation">{</span> 
+     <span class="token function">file</span> <span class="token punctuation">{</span> 
+          path <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"/usr/local/jweb/jweb_tl_pms4/logs/*.log"</span><span class="token punctuation">]</span>
+          <span class="token function">type</span> <span class="token operator">=</span><span class="token operator">></span> syslog
+          start_position <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"end"</span> <span class="token comment" spellcheck="true"># 第一次从头开始读取文件  beginning or end</span>
+          stat_interval <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"3"</span>  <span class="token comment" spellcheck="true"># 定时检查文件是否更新，默认1s</span>
+   <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> 
+
+output <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true"># 保存到es中</span>
+    elasticsearch <span class="token punctuation">{</span> 
+        hosts <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"106.53.119.27:9200"</span>
+        index <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"logstash-%{ +YYYY.MM.dd} "</span>
+    <span class="token punctuation">}</span> 
+    stdout <span class="token punctuation">{</span>  
+        codec <span class="token operator">=</span><span class="token operator">></span> rubydebug
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>启动</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">./logstash -f <span class="token punctuation">..</span>/config/logstash.conf
+
+<span class="token comment" spellcheck="true"># 后台启动</span>
+<span class="token function">nohup</span> ./logstash -f <span class="token punctuation">..</span>/config/logstash.conf <span class="token operator">&amp;</span></code></pre>
+<h3 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h3><blockquote>
+<p>安装</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下载安装包</span>
+<span class="token function">wget</span> https://artifacts.elastic.co/downloads/kibana/kibana-7.16.3-linux-x86_64.tar.gz
+
+<span class="token comment" spellcheck="true"># 解压</span>
+<span class="token function">tar</span> -zxvf kibana-7.16.3-linux-x86_64.tar.gz</code></pre>
+<blockquote>
+<p>修改配置文件</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">vim kibana.yml
+
+<span class="token comment" spellcheck="true"># 修改如下内容</span>
+server.port: 5601
+server.host: <span class="token string">"0.0.0.0"</span>
+elasticsearch.url: <span class="token string">"http://[elasticsearch主机]:9200"</span>
+kibana.index: <span class="token string">".kibana"</span>
+<span class="token comment" spellcheck="true"># 设置为中文内容</span>
+i18n.locale: <span class="token string">"zh-CN"</span></code></pre>
+<blockquote>
+<p>启动</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">bin/kibana
+
+<span class="token comment" spellcheck="true"># 后台启动</span>
+<span class="token function">nohup</span> bin/kibana <span class="token operator">&amp;</span></code></pre>
+<p>访问5601端口即可</p>
+<p><img src="/2023/08/03/ELK/image-20220124225501207.png" alt="image-20220124225501207" loading="lazy"></p>
+<blockquote>
+<p>查看数据</p>
+</blockquote>
+<p>点击侧边栏的discover</p>
+<p><img src="/2023/08/03/ELK/image-20220124225559161.png" alt="image-20220124225559161" loading="lazy"></p>
+<p>第一次进入可能会让你创建索引模式，可以匹配以有的索引，用于展示内容</p>
+<p><img src="/2023/08/03/ELK/image-20220124225902157.png" alt="image-20220124225902157" loading="lazy"></p>
+<p>配置好之后再次点击侧边栏的discover，查看数据，目前展示的便是刚才闯将的索引模式</p>
+<p><img src="/2023/08/03/ELK/image-20220124230053964.png" alt="image-20220124230053964" loading="lazy"></p>
+<blockquote>
+<p>查询日志</p>
+</blockquote>
+<p>日志内容存放在message字段中</p>
+<p><img src="/2023/08/03/ELK/image-20220124230756416.png" alt="image-20220124230756416" loading="lazy"></p>
+<p>可以使用上方的KQL（Kibana Query Language）语句进行查询</p>
+<p><img src="/2023/08/03/ELK/image-20220124230909002.png" alt="image-20220124230909002" loading="lazy"></p>
+<h2 id="LogStash-1"><a href="#LogStash-1" class="headerlink" title="LogStash"></a>LogStash</h2><blockquote>
+<p>logstash是一个数据分析软件，主要目的是分析log日志。整一套软件可以当作一个MVC模型，logstash是controller层，<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Elasticsearch&spm=1001.2101.3001.7020">Elasticsearch</a>是一个model层，kibana是view层。</p>
+</blockquote>
+<p><img src="/2023/08/03/ELK/20190812112842645.png" alt="在这里插入图片描述" loading="lazy"></p>
+<h3 id="input"><a href="#input" class="headerlink" title="input"></a>input</h3><blockquote>
+<p>input 及输入是指日志数据传输到Logstash中</p>
+</blockquote>
+<ul>
+<li>file：从文件系统中读取一个文件，很像UNIX命令 “tail -0a”</li>
+<li>syslog：监听514端口，按照RFC3164标准解析日志数据</li>
+<li>redis：从redis服务器读取数据，支持channel(发布订阅)和list模式。redis一般在Logstash消费集群中作为”broker”角色，保存events队列共Logstash消费。</li>
+<li>lumberjack：使用lumberjack协议来接收数据，目前已经改为 logstash-forwarder。</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">stdin <span class="token punctuation">{</span>  <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true"># 从控制台中输入来源</span>
+
+<span class="token function">file</span> <span class="token punctuation">{</span>  
+    <span class="token comment" spellcheck="true"># 从文件中来</span>
+    path <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"E:/software/logstash-1.5.4/logstash-1.5.4/data/*"</span> <span class="token comment" spellcheck="true">#单一文件</span>
+    <span class="token comment" spellcheck="true"># 监听文件的多个路径</span>
+    path <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"E:/software/logstash-1.5.4/logstash-1.5.4/data/*.log"</span>,<span class="token string">"F:/*.log"</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># 排除不想监听的文件</span>
+    exclude <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"1.log"</span>
+
+    <span class="token comment" spellcheck="true"># 添加自定义的字段</span>
+    add_field <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> <span class="token string">"test"</span><span class="token operator">=</span><span class="token operator">></span><span class="token string">"test"</span><span class="token punctuation">}</span> 
+    <span class="token comment" spellcheck="true"># 增加标签</span>
+    tags <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"tag1"</span>
+
+    <span class="token comment" spellcheck="true"># 设置新事件的标志</span>
+    delimiter <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"\n"</span>
+
+    <span class="token comment" spellcheck="true"># 设置多长时间扫描目录，发现新文件</span>
+    discover_interval <span class="token operator">=</span><span class="token operator">></span> 15
+    <span class="token comment" spellcheck="true"># 设置多长时间检测文件是否修改</span>
+    stat_interval <span class="token operator">=</span><span class="token operator">></span> 1
+
+    <span class="token comment" spellcheck="true"># 监听文件的起始位置，默认是end</span>
+    start_position <span class="token operator">=</span><span class="token operator">></span> beginning
+
+    <span class="token comment" spellcheck="true"># 监听文件读取信息记录的位置</span>
+    sincedb_path <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"E:/software/logstash-1.5.4/logstash-1.5.4/test.txt"</span>
+    <span class="token comment" spellcheck="true"># 设置多长时间会写入读取的位置信息</span>
+    sincedb_write_interval <span class="token operator">=</span><span class="token operator">></span> 15
+<span class="token punctuation">}</span> 
+
+<span class="token comment" spellcheck="true"># 系统日志方式</span>
+syslog <span class="token punctuation">{</span>  
+    <span class="token comment" spellcheck="true"># 定义类型</span>
+    <span class="token function">type</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"system-syslog"</span>  
+    <span class="token comment" spellcheck="true"># 定义监听端口</span>
+    port <span class="token operator">=</span><span class="token operator">></span> 10514    
+<span class="token punctuation">}</span> 
+
+<span class="token comment" spellcheck="true"># filebeats方式</span>
+beats <span class="token punctuation">{</span>  
+    port <span class="token operator">=</span><span class="token operator">></span> 5044
+<span class="token punctuation">}</span> </code></pre>
+<p>以上文件来源file，syslog，beats 只能选择其中一种</p>
+<p>注意：</p>
+<ul>
+<li>文件的路径名需要使用绝对路径</li>
+<li>支持globs写法</li>
+<li>如果想要监听多个目标文件可以改成数组</li>
+</ul>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><blockquote>
+<p>Fillters 在Logstash处理链中担任中间处理组件。经常被组合起来实现一些特定的行为来，处理匹配特定规则的事件流。</p>
+</blockquote>
+<ul>
+<li>grok：解析无规则的文字并转化为有结构的格式。Grok 是目前最好的方式来将无结构的数据转换为有结构可查询的数据。有120多种匹配规则，会有一种满足你的需要。</li>
+<li>mutate：mutate filter 允许改变输入的文档，你可以从命名，删除，移动或者修改字段在处理事件的过程中。</li>
+<li>drop：丢弃一部分events不进行处理，例如：debug events。</li>
+<li>clone：拷贝 event，这个过程中也可以添加或移除字段。</li>
+<li>geoip：添加地理信息(为前台kibana图形化展示使用)</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">filter <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true"># 定义数据的格式</span>
+    grok <span class="token punctuation">{</span> 
+        match <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>  <span class="token string">"message"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"%{ DATA:timestamp} \|%{ IP:serverIp} \|%{ IP:clientIp} \|%{ DATA:logSource} \|%{ DATA:userId} \|%{ DATA:reqUrl} \|%{ DATA:reqUri} \|%{ DATA:refer} \|%{ DATA:device} \|%{ DATA:textDuring} \|%{ DATA:duringTime:int} \|\|"</span><span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">#定义时间戳的格式</span>
+    <span class="token function">date</span> <span class="token punctuation">{</span> 
+        match <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span> <span class="token string">"timestamp"</span>, <span class="token string">"yyyy-MM-dd-HH:mm:ss"</span> <span class="token punctuation">]</span>
+        <span class="token comment" spellcheck="true"># match => ["timeLocal": "dd/MMM/yyyy:HH:mm:ss Z"]</span>
+        locale <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"cn"</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true"># 定义客户端的IP是哪个字段（上面定义的数据格式）</span>
+    geoip <span class="token punctuation">{</span> 
+        <span class="token function">source</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"clientIp"</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true"># 需要进行转换的字段，这里是将访问的时间转成int，再传给Elasticsearch</span>
+    mutate <span class="token punctuation">{</span> 
+        convert <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"duringTime"</span>, <span class="token string">"integer"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>常见的日志样例</p>
+<pre class=" language-bash"><code class="language-bash">内容： - 2015-04-29 13:04:23,733 <span class="token punctuation">[</span>main<span class="token punctuation">]</span> INFO <span class="token punctuation">(</span>api.batch.ThreadPoolWorker<span class="token punctuation">)</span> Command-line options <span class="token keyword">for</span> this run:
+正则：- %<span class="token punctuation">{</span> TIMESTAMP_ISO8601:time<span class="token punctuation">}</span>  \<span class="token punctuation">[</span>%<span class="token punctuation">{</span> WORD:main<span class="token punctuation">}</span> \<span class="token punctuation">]</span> %<span class="token punctuation">{</span> LOGLEVEL:loglevel<span class="token punctuation">}</span>  \<span class="token punctuation">(</span>%<span class="token punctuation">{</span> JAVACLASS:class<span class="token punctuation">}</span> \<span class="token punctuation">)</span> %<span class="token punctuation">{</span> GREEDYDATA:mydata<span class="token punctuation">}</span> </code></pre>
+<h3 id="output"><a href="#output" class="headerlink" title="output"></a>output</h3><blockquote>
+<p>outputs是logstash处理管道的最末端组件。一个event可以在处理过程中经过多重输出，但是一旦所有的outputs都执行结束，这个event也就完成生命周期。</p>
+</blockquote>
+<ul>
+<li><p>elasticsearch：如果你计划将高效的保存数据，并且能够方便和简单的进行查询</p>
+</li>
+<li><p>file：将event数据保存到文件中</p>
+</li>
+<li><p>graphite：将event数据发送到图形化组件中，一个很流行的开源存储图形化展示的组件。<a target="_blank" rel="noopener" href="http://graphite.wikidot.com/">http://graphite.wikidot.com/</a></p>
+</li>
+<li><p>statsd：statsd是一个统计服务，比如技术和时间统，通过udp通讯，聚合一个或者多个后台服务，如果你已经开始使用statsd，该选项对你应该很有用</p>
+</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">output <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true">#将输出保存到elasticsearch，如果没有匹配到时间就不保存，因为日志里的网址参数有些带有换行</span>
+    elasticsearch <span class="token punctuation">{</span> 
+        host <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"127.0.0.1:9200"</span>
+        index <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"logstash-%{ +YYYY.MM.dd} "</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">#输出到stdout</span>
+    <span class="token comment" spellcheck="true">#  stdout {  codec => rubydebug } </span>
+
+    <span class="token comment" spellcheck="true">#定义访问数据的用户名和密码</span>
+    <span class="token comment" spellcheck="true">#  user => webService</span>
+    <span class="token comment" spellcheck="true">#  password => 1q2w3e4r</span>
+<span class="token punctuation">}</span> 
+</code></pre>
+<h3 id="Codecs"><a href="#Codecs" class="headerlink" title="Codecs"></a>Codecs</h3><blockquote>
+<p>codecs 是基于数据流的过滤器，它可以作为input，output的一部分配置。Codecs可以帮助你轻松的分割发送过来已经被序列化的数据。流行的codecs包括 json,msgpack,plain(text)。</p>
+</blockquote>
+<ul>
+<li>json：使用json格式对数据进行编码/解码</li>
+<li>multiline：将汇多个事件中数据汇总为一个单一的行。比如：java异常信息和堆栈信息<br>  获取完整的配置信息，请参考 Logstash文档中 “plugin configuration”部分</li>
+</ul>
+<h3 id="监听多个类型的文件"><a href="#监听多个类型的文件" class="headerlink" title="监听多个类型的文件"></a>监听多个类型的文件</h3><pre class=" language-bash"><code class="language-bash">input <span class="token punctuation">{</span> 
+    <span class="token function">file</span> <span class="token punctuation">{</span> 
+        path <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"/usr/local/jweb/jweb_tl_pms4/logs/run.*.log"</span><span class="token punctuation">]</span>
+        <span class="token function">type</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"run"</span>
+        start_position <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"end"</span>
+        stat_interval <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"3"</span>
+    <span class="token punctuation">}</span> 
+    <span class="token function">file</span> <span class="token punctuation">{</span> 
+        path <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"/usr/local/jweb/jweb_tl_pms4/logs/error.*.log"</span><span class="token punctuation">]</span>
+        <span class="token function">type</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"error"</span>
+        start_position <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"end"</span>
+        stat_interval <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"3"</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> 
+
+output <span class="token punctuation">{</span> 
+    <span class="token keyword">if</span> <span class="token punctuation">[</span>type<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"run"</span> <span class="token punctuation">{</span> 
+        elasticsearch <span class="token punctuation">{</span> 
+            hosts <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"106.53.119.27:9200"</span>
+            index <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"run.%{ +YYYY.MM.dd} .log"</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span>type<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"error"</span> <span class="token punctuation">{</span> 
+        elasticsearch <span class="token punctuation">{</span> 
+            hosts <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"106.53.119.27:9200"</span>
+            index <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"error.%{ +YYYY.MM.dd} .log"</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+    stdout <span class="token punctuation">{</span>  
+        codec <span class="token operator">=</span><span class="token operator">></span> rubydebug
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2023/08/03/ELK/" title="ELK">https://lxjblog.gitee.io/2023/08/03/ELK/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2023/08/03/elasticsearch%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="next" title="elasticsearch基本使用"><span class="post-nav-text">elasticsearch基本使用</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2023 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
