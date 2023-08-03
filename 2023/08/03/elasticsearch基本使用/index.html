@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/elasticsearch%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230803211821250.png">
 <meta property="og:image" content="https://lxjblog.gitee.io/2023/08/03/elasticsearch%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230803213431453.png">
 <meta property="article:published_time" content="2023-08-03T14:41:18.000Z">
-<meta property="article:modified_time" content="2023-08-03T14:45:49.273Z">
+<meta property="article:modified_time" content="2023-08-03T15:13:13.225Z">
 <meta property="article:author" content="晓江">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="elasticsearch">
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <p>最后解压即可</p>
 <p><img src="/2023/08/03/elasticsearch%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20211105005631110.png" alt="image-20211105005631110" loading="lazy"></p>
 <p>文件说明：</p>
-<pre><code>bin        启动文件
+<pre class=" language-bash"><code class="language-bash">bin        启动文件
 config    配置文件
     log4js    日志配置文件
     jvm.options    java虚拟机相关配置
@@ -87,7 +87,7 @@ modules    功能模块
 plugins    插件</code></pre>
 <p>双击<code>elasticsearch.bat</code>文件就可以启动了</p>
 <p>报错：启动失败</p>
-<pre><code>&quot;could not find java in JAVA_HOME at &quot;C:\Program Files\Java\jdk1.8.0_131;\bin\java.exe&quot;</code></pre>
+<pre class=" language-bash"><code class="language-bash"><span class="token string">"could not find java in JAVA_HOME at "</span>C:\Program Files\Java\jdk1.8.0_131<span class="token punctuation">;</span>\bin\java.exe"</code></pre>
 <p><img src="/2023/08/03/elasticsearch%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20211105012825013.png" alt="image-20211105012825013" loading="lazy"></p>
 <p>解决方案：</p>
 <p>上方的错误原因是 <code>jdk1.8.0_131;\bin\</code>多出了一个分号，可以在配置文件中写死，或者配置好JAVA_HOME的路径</p>
