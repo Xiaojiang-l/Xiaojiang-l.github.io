@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2023-08-03T15:12:56.156Z</updated>
+  <updated>2023-08-24T13:49:33.828Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>spring源码</title>
+    <link href="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/"/>
+    <id>https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/</id>
+    <published>2023-08-24T13:46:10.000Z</published>
+    <updated>2023-08-24T13:49:33.828Z</updated>
+    
+    <summary type="html">
+    
+      spring基本源码分析
+    
+    </summary>
+    
+    
+      <category term="后端" scheme="https://lxjblog.gitee.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+      <category term="spring" scheme="https://lxjblog.gitee.io/tags/spring/"/>
+    
+      <category term="源码" scheme="https://lxjblog.gitee.io/tags/%E6%BA%90%E7%A0%81/"/>
+    
+  </entry>
   
   <entry>
     <title>ELK</title>
@@ -432,29 +457,6 @@
       <category term="Gitee" scheme="https://lxjblog.gitee.io/tags/Gitee/"/>
     
       <category term="微信开发工具" scheme="https://lxjblog.gitee.io/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>薄膜材料题库</title>
-    <link href="https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/"/>
-    <id>https://lxjblog.gitee.io/2020/11/07/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99%E9%A2%98%E5%BA%93/</id>
-    <published>2020-11-07T02:28:52.000Z</published>
-    <updated>2020-12-20T13:46:53.833Z</updated>
-    
-    <summary type="html">
-    
-      薄膜材料期中考试题库
-    
-    </summary>
-    
-    
-      <category term="光电课程" scheme="https://lxjblog.gitee.io/categories/%E5%85%89%E7%94%B5%E8%AF%BE%E7%A8%8B/"/>
-    
-    
-      <category term="课内" scheme="https://lxjblog.gitee.io/tags/%E8%AF%BE%E5%86%85/"/>
-    
-      <category term="薄膜材料" scheme="https://lxjblog.gitee.io/tags/%E8%96%84%E8%86%9C%E6%9D%90%E6%96%99/"/>
     
   </entry>
   

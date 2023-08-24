@@ -1,0 +1,963 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>spring源码 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="spring基本源码分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring源码">
+<meta property="og:url" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="spring基本源码分析">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230734308.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813222129188.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/640.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813223156467.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813223817574.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224749909.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224140043.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224543381.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225506438.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225621906.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225724325.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813231415923.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813231906497.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232401605.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232514117.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232640516.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232847644.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233127736.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233547783.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233658186.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234003004.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234147513.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234329850.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234526169.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234927053.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813235756225.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814000041240.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814224640713.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814225651281.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230253410.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230521004.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230101425.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814232147604.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814233717576.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204214444.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204302058.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204535055.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224044828.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213126539.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213340770.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213500676.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815214822264.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815214853434.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815215048194.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815215431210.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815221807773.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815221929355.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222757753.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222905801.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222955212.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224556186.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224659634.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815225755775.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815225853962.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815233032460.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817223054791.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817224341844.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225358141.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225542875.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225628412.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231040747.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233111770.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231349230.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231101445.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233133419.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233159129.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233238118.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234338484.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234802152.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234938713.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235046954.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235126747.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235820858.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235948664.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230818000004840.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820151054122.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820151502244.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820153502640.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820160656816.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820155607053.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820155844499.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162146493.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162216230.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162242477.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820163857630.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820163931830.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164020785.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164038965.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164647980.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164917287.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164930632.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165014014.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165106504.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165347814.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821215856055.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165808628.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821221229486.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821221416440.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821222356523.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821222513693.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821223217232.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821223315185.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225050654.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225720837.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225159638.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225209853.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230054346.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230509317.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230905280.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821231312729.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821231351646.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821232405909.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821232851167.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823215647392.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823220621030.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823220758708.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221315719.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221415413.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221918937.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823223229891.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823223301147.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224006103.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224109349.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224200559.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224310194.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823225350836.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823225454261.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231209893.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231346783.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231615930.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233409536.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233506279.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233633559.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823234517751.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823234948477.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823235106822.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824000901269.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001244597.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001323487.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001357947.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001418287.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001513295.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001539653.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824002628462.png">
+<meta property="og:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824002738486.png">
+<meta property="article:published_time" content="2023-08-24T13:46:10.000Z">
+<meta property="article:modified_time" content="2023-08-24T13:49:33.828Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
+<meta property="article:tag" content="源码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230734308.png"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">54</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">56</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">Spring 源码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%90%AF%E5%8A%A8-spring-%E5%AE%B9%E5%99%A8%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-text">1、启动 spring 容器的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">2、bean 的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81bean-%E5%AF%B9%E8%B1%A1"><span class="toc-text">1、bean 对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81bean-%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-text">2、bean 创建过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-text">3、初始化方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81bean-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-text">4、bean 构造方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81bean-%E8%8E%B7%E5%8F%96"><span class="toc-text">5、bean 获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E3%80%81%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5"><span class="toc-text">6、依赖注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7%E3%80%81AOP-%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="toc-text">7、AOP 代理对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8%E3%80%81spring-%E4%BA%8B%E5%8A%A1"><span class="toc-text">8、spring 事务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9%E3%80%81-Configuration-%E6%B3%A8%E8%A7%A3%E4%BD%9C%E7%94%A8"><span class="toc-text">9、@Configuration 注解作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10%E3%80%81%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="toc-text">10、循环依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11%E3%80%81%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="toc-text">11、三级缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12%E3%80%81-Async-%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="toc-text">12、@Async 循环依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13%E3%80%81-Lazy%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="toc-text">13、@Lazy解决循环依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81FactoryBean"><span class="toc-text">3、FactoryBean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%AE%9E%E7%8E%B0-mybatis-%E7%9A%84-bean-%E6%B3%A8%E5%86%8C"><span class="toc-text">4、实现 mybatis 的 bean 注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E9%80%9A%E8%BF%87-BeanDefinition-%E6%B3%A8%E5%86%8C-bean"><span class="toc-text">5、通过 BeanDefinition 注册 bean</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81ImportBeanDefinitionRegistrar"><span class="toc-text">6、ImportBeanDefinitionRegistrar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E9%85%8D%E7%BD%AE%E6%89%AB%E6%8F%8F"><span class="toc-text">7、配置扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81Spring-%E6%89%AB%E6%8F%8F%E6%B5%81%E7%A8%8B"><span class="toc-text">8、Spring 扫描流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81ComponentScan-%E6%B3%A8%E8%A7%A3"><span class="toc-text">9、ComponentScan 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E3%80%81BeanName-%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6"><span class="toc-text">10、BeanName 生成机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11%E3%80%81-Scope-%E6%B3%A8%E8%A7%A3"><span class="toc-text">11、 Scope 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12%E3%80%81%E6%89%AB%E6%8F%8F%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E9%85%8D%E7%BD%AE"><span class="toc-text">12、扫描文件类型配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13%E3%80%81%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84%E8%A7%A3%E6%9E%90"><span class="toc-text">13、扫描路径解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14%E3%80%81bean-%E9%87%8D%E5%A4%8D%E6%B3%A8%E5%86%8C"><span class="toc-text">14、bean 重复注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15%E3%80%81ASM-%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF"><span class="toc-text">15、ASM 扫描技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16%E3%80%81%E8%BF%87%E6%BB%A4%E5%92%8C%E6%89%AB%E6%8F%8F%E9%85%8D%E7%BD%AE"><span class="toc-text">16、过滤和扫描配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17%E3%80%81Lookup-%E6%B3%A8%E8%A7%A3"><span class="toc-text">17、Lookup 注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18%E3%80%81componentsIndex"><span class="toc-text">18、componentsIndex</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">spring源码</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2023-08-24 21:46:10" itemprop="dateCreated datePublished" datetime="2023-08-24T21:46:10+08:00">2023-08-24</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%90%8E%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">后端</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/java/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">java</span></a><a class="tag" href="/tags/spring/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">spring</span></a><a class="tag" href="/tags/%E6%BA%90%E7%A0%81/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">源码</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://lxjblog.gitee.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Spring-源码分析"><a href="#Spring-源码分析" class="headerlink" title="Spring 源码分析"></a>Spring 源码分析</h2><p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230734308.png" alt="image-20230814230734308" loading="lazy"></p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><h2 id="1、启动-spring-容器的方式"><a href="#1、启动-spring-容器的方式" class="headerlink" title="1、启动 spring 容器的方式"></a>1、启动 spring 容器的方式</h2><p>创建一个 <code>AnnotationConfigApplicationContext</code> 类，并指定配置类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        AnnotationConfigApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotationConfigApplicationContext</span><span class="token punctuation">(</span>AppConf<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>而在 <code>AppConf</code> 配置类中就可以添加对应的注解配置</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token string">"com.demo"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppConf</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>此时通过 context 变量就可以获取扫描路径中生成的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813222129188.png" alt="image-20230813222129188" loading="lazy"></p>
+<h2 id="2、bean-的生命周期"><a href="#2、bean-的生命周期" class="headerlink" title="2、bean 的生命周期"></a>2、bean 的生命周期</h2><h3 id="1、bean-对象"><a href="#1、bean-对象" class="headerlink" title="1、bean 对象"></a>1、bean 对象</h3><p>在Spring框架中，Bean对象是指由Spring容器管理的对象，可以是任意类型的Java类的实例，如数据库连接、业务逻辑类、控制器等</p>
+<p>Bean实例的创建和管理由Spring容器负责，而不是由应用程序本身负责。Bean的主要优势是可以将对象的创建和管理与业务逻辑分离，使应用程序更加灵活和易于维护</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/640.png" alt="图片" loading="lazy"></p>
+<h3 id="2、bean-创建过程"><a href="#2、bean-创建过程" class="headerlink" title="2、bean 创建过程"></a>2、bean 创建过程</h3><p><strong>类 –&gt; 无参构造方法 –&gt; 普通对象 –&gt; 依赖注入 –&gt; init（执行初始化方法）–&gt; 初始化后（AOP）–&gt; 代理对象 –&gt; Map&lt;beanName, Bean对象&gt; 单例池</strong></p>
+<p>其中依赖注入的过程如下</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813223156467.png" alt="image-20230813223156467" loading="lazy"></p>
+<p>所以只需要将定义好的普通对象存入到单例池中，也可成为 bean 对象，但是不同的是 spring 会自动创建对象并进行赋值</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813223817574.png" alt="image-20230813223817574" loading="lazy"></p>
+<p>对应源码</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224749909.png" alt="image-20230813224749909" loading="lazy"></p>
+<h3 id="3、初始化方法"><a href="#3、初始化方法" class="headerlink" title="3、初始化方法"></a>3、初始化方法</h3><p><strong>方式一：</strong></p>
+<p>实现 <code>InitializingBean</code> 接口，并重写 afterPropertiesSet 方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224140043.png" alt="image-20230813224140043" loading="lazy"></p>
+<p>对应的源码如下</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813224543381.png" alt="image-20230813224543381" loading="lazy"></p>
+<p>源码中执行了创建 bean 示例、填充 bean 和 初始化 bean 的过程，其中执行方法对应了初始化 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225506438.png" alt="image-20230813225506438" loading="lazy"></p>
+<p>在初始化 bean 中可以找到对应的这个方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225621906.png" alt="image-20230813225621906" loading="lazy"></p>
+<p>该方法中，先判断这个 bean 是否实现了 <code>InitializingBean</code> 接口，并调用 <code>afterPropertiesSet()</code> 方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813225724325.png" alt="image-20230813225724325" loading="lazy"></p>
+<p><strong>方式二：</strong></p>
+<p>使用 <code>@PostConstruct</code> 注解修饰方法</p>
+<h3 id="4、bean-构造方法"><a href="#4、bean-构造方法" class="headerlink" title="4、bean 构造方法"></a>4、bean 构造方法</h3><ul>
+<li><strong>没有构造方法</strong>：如果 bean 对象中没有显示写出构造方法的时候，在创建 bean 时会使用默认的无参构造方法</li>
+<li><strong>存在无参构造方法</strong>：直接使用无参构造方法</li>
+<li><strong>不存无参构造方法，但存在一个有参构造方法</strong>：直接执行有参构造方法</li>
+<li><strong>不存无参构造方法，但存在多个有参构造方法</strong>：直接报错</li>
+</ul>
+<p>如果存在多个构造方法时，可以直接 <code>@Autowired</code> 注解指定 spring 使用某个构造方法，如果指定了多个构造方法也会报错</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813231415923.png" alt="image-20230813231415923" loading="lazy"></p>
+<p>以上过程为 spring 的推断构造方法</p>
+<p>其中构造方法中的参数，都会从 spring 单例池中获取，如果不存在这个 bean 则会先创建这个 bean，<strong>并且这个对象必须为一个 bean，不然也会报错</strong></p>
+<p>例如将 OrderService 上面的注解注释掉的话，调用 UserService 的构造方法也会报错</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813231906497.png" alt="image-20230813231906497" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232401605.png" alt="image-20230813232401605" loading="lazy"></p>
+<h3 id="5、bean-获取"><a href="#5、bean-获取" class="headerlink" title="5、bean 获取"></a>5、bean 获取</h3><p>在 spring 中可以注册多个相同类型的 bean，如下又多注册了两个 OrderService 类型的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232514117.png" alt="image-20230813232514117" loading="lazy"></p>
+<p>此时获取到的 bean 并不相同，所以单例 bean 的意思是只存在一个相同名字的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232640516.png" alt="image-20230813232640516" loading="lazy"></p>
+<p>所以在这种情况下，执行这个构造方法就会报错了，找不到对应的 bean，而且通过类型查找的话会匹配到三个</p>
+<p>所以只能把 service 改成 正确的 bean 名称，或者只注册一个 OrderService 类型的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813232847644.png" alt="image-20230813232847644" loading="lazy"></p>
+<p>同时，也可以把参数改成 List 这样可以获取所有的 OrderService 类型的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233127736.png" alt="image-20230813233127736" loading="lazy"></p>
+<h3 id="6、依赖注入"><a href="#6、依赖注入" class="headerlink" title="6、依赖注入"></a>6、依赖注入</h3><p><code>@Autowired</code> 先 byType 再 byName，加了这个注解默认是必须注入的，注入失败则报错，但可以通过 required 属性设置</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233547783.png" alt="image-20230813233547783" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813233658186.png" alt="image-20230813233658186" loading="lazy"></p>
+<h3 id="7、AOP-代理对象"><a href="#7、AOP-代理对象" class="headerlink" title="7、AOP 代理对象"></a>7、AOP 代理对象</h3><p>如果使用了 aop 之后，存在 beanMap 单例池的 bean 对象将会是对应的代理对象，此后调用 bean 的 test 方法，都会先执行代理中的代码</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234003004.png" alt="image-20230813234003004" loading="lazy"></p>
+<p>开启 aop 需要增加 <code>@EnableAspectJAutoProxy</code> 注解</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234147513.png" alt="image-20230813234147513" loading="lazy"></p>
+<p>此时获取到的 userService 这个 bean，发现是代理对象</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234329850.png" alt="image-20230813234329850" loading="lazy"></p>
+<p>如果将 aop 代码注释掉，可以看到获取到的就是普通对象了</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234526169.png" alt="image-20230813234526169" loading="lazy"></p>
+<blockquote>
+<p>分析</p>
+</blockquote>
+<p>使用 sop 的时候都会生成代理对象，代理对象中添加普通对象，并重写 test() 方法，先执行切面逻辑代码，再调用普通对象的 test() 方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813234927053.png" alt="image-20230813234927053" loading="lazy"></p>
+<p>并且这个代理对象中 target 是经过依赖注入对象，其中还包含 orderService这个注册进来的 bean，而代理对象不会进行依赖注入</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230813235756225.png" alt="image-20230813235756225" loading="lazy"></p>
+<p>所以，代理对象就是对 普通对象 进行了修饰，在调用指定方法的时候进行其他逻辑</p>
+<p>通过 JoinPoint 属性就可以获取到对应的 普通对象 和 当前代理对象</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814000041240.png" alt="image-20230814000041240" loading="lazy"></p>
+<h3 id="8、spring-事务"><a href="#8、spring-事务" class="headerlink" title="8、spring 事务"></a>8、spring 事务</h3><blockquote>
+<p>初始化</p>
+</blockquote>
+<p>定义 jdbc，并开启事务</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-jdbc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>mysql<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>mysql-connector-java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>8.0.26<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>在配置类上进行定义，并开启事务</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableTransactionManagement</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TransactionConf</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> DataSource <span class="token function">dataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        DriverManagerDataSource dataSource <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DriverManagerDataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dataSource<span class="token punctuation">.</span><span class="token function">setUrl</span><span class="token punctuation">(</span><span class="token string">"jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT&amp;createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dataSource<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span><span class="token string">"root"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dataSource<span class="token punctuation">.</span><span class="token function">setPassword</span><span class="token punctuation">(</span><span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> dataSource<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> JdbcTemplate <span class="token function">jdbcTemplate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JdbcTemplate</span><span class="token punctuation">(</span><span class="token function">dataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> PlatformTransactionManager <span class="token function">platformTransactionManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        DataSourceTransactionManager transactionManager <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DataSourceTransactionManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        transactionManager<span class="token punctuation">.</span><span class="token function">setDataSource</span><span class="token punctuation">(</span><span class="token function">dataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> transactionManager<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>使用</p>
+</blockquote>
+<p>通过以下代码即可使用基本的事务功能</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> JdbcTemplate jdbcTemplate<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Transactional</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        jdbcTemplate<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token string">"insert students(id, name, age) values(1, '晓江', 23)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>原理</p>
+</blockquote>
+<p>通过开启事务的方式，也会生成一个 <code>UserService</code> 的代理对象，在执行 test() 方法的之前事务切面逻辑</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814224640713.png" alt="image-20230814224640713" loading="lazy"></p>
+<blockquote>
+<p>事务注解失效情况</p>
+</blockquote>
+<p>增加方法 test2()，并使用 <code>@Transactional(propagation = Propagation.NEVER)</code> 注解进行修饰，但发现并不会生效</p>
+<p>因为这个时候调用 test2() 方法的是 <code>userService</code> 普通对象，而不是 代理对象，所以配置的切面逻辑不会生效</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814225651281.png" alt="image-20230814225651281" loading="lazy"></p>
+<p>同理，以下方案也会使得事务失效，通过普通对象调用有注解的方法都会失效</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230253410.png" alt="image-20230814230253410" loading="lazy"></p>
+<p>不过以下这种情况则<strong>不会导致事务失效</strong></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230521004.png" alt="image-20230814230521004" loading="lazy"></p>
+<blockquote>
+<p>解决方案</p>
+</blockquote>
+<p>需要使得 test2() 方法上的注解生效，所以必须使用代理对象进行调用，可以直接使用依赖注入自身，然后再调用</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814230101425.png" alt="image-20230814230101425" loading="lazy"></p>
+<h3 id="9、-Configuration-注解作用"><a href="#9、-Configuration-注解作用" class="headerlink" title="9、@Configuration 注解作用"></a>9、@Configuration 注解作用</h3><p>用于修饰配置类，并生成该配置类的代理对象，对于上述事务配置类中，这个注解使得 <code>jdbcTemplate</code> 和 <code>platformTransactionManager</code> 使用了相同的 dataSource 数据源</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814232147604.png" alt="image-20230814232147604" loading="lazy"></p>
+<p>然后 <code>platformTransactionManager</code> 事务管理器将为这个 dataSource 创建对应的连接 conn，并将这两个对象存入 Map&lt;dataSource, conn&gt; 集合中，所以在后续的业务代码中开启事务时，都会从这个 Map 中获取连接</p>
+<p>如果没有 <code>@Configuration</code> 注解的话，就算开启了事务，但是获取不到对应的数据库连接，无法正确的关闭 自动提交，所以事务一样不会正确回滚</p>
+<p>并且可以通过  <code>platformTransactionManager</code> 配置多数据源</p>
+<p><strong>注意：</strong>虽然可以在 <code>@Configuration</code> 修饰的配置类中注册 bean，但即使不使用这个注解，还是一样可以通过 <code>@Bean</code> 注解去注册bean</p>
+<h3 id="10、循环依赖"><a href="#10、循环依赖" class="headerlink" title="10、循环依赖"></a>10、循环依赖</h3><p>在创建 bean 的过程中，出现两个 bean 之间依赖注入的相互引用</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230814233717576.png" alt="image-20230814233717576" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204214444.png" alt="image-20230815204214444" loading="lazy"></p>
+<p>自我依赖</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204302058.png" alt="image-20230815204302058" loading="lazy"></p>
+<h3 id="11、三级缓存"><a href="#11、三级缓存" class="headerlink" title="11、三级缓存"></a>11、三级缓存</h3><blockquote>
+<p>简介</p>
+</blockquote>
+<p><strong>一级缓存 singletonObjects：</strong>存储最终的对象，主要存放的是已经完成实例化、属性填充和初始化所有步骤的单例Bean实例，这样的Bean能够直接提供给用户使用，我们称之为终态Bean或叫成熟Bean</p>
+<p><strong>二级缓存 earlySingletonObjects:</strong> 可用来存储半成品Bean（或代理对象），主要存放的已经完成初始化但属性还没自动赋值的Bean，这些Bean还不能提供用户使用，只是用于提前暴露的Bean实例，我们把这样的Bean称之为临时Bean或早期的Bean（半成品Bean）</p>
+<p><strong>三级缓存 singletonFactories:</strong> 存储最早的普通对象的 lambda 表达式，调用ObjectFactory.getObject()最终会调用getEarlyBeanReference方法，获取提前暴露的单例bean引用（或代理对象）</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815204535055.png" alt="image-20230815204535055" loading="lazy"></p>
+<blockquote>
+<p>原理</p>
+</blockquote>
+<p>1、三级缓存用于实例化完成的普通对象的 lambda 表达式</p>
+<p>2、二级缓存用于填充 bean 的过程中，如果出现了循环依赖，则会提前进行 AOP，先去查找二级缓存是否存在代理对象（如果不需要进行 AOP，二级缓存则保存 普通对象）</p>
+<ul>
+<li>如果不存在，则调用三级缓存中的 lambda 表达式，生成代理对象（或普通对象）</li>
+<li>如果存在，则直接使用该代理对象</li>
+</ul>
+<p>3、一级缓存则用于保存最后生成的 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224044828.png" alt="image-20230815224044828" loading="lazy"></p>
+<blockquote>
+<p>对应源码</p>
+</blockquote>
+<p>对应于 <code>AbstractAutowireCapableBeanFactory</code> 类中的 doCreateBean 方法</p>
+<p>在实例化完成之后，就会出现以下代码，用于解决循环依赖问题，将 beanName 和 lambda 表达式存入到三级缓存中</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213126539.png" alt="image-20230815213126539" loading="lazy"></p>
+<p>在添加的过程中，还会将二级缓存对应的 bean 清除，并标记为正在创建</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213340770.png" alt="image-20230815213340770" loading="lazy"></p>
+<p>而在下面的填充 bean 的过程中，就需要进行依赖注入，可能就会出现循环依赖</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815213500676.png" alt="image-20230815213500676" loading="lazy"></p>
+<p>在填充 bean 的过程中，会判断是通过 name 还是通过 type 进行依赖注入</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815214822264.png" alt="image-20230815214822264" loading="lazy"></p>
+<p>而在依赖注入的过程中会去获取 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815214853434.png" alt="image-20230815214853434" loading="lazy"></p>
+<p>getBean 方法会调用到 doGetBean 方法，其中就会去单例池中去获取 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815215048194.png" alt="image-20230815215048194" loading="lazy"></p>
+<p><strong>最后这个才是 bean 的获取过程</strong></p>
+<ol>
+<li>先判断一级缓存是否存在</li>
+<li>一级缓存获取不到，且这个 bean 正在创建过程中（出现循环依赖）</li>
+<li>查询二级缓存是否存在</li>
+<li>二级缓存获取不到且支持循环依赖</li>
+<li>加锁后再次尝试获取</li>
+<li>如果一二级缓存仍获取不到，则查询三级缓存（这是最先设置的）</li>
+<li>三级缓存存在，则调用三级缓存的 lambda 表达式，生成代理对象（提前 AOP）</li>
+<li>将代理对象存入二级缓存中，并清除三级缓存</li>
+<li>返回代理对象</li>
+</ol>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815215431210.png" alt="image-20230815215431210" loading="lazy"></p>
+<blockquote>
+<p>查看后置 AOP 操作</p>
+</blockquote>
+<p>点击进入初始化方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815221807773.png" alt="image-20230815221807773" loading="lazy"></p>
+<p>进入方法后，在最下面可以看到应用 bean 的后置初始化方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815221929355.png" alt="image-20230815221929355" loading="lazy"></p>
+<p>并进入 postProcessAfterInitialization 方法查看</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222757753.png" alt="image-20230815222757753" loading="lazy"></p>
+<p>这个接口方法具有多个实现类，但我们只需要关心 aop 自动代理的实现方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222905801.png" alt="image-20230815222905801" loading="lazy"></p>
+<p>在 aop 自动代理的过程中，会先判断二级缓存是否存在对应当前 bean 的代理对象，如果存在则不再生成代理 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815222955212.png" alt="image-20230815222955212" loading="lazy"></p>
+<p>至此就完成了创建 bean 的过程，这个 doCreateBean 方法最终就会把二级缓存的代理对象返回出去</p>
+<h3 id="12、-Async-循环依赖"><a href="#12、-Async-循环依赖" class="headerlink" title="12、@Async 循环依赖"></a>12、@Async 循环依赖</h3><p>将 AOP 代理去掉之后，在 userService 的 test() 方法上增加 <code>@Async</code> 注解</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224556186.png" alt="image-20230815224556186" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815224659634.png" alt="image-20230815224659634" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815225755775.png" alt="image-20230815225755775" loading="lazy"></p>
+<p>再次启动代码，则会发现居然不会报错了！！！</p>
+<p>但是也可以发现，单例池中的 userService 存在的也是代理对象了，这是由 Async 注解生成的代理对象</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815225853962.png" alt="image-20230815225853962" loading="lazy"></p>
+<p>算了，测试不出来，可能这个 spring 源码已经解决了这个问题</p>
+<h3 id="13、-Lazy解决循环依赖"><a href="#13、-Lazy解决循环依赖" class="headerlink" title="13、@Lazy解决循环依赖"></a>13、@Lazy解决循环依赖</h3><p>@Lazy注解可以用于Spring框架中的Bean。当一个Bean被注解为@Lazy时，Spring会在需要时延迟初始化这个Bean，从而避免在循环依赖中过早地初始化Bean。</p>
+<p>例如以下代码，在 spring 中不会一开始就初始化这个 bean，只会进行 userService 的实例化，不会进行 orderService 的依赖注入，所以不会出现循环依赖</p>
+<p>直到调用 userSerivce.test() 方法的时候才会进行依赖注入</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230815233032460.png" alt="image-20230815233032460" loading="lazy"></p>
+<h2 id="3、FactoryBean"><a href="#3、FactoryBean" class="headerlink" title="3、FactoryBean"></a>3、FactoryBean</h2><blockquote>
+<p>普通生成 bean</p>
+</blockquote>
+<p>1、实现 <code>FactoryBean</code> 接口，然后重写方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestFactoryBean</span> <span class="token keyword">implements</span> <span class="token class-name">FactoryBean</span><span class="token operator">&lt;</span>UserService<span class="token operator">></span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> UserService <span class="token function">getObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">UserService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">getObjectType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> UserService<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、测试获取 bean</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        AnnotationConfigApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotationConfigApplicationContext</span><span class="token punctuation">(</span>AppConf<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"testFactoryBean"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"&amp;testFactoryBean"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"userService"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、发现通过这种方式，实现一个接口并增加 @Component 注解，实际上注册了两个 bean：</p>
+<ul>
+<li>通过 testFactoryBean 获取到的是 FactoryBean 实现类中注册的 bean</li>
+<li>通过 &amp;testFactoryBean 获取到的则是 实现类 本身</li>
+<li>且无法通过 userService 这个注册 bean 的名称去获取</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817223054791.png" alt="image-20230817223054791" loading="lazy"></p>
+<blockquote>
+<p>生成代理对象 bean</p>
+</blockquote>
+<p>1、创建 userMapper 接口</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817224341844.png" alt="image-20230817224341844" loading="lazy"></p>
+<p>2、修改 TestFactoryBean 类的方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestFactoryBean</span> <span class="token keyword">implements</span> <span class="token class-name">FactoryBean</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Object <span class="token function">getObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> Proxy<span class="token punctuation">.</span><span class="token function">newProxyInstance</span><span class="token punctuation">(</span>TestFactoryBean<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Class</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span> UserMapper<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">}</span> <span class="token punctuation">,</span> <span class="token punctuation">(</span>proxy<span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">UserMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> 
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                <span class="token keyword">return</span> <span class="token number">2</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> 
+        <span class="token punctuation">}</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">getObjectType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> UserMapper<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、启动并测试</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        AnnotationConfigApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotationConfigApplicationContext</span><span class="token punctuation">(</span>AppConf<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        UserMapper userMapper <span class="token operator">=</span> <span class="token punctuation">(</span>UserMapper<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"testFactoryBean"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>userMapper<span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>userMapper<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>4、好吧，测试失败，看来跟我理解的不太一样</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225358141.png" alt="image-20230817225358141" loading="lazy"></p>
+<p>5、然后把接口的返回类型修改成 Object 就可以了，但是输出内容和我想的也不一样</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225542875.png" alt="image-20230817225542875" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817225628412.png" alt="image-20230817225628412" loading="lazy"></p>
+<h2 id="4、实现-mybatis-的-bean-注册"><a href="#4、实现-mybatis-的-bean-注册" class="headerlink" title="4、实现 mybatis 的 bean 注册"></a>4、实现 mybatis 的 bean 注册</h2><p>1、导入 mybatis 依赖，因为这里是要试着自己实现 mybatis 和 spring 整合的，所以就不直接导入 mybatis-spring 的依赖了</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.mybatis<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>mybatis<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.5.9<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231040747.png" alt="image-20230817231040747" loading="lazy"></p>
+<p>2、注册一个 SqlSessionFactory 的 bean，等会用于创建 sqlSession 来生成 mapper</p>
+<p> 注册bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233111770.png" alt="image-20230817233111770" loading="lazy"></p>
+<p>配置 xml 文件</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231349230.png" alt="image-20230817231349230" loading="lazy"></p>
+<p>对应文档位置</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817231101445.png" alt="image-20230817231101445" loading="lazy"></p>
+<p>3、创建 MybatisFactoryBean 用于生成 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233133419.png" alt="image-20230817233133419" loading="lazy"></p>
+<p>4、修改 userMapper 的内容</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233159129.png" alt="image-20230817233159129" loading="lazy"></p>
+<p>5、启动测试，成功查询数据库并返回内容</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        AnnotationConfigApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotationConfigApplicationContext</span><span class="token punctuation">(</span>AppConf<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        UserService userService <span class="token operator">=</span> <span class="token punctuation">(</span>UserService<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"userService"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        userService<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817233238118.png" alt="image-20230817233238118" loading="lazy"></p>
+<h2 id="5、通过-BeanDefinition-注册-bean"><a href="#5、通过-BeanDefinition-注册-bean" class="headerlink" title="5、通过 BeanDefinition 注册 bean"></a>5、通过 BeanDefinition 注册 bean</h2><p>1、修改 MybatisFactoryBean 的内容，并去掉 component 注解</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234338484.png" alt="image-20230817234338484" loading="lazy"></p>
+<p>2、修改启动类，注册 BeanDefinition</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        AnnotationConfigApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotationConfigApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>AppConf<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 注册 bean</span>
+        AbstractBeanDefinition beanDefinition1 <span class="token operator">=</span> BeanDefinitionBuilder<span class="token punctuation">.</span><span class="token function">genericBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition1<span class="token punctuation">.</span><span class="token function">setBeanClass</span><span class="token punctuation">(</span>MybatisFactoryBean<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition1<span class="token punctuation">.</span><span class="token function">getConstructorArgumentValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addGenericArgumentValue</span><span class="token punctuation">(</span>UserMapper<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">registerBeanDefinition</span><span class="token punctuation">(</span><span class="token string">"userMapper"</span><span class="token punctuation">,</span> beanDefinition1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        context<span class="token punctuation">.</span><span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 调用 bean</span>
+        UserService userService <span class="token operator">=</span> <span class="token punctuation">(</span>UserService<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"userService"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        userService<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、测试启动发现能够达到相同的效果</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234802152.png" alt="image-20230817234802152" loading="lazy"></p>
+<blockquote>
+<p>新增其他 mapper</p>
+</blockquote>
+<p>1、新增 OrderMapper 接口</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">OrderMapper</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Select</span><span class="token punctuation">(</span><span class="token string">"select age from students where id = 1"</span><span class="token punctuation">)</span>
+    String <span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>2、修改 UserService</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817234938713.png" alt="image-20230817234938713" loading="lazy"></p>
+<p>3、修改启动类，也注册 orderMapper 这个 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235046954.png" alt="image-20230817235046954" loading="lazy"></p>
+<p>4、启动测试，一切正常</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235126747.png" alt="image-20230817235126747" loading="lazy"></p>
+<p>但是这样子对于注册 mapper 来说还是太多于麻烦，没新增一个 mapper 都需要修改主函数去注册多一个 bean，所以需要考虑使用扫描的方法，批量注册 bean</p>
+<h2 id="6、ImportBeanDefinitionRegistrar"><a href="#6、ImportBeanDefinitionRegistrar" class="headerlink" title="6、ImportBeanDefinitionRegistrar"></a>6、ImportBeanDefinitionRegistrar</h2><p>通过以上方式可以实现用 BeanDefinition 注册 bean，但是代码都存放在主函数中，影响美观和可读性，所以可以通过实现 ImportBeanDefinitionRegistrar 接口来解决这个问题</p>
+<p>1、实现 ImportBeanDefinitionRegistrar 接口并重写方法 registerBeanDefinitions</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MybatisImportBeanDefinitionRegistrar</span> <span class="token keyword">implements</span> <span class="token class-name">ImportBeanDefinitionRegistrar</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerBeanDefinitions</span><span class="token punctuation">(</span>AnnotationMetadata importingClassMetadata<span class="token punctuation">,</span> BeanDefinitionRegistry registry<span class="token punctuation">,</span> BeanNameGenerator importBeanNameGenerator<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 注册 userMapper</span>
+        AbstractBeanDefinition beanDefinition1 <span class="token operator">=</span> BeanDefinitionBuilder<span class="token punctuation">.</span><span class="token function">genericBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition1<span class="token punctuation">.</span><span class="token function">setBeanClass</span><span class="token punctuation">(</span>MybatisFactoryBean<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition1<span class="token punctuation">.</span><span class="token function">getConstructorArgumentValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addGenericArgumentValue</span><span class="token punctuation">(</span>UserMapper<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        registry<span class="token punctuation">.</span><span class="token function">registerBeanDefinition</span><span class="token punctuation">(</span><span class="token string">"userMapper"</span><span class="token punctuation">,</span> beanDefinition1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 注册 orderMapper</span>
+        AbstractBeanDefinition beanDefinition2 <span class="token operator">=</span> BeanDefinitionBuilder<span class="token punctuation">.</span><span class="token function">genericBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition2<span class="token punctuation">.</span><span class="token function">setBeanClass</span><span class="token punctuation">(</span>MybatisFactoryBean<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition2<span class="token punctuation">.</span><span class="token function">getConstructorArgumentValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addGenericArgumentValue</span><span class="token punctuation">(</span>OrderMapper<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        registry<span class="token punctuation">.</span><span class="token function">registerBeanDefinition</span><span class="token punctuation">(</span><span class="token string">"orderMapper"</span><span class="token punctuation">,</span> beanDefinition2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、将注册的代码迁移到上方，然后删除主函数的代码</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235820858.png" alt="image-20230817235820858" loading="lazy"></p>
+<p>3、在配置类中导入这个实现类</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230817235948664.png" alt="image-20230817235948664" loading="lazy"></p>
+<p>4、再次启动主函数，mapper 同样也可以被注册进来</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230818000004840.png" alt="image-20230818000004840" loading="lazy"></p>
+<h2 id="7、配置扫描"><a href="#7、配置扫描" class="headerlink" title="7、配置扫描"></a>7、配置扫描</h2><blockquote>
+<p>自定义扫描注解</p>
+</blockquote>
+<p>1、自定义扫描注解，并将 Import 注解的内容移入到这个注解中</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span>ElementType<span class="token punctuation">.</span>TYPE<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span>RetentionPolicy<span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Import</span><span class="token punctuation">(</span>MybatisImportBeanDefinitionRegistrar<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> @<span class="token keyword">interface</span> <span class="token class-name">TestScan</span> <span class="token punctuation">{</span> 
+    String <span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>2、在 AppConf 中使用这个注解，并配置扫描路径</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820151054122.png" alt="image-20230820151054122" loading="lazy"></p>
+<p>3、此时在我们 import 进来的这个 ImportBeanDefinitionRegistrar 实现类中就可以获取到加了 import 注解的类的信息了</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MybatisImportBeanDefinitionRegistrar</span> <span class="token keyword">implements</span> <span class="token class-name">ImportBeanDefinitionRegistrar</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerBeanDefinitions</span><span class="token punctuation">(</span>AnnotationMetadata importingClassMetadata<span class="token punctuation">,</span> BeanDefinitionRegistry registry<span class="token punctuation">,</span> BeanNameGenerator importBeanNameGenerator<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> testScan <span class="token operator">=</span> importingClassMetadata<span class="token punctuation">.</span><span class="token function">getAnnotationAttributes</span><span class="token punctuation">(</span>TestScan<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        testScan<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"value"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ……
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820151502244.png" alt="image-20230820151502244" loading="lazy"></p>
+<blockquote>
+<p>配置扫描器</p>
+</blockquote>
+<p>1、创建扫描器，继承 ClassPathBeanDefinitionScanner 类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestScanner</span> <span class="token keyword">extends</span> <span class="token class-name">ClassPathBeanDefinitionScanner</span> <span class="token punctuation">{</span> 
+
+    <span class="token keyword">public</span> <span class="token function">TestScanner</span><span class="token punctuation">(</span>BeanDefinitionRegistry registry<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">super</span><span class="token punctuation">(</span>registry<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">// 配置只扫描接口（默认不扫描）</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">isCandidateComponent</span><span class="token punctuation">(</span>AnnotatedBeanDefinition beanDefinition<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> beanDefinition<span class="token punctuation">.</span><span class="token function">getMetadata</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isInterface</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token comment" spellcheck="true">// 配置扫描方式</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> Set<span class="token operator">&lt;</span>BeanDefinitionHolder<span class="token operator">></span> <span class="token function">doScan</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> basePackages<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 配置扫描全部</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">addIncludeFilter</span><span class="token punctuation">(</span><span class="token punctuation">(</span>var1<span class="token punctuation">,</span> var2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Set<span class="token operator">&lt;</span>BeanDefinitionHolder<span class="token operator">></span> beanDefinitionHolders <span class="token operator">=</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">doScan</span><span class="token punctuation">(</span>basePackages<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> beanDefinitionHolders<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、在 ImportBeanDefinitionRegistrar 实现类中引用这个扫描器</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820153502640.png" alt="image-20230820153502640" loading="lazy"></p>
+<p>3、测试查看扫描结果，可以将两个接口描出来，但生成的 bean 不是我们想要的结果，应该是这个接口的实现类或者自定义的 MybatisFactoryBean 才对</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820160656816.png" alt="image-20230820160656816" loading="lazy"></p>
+<p>4、修改扫描结果 TestScanner 的 doScan 方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> Set<span class="token operator">&lt;</span>BeanDefinitionHolder<span class="token operator">></span> <span class="token function">doScan</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> basePackages<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true">// 配置扫描全部</span>
+    <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">addIncludeFilter</span><span class="token punctuation">(</span><span class="token punctuation">(</span>var1<span class="token punctuation">,</span> var2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Set<span class="token operator">&lt;</span>BeanDefinitionHolder<span class="token operator">></span> beanDefinitionHolders <span class="token operator">=</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">doScan</span><span class="token punctuation">(</span>basePackages<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 修改 bean 的 getBeanDefinition</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>BeanDefinitionHolder beanDefinitionHolder <span class="token operator">:</span> beanDefinitionHolders<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        BeanDefinition beanDefinition <span class="token operator">=</span> beanDefinitionHolder<span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        beanDefinition<span class="token punctuation">.</span><span class="token function">getConstructorArgumentValues</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">addGenericArgumentValue</span><span class="token punctuation">(</span>Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>beanDefinition<span class="token punctuation">.</span><span class="token function">getBeanClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 修改 bean 的实现类 FactoryBean</span>
+        beanDefinition<span class="token punctuation">.</span><span class="token function">setBeanClassName</span><span class="token punctuation">(</span>MybatisFactoryBean<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+    <span class="token keyword">return</span> beanDefinitionHolders<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>5、而对于 MybatisImportBeanDefinitionRegistrar 类，现在只需配置如下代码即可</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MybatisImportBeanDefinitionRegistrar</span> <span class="token keyword">implements</span> <span class="token class-name">ImportBeanDefinitionRegistrar</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerBeanDefinitions</span><span class="token punctuation">(</span>AnnotationMetadata importingClassMetadata<span class="token punctuation">,</span> BeanDefinitionRegistry registry<span class="token punctuation">,</span> BeanNameGenerator importBeanNameGenerator<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 获取扫描路径</span>
+        Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> testScan <span class="token operator">=</span> importingClassMetadata<span class="token punctuation">.</span><span class="token function">getAnnotationAttributes</span><span class="token punctuation">(</span>TestScan<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String path <span class="token operator">=</span> testScan<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"value"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 开始扫描，调用 scan 方法</span>
+        TestScanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TestScanner</span><span class="token punctuation">(</span>registry<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        scanner<span class="token punctuation">.</span><span class="token function">scan</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>5、再次启动测试，发现能够正常调用 mapper 的方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820155607053.png" alt="image-20230820155607053" loading="lazy"></p>
+<blockquote>
+<p>新增 mapper 测试</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">NumberMapper</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Select</span><span class="token punctuation">(</span><span class="token string">"select 'number'"</span><span class="token punctuation">)</span>
+    String <span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>在 userService 中使用</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> UserMapper userMapper<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> OrderMapper orderMapper<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> NumberMapper numberMapper<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>userMapper<span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>orderMapper<span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>numberMapper<span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>发现同样能够正常使用</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820155844499.png" alt="image-20230820155844499" loading="lazy"></p>
+<h2 id="8、Spring-扫描流程"><a href="#8、Spring-扫描流程" class="headerlink" title="8、Spring 扫描流程"></a>8、Spring 扫描流程</h2><p>1、点击 AnnotationConfigApplicationContext</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162146493.png" alt="image-20230820162146493" loading="lazy"></p>
+<p>2、查看 refresh 方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162216230.png" alt="image-20230820162216230" loading="lazy"></p>
+<p>3、在 invokeBeanFactoryPostProcessors 方法中就定义了扫描</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820162242477.png" loading="lazy"></p>
+<p>接下来就一路往下查看</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820163857630.png" alt="image-20230820163857630" loading="lazy"></p>
+<p>发现了一个 BeanDefinition 后置处理器</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820163931830.png" alt="image-20230820163931830" loading="lazy"></p>
+<p>查看配置类的实现方式</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164020785.png" alt="image-20230820164020785" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164038965.png" alt="image-20230820164038965" loading="lazy"></p>
+<p>找到下面的解析方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164647980.png" alt="image-20230820164647980" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164917287.png" alt="image-20230820164917287" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820164930632.png" alt="image-20230820164930632" loading="lazy"></p>
+<p>在 processConfigurationClass 方法中的 configClass 就是我们传进来的配置类</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165014014.png" alt="image-20230820165014014" loading="lazy"></p>
+<p>在 doProcessConfigurationClass 方法中就会识别对应的配置类注解</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165106504.png" alt="image-20230820165106504" loading="lazy"></p>
+<h2 id="9、ComponentScan-注解"><a href="#9、ComponentScan-注解" class="headerlink" title="9、ComponentScan 注解"></a>9、ComponentScan 注解</h2><p>通过上方代码分析，查看 doProcessConfigurationClass 方法下面的 <code>@ComponentScan</code> 注解的处理，可以看到 ComponentScans 和 ComponentScan 都可以用来配置扫描路径</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165347814.png" alt="image-20230820165347814" loading="lazy"></p>
+<p>发现源码中也是使用 ClassPathBeanDefinitionScanner 扫描 componentScan 配置的路径</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821215856055.png" alt="image-20230821215856055" loading="lazy"></p>
+<p>而在 ComponentScan 注解上面加了 <code>@Repeatable </code> 注解，所以可以重复使用</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230820165808628.png" alt="image-20230820165808628" loading="lazy"></p>
+<blockquote>
+<p>配置扫描多路径</p>
+</blockquote>
+<p>方式一：通过使用多个 ComponentScan 注解</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token string">"com.example.web_test"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token string">"com.example.web_test2"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token string">"com.example.web_test3"</span><span class="token punctuation">,</span> <span class="token string">"com.example.web_test4"</span><span class="token punctuation">}</span> <span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppConf</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>方式二：使用 ComponentScans 注解</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@ComponentScans</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token string">"com.example.web_test"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span><span class="token string">"com.example.web_test2"</span><span class="token punctuation">)</span><span class="token punctuation">}</span> <span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppConf</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>扫描过程</p>
+</blockquote>
+<p>1、扫描 component 注解中配置的路径，然后依次获取扫描出来的 BeanDefinition，并判断扫描出来的是否为配置类</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821221229486.png" alt="image-20230821221229486" loading="lazy"></p>
+<p>2、checkConfigurationClassCandidate 方法判断这个 bean 中是否存在 Configuration 注解，存在则作为配置类进行解析</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821221416440.png" alt="image-20230821221416440" loading="lazy"></p>
+<p>3、如果不存在 Configuration 注解，则会调用 isConfigurationCandidate 方法进行判断：</p>
+<ul>
+<li>判断是否为接口</li>
+<li>判断是否存在部分注解</li>
+<li>判断是否有带 Bean 注解的方法</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821222356523.png" alt="image-20230821222356523" loading="lazy"></p>
+<p>4、candidateIndicators 是一个 Set，所以只要一个类存在以下注解便是配置类，需要在进行一次解析</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821222513693.png" alt="image-20230821222513693" loading="lazy"></p>
+<h2 id="10、BeanName-生成机制"><a href="#10、BeanName-生成机制" class="headerlink" title="10、BeanName 生成机制"></a>10、BeanName 生成机制</h2><p>1、回到刚才的扫描注解解析方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821223217232.png" alt="image-20230821223217232" loading="lazy"></p>
+<p>2、解析代码中获取 componentScan 注解中配置的 beanName 生成器 <code>nameGenerator</code></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821223315185.png" alt="image-20230821223315185" loading="lazy"></p>
+<p>3、自定义生成器，创建 BeanNameGenerator 实现类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestBeanNameGenerator</span> <span class="token keyword">implements</span> <span class="token class-name">BeanNameGenerator</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">generateBeanName</span><span class="token punctuation">(</span>BeanDefinition beanDefinition<span class="token punctuation">,</span> BeanDefinitionRegistry beanDefinitionRegistry<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token string">"xiaojiang"</span> <span class="token operator">+</span> ClassUtils<span class="token punctuation">.</span><span class="token function">getShortName</span><span class="token punctuation">(</span>Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>beanDefinition<span class="token punctuation">.</span><span class="token function">getBeanClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>4、修改 AppConfig 类上的扫描注解</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@ComponentScan</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"com.example.web_test"</span><span class="token punctuation">,</span> nameGenerator <span class="token operator">=</span> TestBeanNameGenerator<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppConf</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>5、启动测试，成功获取到 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225050654.png" alt="image-20230821225050654" loading="lazy"></p>
+<blockquote>
+<p>查看默认 beanName 生成策略</p>
+</blockquote>
+<p>1、获取注解上的 value 值作为 beanName</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225720837.png" alt="image-20230821225720837" loading="lazy"></p>
+<p>2、先获取路径的 ShortName，也就是类名，然后再进行处理</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225159638.png" alt="image-20230821225159638" loading="lazy"></p>
+<p>3、然后判断类名：</p>
+<ul>
+<li>如果类名为空或长度为 0 则返回原名</li>
+<li>如果类名首两个字母都是大写，也返回原名</li>
+<li>正常类名则直接首字母小写作为 beanName</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821225209853.png" alt="image-20230821225209853" loading="lazy"></p>
+<h2 id="11、-Scope-注解"><a href="#11、-Scope-注解" class="headerlink" title="11、 Scope 注解"></a>11、 Scope 注解</h2><p>1、加在实体类上，用于标识作用域</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Scope</span><span class="token punctuation">(</span>WebApplicationContext<span class="token punctuation">.</span>SCOPE_REQUEST<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、可以通过以上配置，设置当发送 request 请求的时候才会创建这个 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230054346.png" alt="image-20230821230054346" loading="lazy"></p>
+<p>3、如果此时另一个 bean 需要依赖到 userService</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderService</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> UserService userService<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>4、这个时候就会创建一个 userService 的代理对象用于依赖注入</p>
+<p>5、而生成代理对象的代理机制也是可以在 scope 注解中配置 proxyMode 属性</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230509317.png" alt="image-20230821230509317" loading="lazy"></p>
+<h2 id="12、扫描文件类型配置"><a href="#12、扫描文件类型配置" class="headerlink" title="12、扫描文件类型配置"></a>12、扫描文件类型配置</h2><p>1、继续查看 componentScan 解析代码</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821230905280.png" alt="image-20230821230905280" loading="lazy"></p>
+<p>2、查看  ComponentScan 注解中配置的默认值</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821231312729.png" alt="image-20230821231312729" loading="lazy"></p>
+<p>3、配置任意目录下的所有 .class 文件</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821231351646.png" alt="image-20230821231351646" loading="lazy"></p>
+<h2 id="13、扫描路径解析"><a href="#13、扫描路径解析" class="headerlink" title="13、扫描路径解析"></a>13、扫描路径解析</h2><p>1、查看扫描路径的获取方式</p>
+<ul>
+<li>获取注解中 basePackages 的属性（跟 value 属性一样），这个路径可以是多个</li>
+<li>获取注解中 basePackageClasses 的属性（一个类），然后获取这个类的包路径</li>
+<li>如果注解中未配置以上两个属性，则使用当前这个类的包路径进行扫描</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821232405909.png" alt="image-20230821232405909" loading="lazy"></p>
+<p>2、并且在扫描代码的最后，配置在扫描到这身这个 bean（AppConfig）的时候直接过滤掉，因为一开始就已经注册到了</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230821232851167.png" alt="image-20230821232851167" loading="lazy"></p>
+<h2 id="14、bean-重复注册"><a href="#14、bean-重复注册" class="headerlink" title="14、bean 重复注册"></a>14、bean 重复注册</h2><p>1、接着上方读取完路径之后，就开始正式扫描路径内容了</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823215647392.png" alt="image-20230823215647392" loading="lazy"></p>
+<p>2、在 doscan 方法中，会校验这个 bean 是否已经注册了</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823220621030.png" alt="image-20230823220621030" loading="lazy"></p>
+<p>3、以下是校验方式，如果已经存在且类型相同，则不再进行注册</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823220758708.png" alt="image-20230823220758708" loading="lazy"></p>
+<h2 id="15、ASM-扫描技术"><a href="#15、ASM-扫描技术" class="headerlink" title="15、ASM 扫描技术"></a>15、ASM 扫描技术</h2><p>1、查看 doscan 的扫描路径内容方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221315719.png" alt="image-20230823221315719" loading="lazy"></p>
+<p>2、对于 bean 的扫描有两种方式</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221415413.png" alt="image-20230823221415413" loading="lazy"></p>
+<p>3、而对应的默认方式就是 ASM 技术，查看 scanCandidateComponents 方法</p>
+<ul>
+<li>先拼接获取扫描路径，然后获取各个 class 文件</li>
+<li>利用 asm 技术获取各个 class 文件的元数据 meta（在不使用反射和实例化的情况下获取类的信息）</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823221918937.png" alt="image-20230823221918937" loading="lazy"></p>
+<h2 id="16、过滤和扫描配置"><a href="#16、过滤和扫描配置" class="headerlink" title="16、过滤和扫描配置"></a>16、过滤和扫描配置</h2><p>1、接着上续方法，对元数据进行判断</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823223229891.png" alt="image-20230823223229891" loading="lazy"></p>
+<p>2、校验是否被过滤或包含，而在我们的配置中并没有手动设置 includeFilters 内容</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823223301147.png" alt="image-20230823223301147" loading="lazy"></p>
+<p>3、回到一开始扫描 Component 注解的时候</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224006103.png" alt="image-20230823224006103" loading="lazy"></p>
+<p>4、在创建扫描器的时候会查看是否使用默认过滤器</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224109349.png" alt="image-20230823224109349" loading="lazy"></p>
+<p>5、没有配置的话是使用默认的</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224200559.png" alt="image-20230823224200559" loading="lazy"></p>
+<p>6、这个就会为扫描器配置 includeFilters，过滤加有 <code>Component</code> 、<code>ManagedBean</code> 和 <code>Named</code> 注解的类</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823224310194.png" alt="image-20230823224310194" loading="lazy"></p>
+<p>7、所以回到刚才的扫描位置</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823225350836.png" alt="image-20230823225350836" loading="lazy"></p>
+<p>8、如果经过了过滤器，则会判断是否存在 <code>@Conditional</code> 注解，并根据条件判断是否创建</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823225454261.png" alt="image-20230823225454261" loading="lazy"></p>
+<p>9、获取条件内容并进行判断</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231209893.png" alt="image-20230823231209893" loading="lazy"></p>
+<p>10、以下是对配置类注解的判断</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231346783.png" alt="image-20230823231346783" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823231615930.png" alt="image-20230823231615930" loading="lazy"></p>
+<p>11、回到 addCandidateComponentsFromIndex 方法，如果类存在 component 等注解后，就需要进行第二次判断</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233409536.png" alt="image-20230823233409536" loading="lazy"></p>
+<p>12、进行第二次判断</p>
+<ul>
+<li>这个类是否独立（不是普通内部类）</li>
+<li>不是接口或抽象类</li>
+<li>是抽象类时，是否存在 Lookup 注解修饰方法</li>
+</ul>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233506279.png" alt="image-20230823233506279" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823233633559.png" alt="image-20230823233633559" loading="lazy"></p>
+<h2 id="17、Lookup-注解"><a href="#17、Lookup-注解" class="headerlink" title="17、Lookup 注解"></a>17、Lookup 注解</h2><p>根据上方扫描判断可知，当一个类是抽象类时，无法创建为 bean，但是如果方法上加了 Lookup 注解，则可以生成这个抽象类的代理对象作为 bean</p>
+<blockquote>
+<p>用法</p>
+</blockquote>
+<p>1、在抽象类的方法上加 Lookup 注解</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+
+    <span class="token comment" spellcheck="true">// 这个方法仅用于获取 bean</span>
+    <span class="token annotation punctuation">@Lookup</span><span class="token punctuation">(</span><span class="token string">"orderService"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> OrderService <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 实际上，以下代码并不会执行</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">11111111</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、启动测试，发现只输出了 orderService 信息，并不会执行 test 方法内部代码</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823234517751.png" alt="image-20230823234517751" loading="lazy"></p>
+<blockquote>
+<p>作用</p>
+</blockquote>
+<p>1、例如当 orderService 是多例 bean 时</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Scope</span><span class="token punctuation">(</span><span class="token string">"prototype"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderService</span> <span class="token punctuation">{</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、使用依赖注入的方式获取</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> OrderService orderService<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>orderService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、启动测试发现，获取到的都是同一个 bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823234948477.png" alt="image-20230823234948477" loading="lazy"></p>
+<p>4、改用成 Lookup 注解获取 bean</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span> 
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token function">orderService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Lookup</span><span class="token punctuation">(</span><span class="token string">"orderService"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> OrderService <span class="token function">orderService</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">11111111</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>5、启动发现，获取到的都是不同的bean</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230823235106822.png" alt="image-20230823235106822" loading="lazy"></p>
+<h2 id="18、componentsIndex"><a href="#18、componentsIndex" class="headerlink" title="18、componentsIndex"></a>18、componentsIndex</h2><p>1、查看bean 扫描的优化机制</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824000901269.png" alt="image-20230824000901269" loading="lazy"></p>
+<p>1、而这个 componentsIndex 的配置，同样是在创建 scanner 的时候配置的</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001244597.png" alt="image-20230824001244597" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001323487.png" alt="image-20230824001323487" loading="lazy"></p>
+<p>2、接着查看 loadIndex 方法</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001357947.png" alt="image-20230824001357947" loading="lazy"></p>
+<p>3、在这里根据文件构建 index</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001418287.png" alt="image-20230824001418287" loading="lazy"></p>
+<p>4、而在 doLoadIndex 方法中，则加载这个路径 <code>META-INF/spring.components</code></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001513295.png" alt="image-20230824001513295" loading="lazy"></p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824001539653.png" alt="image-20230824001539653" loading="lazy"></p>
+<p>5、所以只需要在这个文件中配置内容即可生成 componentsIndex</p>
+<pre class=" language-properties"><code class="language-properties"><span class="token attr-name">com.example.web_test.service.UserService</span><span class="token punctuation">=</span><span class="token attr-value">org.springframework.stereotype.Component</span></code></pre>
+<p>6、再次启动，发现成功读取到配置文件的内容，左边为 bean 内容，右边为注解类型</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824002628462.png" alt="image-20230824002628462" loading="lazy"></p>
+<p>7、并且配置之后只会加载配置文件中的 bean，其他 bean 即使加了 component 注解也不会被加载进来</p>
+<p><img src="/2023/08/24/spring%E6%BA%90%E7%A0%81/image-20230824002738486.png" alt="image-20230824002738486" loading="lazy"></p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/" title="spring源码">https://lxjblog.gitee.io/2023/08/24/spring%E6%BA%90%E7%A0%81/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2023/08/03/ELK/" rel="next" title="ELK"><span class="post-nav-text">ELK</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2023 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
