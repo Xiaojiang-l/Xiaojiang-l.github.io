@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>Mongodb | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="mongodb 基本使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongodb">
+<meta property="og:url" content="https://lxjblog.gitee.io/2023/12/27/mongodb/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="mongodb 基本使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-27T13:46:10.000Z">
+<meta property="article:modified_time" content="2023-12-27T12:13:29.838Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">55</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">56</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mongodb"><span class="toc-text">Mongodb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">1、数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E9%9B%86%E5%90%88"><span class="toc-text">2、集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%96%87%E6%A1%A3"><span class="toc-text">3、文档</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81CRUD"><span class="toc-text">4、CRUD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E6%8F%92%E5%85%A5"><span class="toc-text">文档插入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E6%9F%A5%E8%AF%A2"><span class="toc-text">文档查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3"><span class="toc-text">更新文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3"><span class="toc-text">删除文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C"><span class="toc-text">批量操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81springboot%E9%9B%86%E6%88%90"><span class="toc-text">5、springboot集成</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2023/12/27/mongodb/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Mongodb</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2023-12-27 21:46:10" itemprop="dateCreated datePublished" datetime="2023-12-27T21:46:10+08:00">2023-12-27</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%90%8E%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">后端</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/java/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">java</span></a><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">数据库</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://lxjblog.gitee.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Mongodb"><a href="#Mongodb" class="headerlink" title="Mongodb"></a>Mongodb</h2><p>中文文档：<a target="_blank" rel="noopener" href="https://docs.mongoing.com/mongodb-crud-operations/insert-documents">https://docs.mongoing.com/mongodb-crud-operations/insert-documents</a></p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><p>命令文档：<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/v4.2/reference/operator/query/">https://www.mongodb.com/docs/v4.2/reference/operator/query/</a></p>
+<h2 id="1、数据库"><a href="#1、数据库" class="headerlink" title="1、数据库"></a>1、数据库</h2><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 查看当前数据库</span>
+db
+
+<span class="token comment" spellcheck="true"># 切换数据库，如果数据库不存在则自动创建</span>
+use <span class="token operator">&lt;</span>数据库名称<span class="token operator">></span>
+
+<span class="token comment" spellcheck="true"># 删除当前 use 的数据库</span>
+db.dropDatabase<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 数据备份</span>
+mongodump --db <span class="token operator">&lt;</span>database_name<span class="token operator">></span> --out <span class="token operator">&lt;</span>backup_directory<span class="token operator">></span></code></pre>
+<h2 id="2、集合"><a href="#2、集合" class="headerlink" title="2、集合"></a>2、集合</h2><p>MongoDB将文档存储在集合中。集合类似于关系数据库中的表</p>
+<blockquote>
+<p>创建集合</p>
+</blockquote>
+<ul>
+<li><p>显式创建</p>
+<pre class=" language-bash"><code class="language-bash">db.createCollection<span class="token punctuation">(</span> <span class="token operator">&lt;</span>name<span class="token operator">></span>,  
+   <span class="token punctuation">{</span>   
+     // 创建一个有大小限制的集合  
+     capped: <span class="token operator">&lt;</span>boolean<span class="token operator">></span>,  
+     // 是否自动为每个文档的_id字段创建索引  
+     autoIndexId: <span class="token operator">&lt;</span>boolean<span class="token operator">></span>,  
+     // 有大小限制的集合的最大字节大小  
+     size: <span class="token operator">&lt;</span>number<span class="token operator">></span>,  
+     // 有大小限制的集合中允许的最大文档数  
+     max: <span class="token operator">&lt;</span>number<span class="token operator">></span>,  
+     // 存储引擎的配置选项  
+     storageEngine: <span class="token operator">&lt;</span>document<span class="token operator">></span>,  
+     // 验证器，用于确保插入或更新的文档满足指定的条件  
+     validator: <span class="token operator">&lt;</span>document<span class="token operator">></span>,  
+     // 验证器操作级别的选项：<span class="token string">"moderate"</span>，<span class="token string">"strict"</span>，或 <span class="token string">"ruthless"</span>  
+     validationLevel: <span class="token operator">&lt;</span>string<span class="token operator">></span>,  
+     // 当文档不满足验证器条件时采取的操作：<span class="token string">"error"</span> 或 <span class="token string">"warn"</span>  
+     validationAction: <span class="token operator">&lt;</span>string<span class="token operator">></span>,  
+     // 索引选项的默认值  
+     indexOptionDefaults: <span class="token operator">&lt;</span>document<span class="token operator">></span>,  
+     // 视图所基于的集合名称  
+     viewOn: <span class="token operator">&lt;</span>string<span class="token operator">></span>,  
+     // 从数据到视图的转换过程  
+     pipeline: <span class="token operator">&lt;</span>pipeline<span class="token operator">></span>,  
+     // 集合的排序规则  
+     collation: <span class="token operator">&lt;</span>document<span class="token operator">></span>,  
+     // 写入关注点，即确认写操作完成之前所需满足的条件  
+     writeConcern: <span class="token operator">&lt;</span>document<span class="token operator">></span>  
+   <span class="token punctuation">}</span>   
+<span class="token punctuation">)</span></code></pre>
+</li>
+<li><p>自动创建</p>
+<pre class=" language-bash"><code class="language-bash">db.myCollection2.insertOne<span class="token punctuation">(</span> <span class="token punctuation">{</span>  x: 1 <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+</li>
+</ul>
+<blockquote>
+<p>文档验证</p>
+</blockquote>
+<p>默认情况下，集合不要求其文档具有相同的模式。也就是说，单个集合中的文档不需要具有相同的字段集，并且字段的数据类型可以在集合中的不同文档之间有所不同。</p>
+<p>但是，从MongoDB 3.2开始，您可以在更新和插入操作期间对集合强制执行<a target="_blank" rel="noopener" href="https://docs.mongodb.com/v4.2/core/schema-validation/">文档验证规则</a>。有关详细信息，请参见<a target="_blank" rel="noopener" href="https://docs.mongodb.com/v4.2/core/schema-validation/">模式验证</a>。</p>
+<p>文档验证需要在创建文档的时候指定，如下：</p>
+<pre class=" language-bash"><code class="language-bash">db.createCollection<span class="token punctuation">(</span><span class="token string">"students"</span>, <span class="token punctuation">{</span> 
+   validator: <span class="token punctuation">{</span> 
+      <span class="token variable">$jsonSchema</span><span class="token keyword">:</span> <span class="token punctuation">{</span> 
+         bsonType: <span class="token string">"object"</span>,
+         required: <span class="token punctuation">[</span> <span class="token string">"name"</span>, <span class="token string">"year"</span><span class="token punctuation">]</span>,
+         properties: <span class="token punctuation">{</span> 
+            name: <span class="token punctuation">{</span> 
+               bsonType: <span class="token string">"string"</span>,
+               description: <span class="token string">"must be a string and is required"</span>
+            <span class="token punctuation">}</span> ,
+            year: <span class="token punctuation">{</span> 
+               bsonType: <span class="token string">"int"</span>,
+               minimum: 2017,
+               maximum: 3017,
+               description: <span class="token string">"must be an integer in [ 2017, 3017 ] and is required"</span>
+            <span class="token punctuation">}</span> ,
+            address: <span class="token punctuation">{</span> 
+               bsonType: <span class="token string">"object"</span>,
+               required: <span class="token punctuation">[</span> <span class="token string">"city"</span> <span class="token punctuation">]</span>,
+               properties: <span class="token punctuation">{</span> 
+                  street: <span class="token punctuation">{</span> 
+                     bsonType: <span class="token string">"string"</span>,
+                     description: <span class="token string">"must be a string if the field exists"</span>
+                  <span class="token punctuation">}</span> ,
+                  city: <span class="token punctuation">{</span> 
+                     bsonType: <span class="token string">"string"</span>,
+                     <span class="token string">"description"</span><span class="token keyword">:</span> <span class="token string">"must be a string and is required"</span>
+                  <span class="token punctuation">}</span> 
+               <span class="token punctuation">}</span> 
+            <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> 
+      <span class="token punctuation">}</span> 
+   <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> <span class="token punctuation">)</span></code></pre>
+<p>也可以使用如下方式创建</p>
+<pre class=" language-bash"><code class="language-bash">db.createCollection<span class="token punctuation">(</span> <span class="token string">"contacts"</span>,
+   <span class="token punctuation">{</span>  validator: <span class="token punctuation">{</span>  <span class="token variable">$or</span><span class="token keyword">:</span>
+      <span class="token punctuation">[</span>
+         <span class="token punctuation">{</span>  phone: <span class="token punctuation">{</span>  <span class="token variable">$type</span><span class="token keyword">:</span> <span class="token string">"string"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  email: <span class="token punctuation">{</span>  <span class="token variable">$regex</span><span class="token keyword">:</span> /@mongodb\.com$/ <span class="token punctuation">}</span>  <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  status: <span class="token punctuation">{</span>  <span class="token variable">$in</span><span class="token keyword">:</span> <span class="token punctuation">[</span> <span class="token string">"Unknown"</span>, <span class="token string">"Incomplete"</span> <span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> 
+      <span class="token punctuation">]</span>
+   <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<h2 id="3、文档"><a href="#3、文档" class="headerlink" title="3、文档"></a>3、文档</h2><p>MongoDB文档由字段和值对组成，并具有以下结构：</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">var</span> mydoc <span class="token operator">=</span> <span class="token punctuation">{</span> 
+    _id<span class="token punctuation">:</span> <span class="token function">ObjectId</span><span class="token punctuation">(</span><span class="token string">"5099803df3f4948bd2f98391"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    name<span class="token punctuation">:</span> <span class="token punctuation">{</span>  first<span class="token punctuation">:</span> <span class="token string">"Alan"</span><span class="token punctuation">,</span> last<span class="token punctuation">:</span> <span class="token string">"Turing"</span> <span class="token punctuation">}</span> <span class="token punctuation">,</span>
+    birth<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">'Jun 23, 1912'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    death<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">'Jun 07, 1954'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    contribs<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token string">"Turing machine"</span><span class="token punctuation">,</span> <span class="token string">"Turing test"</span><span class="token punctuation">,</span> <span class="token string">"Turingery"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    views <span class="token punctuation">:</span> <span class="token function">NumberLong</span><span class="token punctuation">(</span><span class="token number">1250000</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>字段名称</p>
+</blockquote>
+<ul>
+<li><p>字段名称<code>_id</code>保留用作主键；它的值在集合中必须是唯一的，不可变的，并且可以是数组以外的任何类型。如果插入的文档省略了该_id字段，则MongoDB驱动程序会自动为该_id字段生成一个<a target="_blank" rel="noopener" href="https://docs.mongodb.com/v4.2/reference/bson-types/#objectid">ObjectId</a>。</p>
+</li>
+<li><p>字段名称<strong>不能</strong>包含<code>null</code>字符。</p>
+</li>
+<li><p>顶级字段名称<strong>不能</strong>以美元符号（<code>$</code>）字符开头。</p>
+</li>
+</ul>
+<blockquote>
+<p>数组</p>
+</blockquote>
+<p>要通过从零开始的索引位置指定或访问数组的元素，请将数组名称与点（<code>.</code>）和从零开始的索引位置连接起来，并用引号引起来：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">{</span> 
+   <span class="token punctuation">..</span>.
+   contribs: <span class="token punctuation">[</span> <span class="token string">"Turing machine"</span>, <span class="token string">"Turing test"</span>, <span class="token string">"Turingery"</span> <span class="token punctuation">]</span>,
+   <span class="token punctuation">..</span>.
+<span class="token punctuation">}</span> </code></pre>
+<p>要指定<code>contribs</code>数组中的第三个元素，请使用点符号<code>&quot;contribs.2&quot;</code></p>
+<h2 id="4、CRUD"><a href="#4、CRUD" class="headerlink" title="4、CRUD"></a>4、CRUD</h2><h3 id="文档插入"><a href="#文档插入" class="headerlink" title="文档插入"></a>文档插入</h3><blockquote>
+<p>插入文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.insertOne<span class="token punctuation">(</span>  
+        <span class="token punctuation">{</span>  item: <span class="token string">"canvas"</span>, qty: 100, tags: <span class="token punctuation">[</span><span class="token string">"cotton"</span><span class="token punctuation">]</span>, size: <span class="token punctuation">{</span>  h: 28, w: 35.5, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> 
+<span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>插入多个文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.insertMany<span class="token punctuation">(</span><span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>  item: <span class="token string">"journal"</span>, qty: 25, tags: <span class="token punctuation">[</span><span class="token string">"blank"</span>, <span class="token string">"red"</span><span class="token punctuation">]</span>, size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> , 
+        <span class="token punctuation">{</span>  item: <span class="token string">"mat"</span>, qty: 85, tags: <span class="token punctuation">[</span><span class="token string">"gray"</span><span class="token punctuation">]</span>, size: <span class="token punctuation">{</span>  h: 27.9, w: 35.5, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> ,
+        <span class="token punctuation">{</span>  item: <span class="token string">"mousepad"</span>, qty: 25, tags: <span class="token punctuation">[</span><span class="token string">"gel"</span>, <span class="token string">"blue"</span><span class="token punctuation">]</span>, size: <span class="token punctuation">{</span>  h: 19, w: 22.85, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> 
+<span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre>
+<h3 id="文档查询"><a href="#文档查询" class="headerlink" title="文档查询"></a>文档查询</h3><p>命令文档：<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/v4.2/reference/operator/query/">https://www.mongodb.com/docs/v4.2/reference/operator/query/</a></p>
+<blockquote>
+<p>查询所有</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>等值查询</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  status: <span class="token string">"D"</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>in 查询</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  status: <span class="token punctuation">{</span>  <span class="token variable">$in</span><span class="token keyword">:</span> <span class="token punctuation">[</span> <span class="token string">"A"</span>, <span class="token string">"D"</span> <span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>and 查询</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  status: <span class="token string">"A"</span>, qty: <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 30 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>or 查询</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token variable">$or</span><span class="token keyword">:</span> <span class="token punctuation">[</span> <span class="token punctuation">{</span>  status: <span class="token string">"A"</span> <span class="token punctuation">}</span> , <span class="token punctuation">{</span>  qty: <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 30 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>多条件查询</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span> 
+     status: <span class="token string">"A"</span>,
+     <span class="token variable">$or</span><span class="token keyword">:</span> <span class="token punctuation">[</span> <span class="token punctuation">{</span>  qty: <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 30 <span class="token punctuation">}</span>  <span class="token punctuation">}</span> , <span class="token punctuation">{</span>  item: /^p/ <span class="token punctuation">}</span>  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>查询数组</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.insertMany<span class="token punctuation">(</span><span class="token punctuation">[</span>
+   <span class="token punctuation">{</span>  item: <span class="token string">"journal"</span>, qty: 25, tags: <span class="token punctuation">[</span><span class="token string">"blank"</span>, <span class="token string">"red"</span><span class="token punctuation">]</span>, dim_cm: <span class="token punctuation">[</span> 14, 21 <span class="token punctuation">]</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"notebook"</span>, qty: 50, tags: <span class="token punctuation">[</span><span class="token string">"red"</span>, <span class="token string">"blank"</span><span class="token punctuation">]</span>, dim_cm: <span class="token punctuation">[</span> 14, 21 <span class="token punctuation">]</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span>, qty: 100, tags: <span class="token punctuation">[</span><span class="token string">"red"</span>, <span class="token string">"blank"</span>, <span class="token string">"plain"</span><span class="token punctuation">]</span>, dim_cm: <span class="token punctuation">[</span> 14, 21 <span class="token punctuation">]</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"planner"</span>, qty: 75, tags: <span class="token punctuation">[</span><span class="token string">"blank"</span>, <span class="token string">"red"</span><span class="token punctuation">]</span>, dim_cm: <span class="token punctuation">[</span> 22.85, 30 <span class="token punctuation">]</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"postcard"</span>, qty: 45, tags: <span class="token punctuation">[</span><span class="token string">"blue"</span><span class="token punctuation">]</span>, dim_cm: <span class="token punctuation">[</span> 10, 15.25 <span class="token punctuation">]</span> <span class="token punctuation">}</span> 
+<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>查询完全等于的数组</p>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  tags: <span class="token punctuation">[</span><span class="token string">"red"</span>, <span class="token string">"blank"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<p>查询包含内容的数组，不区分顺序</p>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  tags: <span class="token punctuation">{</span>  <span class="token variable">$all</span><span class="token keyword">:</span> <span class="token punctuation">[</span><span class="token string">"red"</span>, <span class="token string">"blank"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 等价于</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token variable">$and</span><span class="token keyword">:</span> <span class="token punctuation">[</span> <span class="token punctuation">{</span>  tags: <span class="token string">"red"</span> <span class="token punctuation">}</span> , <span class="token punctuation">{</span>  tags: <span class="token string">"blank"</span> <span class="token punctuation">}</span>  <span class="token punctuation">]</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<p>查询包含内容的数组</p>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  tags: <span class="token string">"red"</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<p>多条件查询</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 单个元素同时满足大于15并且小于20，或者一个元素满足大于15，另外一个元素小于20的所有文档</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  dim_cm: <span class="token punctuation">{</span>  <span class="token variable">$gt</span><span class="token keyword">:</span> 15, <span class="token variable">$lt</span><span class="token keyword">:</span> 20 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 数组中最少一个元素同时满足所有的查询条件</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  dim_cm: <span class="token punctuation">{</span>  <span class="token variable">$elemMatch</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$gt</span><span class="token keyword">:</span> 22, <span class="token variable">$lt</span><span class="token keyword">:</span> 30 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<p>通过数组下标查询</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 数组字段dim_cm中第二个元素大于25的所有文档</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token string">"dim_cm.1"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$gt</span><span class="token keyword">:</span> 25 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<p>通过数组长度查询</p>
+<pre class=" language-bash"><code class="language-bash">db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token string">"tags"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$size</span><span class="token keyword">:</span> 3 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>查询嵌套文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.insertMany<span class="token punctuation">(</span> <span class="token punctuation">[</span>
+   <span class="token punctuation">{</span>  item: <span class="token string">"journal"</span>, qty: 25, size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"notebook"</span>, qty: 50, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span>, qty: 100, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"planner"</span>, qty: 75, size: <span class="token punctuation">{</span>  h: 22.85, w: 30, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"postcard"</span>, qty: 45, size: <span class="token punctuation">{</span>  h: 10, w: 15.25, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> 
+<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下面的案例返回inventory集合中size字段的值等于文档{  h: 14, w: 21, uom: "cm" } 的所有文档</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 但如果调换了顺序则查询不到</span>
+db.inventory.find<span class="token punctuation">(</span>  <span class="token punctuation">{</span>  size: <span class="token punctuation">{</span>  w: 21, h: 14, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span>   <span class="token punctuation">)</span></code></pre>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 可以通过如下方式进行嵌套查询</span>
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token string">"size.uom"</span><span class="token keyword">:</span> <span class="token string">"in"</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span>
+
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token string">"size.h"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 15 <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token punctuation">)</span>
+
+db.inventory.find<span class="token punctuation">(</span> <span class="token punctuation">{</span>  <span class="token string">"size.h"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 15 <span class="token punctuation">}</span> , <span class="token string">"size.uom"</span><span class="token keyword">:</span> <span class="token string">"in"</span>, status: <span class="token string">"D"</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<h3 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h3><p>更新命令文档：<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/upcoming/reference/operator/update/set/#up._S_set">https://www.mongodb.com/docs/upcoming/reference/operator/update/set/#up._S_set</a></p>
+<pre class=" language-bash"><code class="language-bash">db.inventory.insertMany<span class="token punctuation">(</span> <span class="token punctuation">[</span>
+   <span class="token punctuation">{</span>  item: <span class="token string">"canvas"</span>, qty: 100, size: <span class="token punctuation">{</span>  h: 28, w: 35.5, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"journal"</span>, qty: 25, size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"mat"</span>, qty: 85, size: <span class="token punctuation">{</span>  h: 27.9, w: 35.5, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"mousepad"</span>, qty: 25, size: <span class="token punctuation">{</span>  h: 19, w: 22.85, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"P"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"notebook"</span>, qty: 50, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"P"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span>, qty: 100, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"planner"</span>, qty: 75, size: <span class="token punctuation">{</span>  h: 22.85, w: 30, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"postcard"</span>, qty: 45, size: <span class="token punctuation">{</span>  h: 10, w: 15.25, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"sketchbook"</span>, qty: 80, size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"sketch pad"</span>, qty: 95, size: <span class="token punctuation">{</span>  h: 22.85, w: 30.5, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> 
+<span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<blockquote>
+<p>更新单个文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.updateOne<span class="token punctuation">(</span>
+    <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span> <span class="token punctuation">}</span> ,
+    <span class="token punctuation">{</span> 
+        <span class="token variable">$set</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"size.uom"</span><span class="token keyword">:</span> <span class="token string">"cm"</span>, status: <span class="token string">"P"</span> <span class="token punctuation">}</span> , 
+        <span class="token variable">$currentDate</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  lastModified: <span class="token boolean">true</span> <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">)</span></code></pre>
+<ul>
+<li>使用$set 运算符将size.uom字段的值更新为“ cm”，将状态字段的值更新为“ P”</li>
+<li>使用$currentDate运算符将lastModified字段的值更新为当前日期。 如果lastModified字段不存在，则$currentDate将创建该字段</li>
+</ul>
+<blockquote>
+<p>更新多个文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.updateMany<span class="token punctuation">(</span> 
+    <span class="token punctuation">{</span>  <span class="token string">"qty"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$lt</span><span class="token keyword">:</span> 50 <span class="token punctuation">}</span>  <span class="token punctuation">}</span> ,
+    <span class="token punctuation">{</span>   
+        <span class="token variable">$set</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"size.uom"</span><span class="token keyword">:</span> <span class="token string">"in"</span>, status: <span class="token string">"P"</span> <span class="token punctuation">}</span> , 
+        <span class="token variable">$currentDate</span><span class="token keyword">:</span> <span class="token punctuation">{</span>  lastModified: <span class="token boolean">true</span> <span class="token punctuation">}</span>   
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>替换文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.replaceOne<span class="token punctuation">(</span>
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span>, instock: <span class="token punctuation">[</span> <span class="token punctuation">{</span>  warehouse: <span class="token string">"A"</span>, qty: 60 <span class="token punctuation">}</span> , <span class="token punctuation">{</span>  warehouse: <span class="token string">"B"</span>, qty: 40 <span class="token punctuation">}</span>  <span class="token punctuation">]</span> <span class="token punctuation">}</span> 
+<span class="token punctuation">)</span></code></pre>
+<p>直接将 item 等于 paper 的文档内容替换成新的</p>
+<h3 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3><pre class=" language-bash"><code class="language-bash">db.inventory.insertMany<span class="token punctuation">(</span> <span class="token punctuation">[</span>
+   <span class="token punctuation">{</span>  item: <span class="token string">"journal"</span>, qty: 25, size: <span class="token punctuation">{</span>  h: 14, w: 21, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"notebook"</span>, qty: 50, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"P"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"paper"</span>, qty: 100, size: <span class="token punctuation">{</span>  h: 8.5, w: 11, uom: <span class="token string">"in"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"planner"</span>, qty: 75, size: <span class="token punctuation">{</span>  h: 22.85, w: 30, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"D"</span> <span class="token punctuation">}</span> ,
+   <span class="token punctuation">{</span>  item: <span class="token string">"postcard"</span>, qty: 45, size: <span class="token punctuation">{</span>  h: 10, w: 15.25, uom: <span class="token string">"cm"</span> <span class="token punctuation">}</span> , status: <span class="token string">"A"</span> <span class="token punctuation">}</span> ,
+<span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<blockquote>
+<p>删除所有文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.deleteMany<span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token punctuation">}</span> <span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>删除单个文档</p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash">db.inventory.deleteOne<span class="token punctuation">(</span> <span class="token punctuation">{</span>  status: <span class="token string">"D"</span> <span class="token punctuation">}</span>  <span class="token punctuation">)</span></code></pre>
+<h3 id="批量操作"><a href="#批量操作" class="headerlink" title="批量操作"></a>批量操作</h3><ul>
+<li>有序操作：MongoDB串行地执行操作。 如果在某个单独的写操作的处理过程中发生错误，MongoDB将直接返回而不再继续处理列表中任何剩余的写操作</li>
+<li>无序操作：MongoDB可以并行地执行操作，但是不能保证此行为。 如果某个单独的写操作的处理过程中发生错误，MongoDB将继续处理列表中剩余的写操作</li>
+</ul>
+<blockquote>
+<p>bulkWrite()方法</p>
+</blockquote>
+<p>bulkWrite() 支持如下操作：</p>
+<ul>
+<li>insertOne</li>
+<li>updateOne</li>
+<li>updateMany</li>
+<li>replaceOne</li>
+<li>deleteOne</li>
+<li>deleteMany</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">try <span class="token punctuation">{</span> 
+   db.characters.bulkWrite<span class="token punctuation">(</span>
+      <span class="token punctuation">[</span>
+         <span class="token punctuation">{</span>  insertOne <span class="token keyword">:</span>
+            <span class="token punctuation">{</span> 
+               <span class="token string">"document"</span> <span class="token keyword">:</span>
+               <span class="token punctuation">{</span> 
+                  <span class="token string">"_id"</span> <span class="token keyword">:</span> 4, <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Dithras"</span>, <span class="token string">"class"</span> <span class="token keyword">:</span> <span class="token string">"barbarian"</span>, <span class="token string">"lvl"</span> <span class="token keyword">:</span> 4
+               <span class="token punctuation">}</span> 
+            <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  insertOne <span class="token keyword">:</span>
+            <span class="token punctuation">{</span> 
+               <span class="token string">"document"</span> <span class="token keyword">:</span>
+               <span class="token punctuation">{</span> 
+                  <span class="token string">"_id"</span> <span class="token keyword">:</span> 5, <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Taeln"</span>, <span class="token string">"class"</span> <span class="token keyword">:</span> <span class="token string">"fighter"</span>, <span class="token string">"lvl"</span> <span class="token keyword">:</span> 3
+               <span class="token punctuation">}</span> 
+            <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  updateOne <span class="token keyword">:</span>
+            <span class="token punctuation">{</span> 
+               <span class="token string">"filter"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Eldon"</span> <span class="token punctuation">}</span> ,
+               <span class="token string">"update"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token variable">$set</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"status"</span> <span class="token keyword">:</span> <span class="token string">"Critical Injury"</span> <span class="token punctuation">}</span>  <span class="token punctuation">}</span> 
+            <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  deleteOne <span class="token keyword">:</span>
+            <span class="token punctuation">{</span>  <span class="token string">"filter"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Brisbane"</span><span class="token punctuation">}</span>  <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> ,
+         <span class="token punctuation">{</span>  replaceOne <span class="token keyword">:</span>
+            <span class="token punctuation">{</span> 
+               <span class="token string">"filter"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Meldane"</span> <span class="token punctuation">}</span> ,
+               <span class="token string">"replacement"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span>  <span class="token string">"char"</span> <span class="token keyword">:</span> <span class="token string">"Tanys"</span>, <span class="token string">"class"</span> <span class="token keyword">:</span> <span class="token string">"oracle"</span>, <span class="token string">"lvl"</span> <span class="token keyword">:</span> 4 <span class="token punctuation">}</span> 
+            <span class="token punctuation">}</span> 
+         <span class="token punctuation">}</span> 
+      <span class="token punctuation">]</span>
+   <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> 
+catch <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+   print<span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>该操作将返回如下的结果：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">{</span> 
+   <span class="token string">"acknowledged"</span> <span class="token keyword">:</span> true,
+   <span class="token string">"deletedCount"</span> <span class="token keyword">:</span> 1,
+   <span class="token string">"insertedCount"</span> <span class="token keyword">:</span> 2,
+   <span class="token string">"matchedCount"</span> <span class="token keyword">:</span> 2,
+   <span class="token string">"upsertedCount"</span> <span class="token keyword">:</span> 0,
+   <span class="token string">"insertedIds"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span> 
+      <span class="token string">"0"</span> <span class="token keyword">:</span> 4,
+      <span class="token string">"1"</span> <span class="token keyword">:</span> 5
+   <span class="token punctuation">}</span> ,
+   <span class="token string">"upsertedIds"</span> <span class="token keyword">:</span> <span class="token punctuation">{</span> 
+
+   <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<h2 id="5、springboot集成"><a href="#5、springboot集成" class="headerlink" title="5、springboot集成"></a>5、springboot集成</h2><p>1、导入依赖</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>  
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>  
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-data-mongodb<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>  
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>2、编写实体类</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>  
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>mongodb<span class="token punctuation">.</span>core<span class="token punctuation">.</span>mapping<span class="token punctuation">.</span>Document<span class="token punctuation">;</span>  
+
+<span class="token annotation punctuation">@Document</span><span class="token punctuation">(</span>collection <span class="token operator">=</span> <span class="token string">"people"</span><span class="token punctuation">)</span>  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>   
+    <span class="token annotation punctuation">@Id</span>  
+    <span class="token keyword">private</span> String id<span class="token punctuation">;</span>  
+    <span class="token keyword">private</span> String name<span class="token punctuation">;</span>  
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>  
+
+    <span class="token comment" spellcheck="true">// 省略getter和setter方法  </span>
+<span class="token punctuation">}</span> </code></pre>
+<p>3、创建 mapper 接口</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>mongodb<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>MongoRepository<span class="token punctuation">;</span>  
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">PersonRepository</span> <span class="token keyword">extends</span> <span class="token class-name">MongoRepository</span><span class="token operator">&lt;</span>Person<span class="token punctuation">,</span> String<span class="token operator">></span> <span class="token punctuation">{</span>   
+<span class="token punctuation">}</span> </code></pre>
+<p>4、实现 crud</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Autowired<span class="token punctuation">;</span>  
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Service<span class="token punctuation">;</span>  
+
+<span class="token annotation punctuation">@Service</span>  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PersonService</span> <span class="token punctuation">{</span>   
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> PersonRepository personRepository<span class="token punctuation">;</span>   
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">savePerson</span><span class="token punctuation">(</span>Person person<span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        personRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">deletePerson</span><span class="token punctuation">(</span>String id<span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        personRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+
+    <span class="token keyword">public</span> Person <span class="token function">findPersonById</span><span class="token punctuation">(</span>String id<span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        <span class="token keyword">return</span> personRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">></span> <span class="token function">getAllPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        <span class="token keyword">return</span> personRepository<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>实现复杂查询</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PersonService</span> <span class="token punctuation">{</span>   
+
+    <span class="token annotation punctuation">@Autowired</span>  
+    <span class="token keyword">private</span> MongoTemplate mongoTemplate<span class="token punctuation">;</span>  
+
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">></span> <span class="token function">findPeopleAgeGreaterThan18</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        Query query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Query</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        query<span class="token punctuation">.</span><span class="token function">addCriteria</span><span class="token punctuation">(</span>Criteria<span class="token punctuation">.</span><span class="token function">where</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">gt</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">"zhangsan"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">return</span> mongoTemplate<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> Person<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span> </code></pre>
+<p>也可以在接口中用注解查询</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Repository</span>  
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">PersonRepository</span> <span class="token keyword">extends</span> <span class="token class-name">MongoRepository</span><span class="token operator">&lt;</span>Person<span class="token punctuation">,</span> String<span class="token operator">></span> <span class="token punctuation">{</span>   
+    <span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token string">"{ 'age': { $gt: ?0} } "</span><span class="token punctuation">)</span>  
+    List<span class="token operator">&lt;</span>Person<span class="token operator">></span> <span class="token function">findByAgeGreaterThan</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+<span class="token punctuation">}</span> </code></pre>
+<blockquote>
+<p>聚合管道</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PersonService</span> <span class="token punctuation">{</span>   
+
+    <span class="token annotation punctuation">@Autowired</span>  
+    <span class="token keyword">private</span> MongoTemplate mongoTemplate<span class="token punctuation">;</span>  
+
+    <span class="token keyword">public</span> AggregationResults<span class="token operator">&lt;</span>Person<span class="token operator">></span> <span class="token function">findPeopleByAgeRange</span><span class="token punctuation">(</span><span class="token keyword">int</span> minAge<span class="token punctuation">,</span> <span class="token keyword">int</span> maxAge<span class="token punctuation">)</span> <span class="token punctuation">{</span>   
+        AggregationOperation match <span class="token operator">=</span> Aggregation<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>Criteria<span class="token punctuation">.</span><span class="token function">where</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">gte</span><span class="token punctuation">(</span>minAge<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">lte</span><span class="token punctuation">(</span>maxAge<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        AggregationOperation group <span class="token operator">=</span> Aggregation<span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">as</span><span class="token punctuation">(</span><span class="token string">"count"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        Aggregation aggregation <span class="token operator">=</span> Aggregation<span class="token punctuation">.</span><span class="token function">newAggregation</span><span class="token punctuation">(</span>match<span class="token punctuation">,</span> group<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">return</span> mongoTemplate<span class="token punctuation">.</span><span class="token function">aggregate</span><span class="token punctuation">(</span>aggregation<span class="token punctuation">,</span> Person<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+<span class="token punctuation">}</span> </code></pre>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2023/12/27/mongodb/" title="Mongodb">https://lxjblog.gitee.io/2023/12/27/mongodb/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2023/08/24/spring%E6%BA%90%E7%A0%81/" rel="next" title="spring源码"><span class="post-nav-text">spring源码</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2023 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>

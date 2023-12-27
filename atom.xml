@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lxjblog.gitee.io/"/>
-  <updated>2023-08-24T13:49:33.828Z</updated>
+  <updated>2023-12-27T12:13:29.838Z</updated>
   <id>https://lxjblog.gitee.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mongodb</title>
+    <link href="https://lxjblog.gitee.io/2023/12/27/mongodb/"/>
+    <id>https://lxjblog.gitee.io/2023/12/27/mongodb/</id>
+    <published>2023-12-27T13:46:10.000Z</published>
+    <updated>2023-12-27T12:13:29.838Z</updated>
+    
+    <summary type="html">
+    
+      mongodb 基本使用
+    
+    </summary>
+    
+    
+      <category term="后端" scheme="https://lxjblog.gitee.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="java" scheme="https://lxjblog.gitee.io/tags/java/"/>
+    
+      <category term="数据库" scheme="https://lxjblog.gitee.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>spring源码</title>
@@ -434,29 +457,6 @@
       <category term="springBoot" scheme="https://lxjblog.gitee.io/tags/springBoot/"/>
     
       <category term="网站" scheme="https://lxjblog.gitee.io/tags/%E7%BD%91%E7%AB%99/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微信开发工具连接Gitee</title>
-    <link href="https://lxjblog.gitee.io/2020/12/12/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E8%BF%9E%E6%8E%A5Gitee/"/>
-    <id>https://lxjblog.gitee.io/2020/12/12/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E8%BF%9E%E6%8E%A5Gitee/</id>
-    <published>2020-12-11T16:00:37.000Z</published>
-    <updated>2020-12-11T16:05:56.989Z</updated>
-    
-    <summary type="html">
-    
-      使用微信开发者工具连接Gitee，进行版本控制，避免出现误删代码无法回退的问题
-    
-    </summary>
-    
-    
-      <category term="小程序" scheme="https://lxjblog.gitee.io/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
-    
-    
-      <category term="Gitee" scheme="https://lxjblog.gitee.io/tags/Gitee/"/>
-    
-      <category term="微信开发工具" scheme="https://lxjblog.gitee.io/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
