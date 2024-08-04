@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>任务调度 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="任务调度框架介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="任务调度">
+<meta property="og:url" content="https://lxjblog.gitee.io/2024/04/12/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="任务调度框架介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913495268-891ed8f4-e835-47c4-a691-2c63b5b16854.png#averageHue=%23fafafa&clientId=ud2fe7890-5955-4&from=paste&height=406&id=ua5cbb706&originHeight=558&originWidth=1241&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=96811&status=done&style=none&taskId=u22cfe629-3ea8-4a6f-acc2-f61fac3adac&title=&width=902.5454545454545">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913589775-861edf8a-0bd6-4e11-be59-b3d500bc38f2.png#averageHue=%235d665a&clientId=ud2fe7890-5955-4&from=paste&height=435&id=uc4c1c374&originHeight=598&originWidth=1204&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=267449&status=done&style=none&taskId=u8e7d8b64-e9af-4b7b-ae56-59e21cc533f&title=&width=875.6363636363636">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913601868-23e847ec-1cff-4963-bb20-848bf9655b14.png#averageHue=%23696c4b&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=ud9e83e73&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=315762&status=done&style=none&taskId=u02924076-33a4-4cfb-98ab-0ef1f8f66ae&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913611813-2312e1fd-73db-4315-8915-e8c10ee493b2.png#averageHue=%23d0d5dd&clientId=ud2fe7890-5955-4&from=paste&height=340&id=ub4c76639&originHeight=468&originWidth=1047&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=12169&status=done&style=none&taskId=u4bdc6a82-d614-4a05-9fca-794e147828b&title=&width=761.4545454545455">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913638373-1856141c-6ccf-4a4f-b138-dd089a26c3c9.png#averageHue=%235a5942&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u98fb5b9a&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=290280&status=done&style=none&taskId=u92b2ed95-dbde-4c3d-9585-4ad2683b53b&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913764775-820c2756-026b-46b4-982f-3586640bd093.png#averageHue=%236c6b4d&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u1f59d499&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=343436&status=done&style=none&taskId=uf210beaa-b3df-4c08-a597-8afba6cd348&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913775005-9a3645c5-f572-446d-92e1-dde5e9ffaa85.png#averageHue=%23656948&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u72c8750d&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=331672&status=done&style=none&taskId=uea649f9f-e667-4bbd-9c84-c74cea87e51&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913783355-0a2db06c-294c-4ec2-92cc-2fd29ad7180d.png#averageHue=%238e9599&clientId=ud2fe7890-5955-4&from=paste&height=962&id=u5a329f7e&originHeight=1323&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=62638&status=done&style=none&taskId=u90b42f69-3210-4bbb-b01e-3b1c6b594f7&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913792288-97ccf3f0-3bcd-4ba4-ac57-e8c7e0910ffe.png#averageHue=%231a7b51&clientId=ud2fe7890-5955-4&from=paste&height=962&id=ua8f07da0&originHeight=1323&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=91377&status=done&style=none&taskId=ub4f393e4-b5aa-4a05-9aee-47767537cc9&title=&width=1861.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913812180-f7ed0945-a721-46be-8f58-0543066b3e80.png#averageHue=%233d4043&clientId=ud2fe7890-5955-4&from=paste&height=529&id=u92578f5d&originHeight=727&originWidth=606&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=33124&status=done&style=none&taskId=ufd654650-c33b-4f04-9b06-41daaf1bb36&title=&width=440.72727272727275">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913822083-660a1870-0ee5-4646-b789-c3cb4a6bf496.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=490&id=u3788d152&originHeight=674&originWidth=2206&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=121225&status=done&style=none&taskId=ud1f29ca2-0c0f-47be-964e-a4bf2c280e7&title=&width=1604.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913829348-9d813d97-5806-4404-b9de-46277e8ace89.png#averageHue=%230e7344&clientId=ud2fe7890-5955-4&from=paste&height=955&id=u1a8dc396&originHeight=1313&originWidth=1787&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=87511&status=done&style=none&taskId=uf8132309-eb88-482e-9506-9f0f595791f&title=&width=1299.6363636363637">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913833823-362cf046-f9d4-48a4-8631-566186c4727c.png#averageHue=%232d2d2c&clientId=ud2fe7890-5955-4&from=paste&height=313&id=uc3a32686&originHeight=430&originWidth=1345&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=66596&status=done&style=none&taskId=u348831cd-7593-46b6-b3b7-7b16c02d8a9&title=&width=978.1818181818181">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913844372-d1f8c735-6f26-4526-9d1b-c9466e894b97.png#averageHue=%236e6a4c&clientId=ud2fe7890-5955-4&from=paste&height=508&id=ue47b8a16&originHeight=699&originWidth=2023&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=164511&status=done&style=none&taskId=u93718e89-643f-49a9-a77a-87dcf364322&title=&width=1471.2727272727273">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913851176-1197225b-2fd2-4ac8-943c-080c9e64ae5b.png#averageHue=%232f2e2c&clientId=ud2fe7890-5955-4&from=paste&height=704&id=u7130c5a8&originHeight=968&originWidth=1101&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=117756&status=done&style=none&taskId=uf6b9aad8-d356-4821-8c4a-7f44008f896&title=&width=800.7272727272727">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913861711-fd47e994-5fc2-4f8f-878c-5ae992f4b49a.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=657&id=uf04b9f95&originHeight=904&originWidth=1495&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=131034&status=done&style=none&taskId=u21c62131-e942-4f01-a062-3a771103c4a&title=&width=1087.2727272727273">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913872756-ce830314-c6d1-4ef7-bfdb-4390e1dc7a7e.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=514&id=u778a9345&originHeight=707&originWidth=1126&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=84892&status=done&style=none&taskId=u91954f67-6906-4549-84e7-eedcf1c5458&title=&width=818.9090909090909">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914225668-4beb1ec0-6ff2-4c50-b807-6ff9c2c91f42.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=901&id=u89b3b272&originHeight=1239&originWidth=1895&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=278907&status=done&style=none&taskId=uabda308f-5a32-4ddb-b288-df91f342cd7&title=&width=1378.1818181818182">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914279896-4d589ee6-b91c-4bb8-908e-b32a38cdb2eb.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=659&id=uf13e5328&originHeight=906&originWidth=1932&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=145555&status=done&style=none&taskId=u1ba50917-3623-49cb-bf7f-8072b35bc1b&title=&width=1405.090909090909">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914414164-fb144da2-3662-40a1-9084-c5cd79569b7c.png#averageHue=%232d2c2b&clientId=ud2fe7890-5955-4&from=paste&height=518&id=u593c0504&originHeight=712&originWidth=1706&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=124669&status=done&style=none&taskId=u06d3d88d-1877-4f3e-a839-bdf7a374de6&title=&width=1240.7272727272727">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914555635-37778e7d-c04e-4250-bd23-e34e872cfedd.png#averageHue=%232c2b2b&clientId=ud2fe7890-5955-4&from=paste&height=763&id=ub112e888&originHeight=1049&originWidth=1710&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=196400&status=done&style=none&taskId=uf2dc6edc-48ce-4963-b1a1-6b465fa13be&title=&width=1243.6363636363637">
+<meta property="article:published_time" content="2024-04-12T13:46:10.000Z">
+<meta property="article:modified_time" content="2024-08-04T10:20:57.071Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913495268-891ed8f4-e835-47c4-a691-2c63b5b16854.png#averageHue=%23fafafa&clientId=ud2fe7890-5955-4&from=paste&height=406&id=ua5cbb706&originHeight=558&originWidth=1241&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=96811&status=done&style=none&taskId=u22cfe629-3ea8-4a6f-acc2-f61fac3adac&title=&width=902.5454545454545"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">70</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">57</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Timer-%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-text">Timer 定时器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Quartz-%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-text">Quartz 任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xxl-job-%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-text">xxl-job 任务调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-text">使用流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="toc-text">执行器配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-text">原理分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%A7%A6%E5%8F%91%E8%BF%87%E7%A8%8B"><span class="toc-text">任务触发过程</span></a></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2024/04/12/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">任务调度</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2024-04-12 21:46:10" itemprop="dateCreated datePublished" datetime="2024-04-12T21:46:10+08:00">2024-04-12</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2024-08-04 18:20:57" itemprop="dateModified" datetime="2024-08-04T18:20:57+08:00">2024-08-04</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%90%8E%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">后端</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/java/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">java</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://xiaojiang-l.github.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="Timer-定时器"><a href="#Timer-定时器" class="headerlink" title="Timer 定时器"></a>Timer 定时器</h2><p>Timer 是 JDK 自带的一个定时器类</p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><blockquote>
+<p>基本用法</p>
+</blockquote>
+<ol>
+<li>创建任务定时器对象</li>
+<li>创建任务</li>
+<li>启动任务<br>```java<br>/**</li>
+</ol>
+<ul>
+<li>创建定时器示例</li>
+<li>/<br>private static Timer timer = new Timer();</li>
+</ul>
+<p>/**</p>
+<ul>
+<li>创建任务实现类</li>
+<li>/<br>static class MyTask extends TimerTask {<br>   @Override<br>   public void run() {<pre><code>   System.out.println(&quot;定时任务开始执行&quot;);</code></pre>
+   }<br>}</li>
+</ul>
+<p>public static void main(String[] args) {<br>    // 启动任务<br>    timer.schedule(new MyTask(), DateUtil.parse(“2024-02-04 16:41”, “yyyy-MM-dd HH:mm”));<br>}</p>
+<pre><code>
+&gt; 内部原理
+
+1. 在 Timer 中定义了 TaskQueue 任务队列（小顶堆），用于存放任务
+2. 定义 TimerThread 线程，并在线程中使用 while 循环持续监测是否有新的任务加入到队列中
+3. 队列中的任务根据下一次执行时间 nextExecutionTime 构造小顶堆，每次优先取时间最小的任务进行处理
+```java
+public class Timer { 
+    // 任务队列
+    private final TaskQueue queue = new TaskQueue();
+
+    // 调度线程
+    private final TimerThread thread = new TimerThread(queue);
+
+    // 构造方法
+    public Timer(String name) { 
+        thread.setName(name);
+        // 启动调度线程
+        thread.start();
+    } 
+
+    // 添加任务
+    public void schedule(TimerTask task, Date time) { 
+        sched(task, time.getTime(), 0);
+    } 
+} 
+
+class TimerThread extends Thread { 
+    public void run() { 
+        try { 
+            mainLoop();
+        }  finally { 
+            synchronized(queue) { 
+                newTasksMayBeScheduled = false;
+                queue.clear();  
+            } 
+        } 
+    } 
+    private void mainLoop() { 
+        while (true) { 
+            try { 
+                synchronized(queue) { 
+                    while (queue.isEmpty() &amp;&amp; newTasksMayBeScheduled)
+                        // 等待任务加入
+                        queue.wait();
+                    ……
+                    task = queue.getMin();
+                    ……
+                } 
+                if (taskFired)
+                    // 运行任务
+                    task.run();
+            }  catch(InterruptedException e) { 
+            } 
+        } 
+    } 
+} </code></pre>
+<blockquote>
+<p>任务执行过程</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">mainLoop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+                TimerTask task<span class="token punctuation">;</span>
+                <span class="token keyword">boolean</span> taskFired<span class="token punctuation">;</span>
+                <span class="token keyword">synchronized</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                    <span class="token comment" spellcheck="true">// 等待队列不为空</span>
+                    <span class="token keyword">while</span> <span class="token punctuation">(</span>queue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> newTasksMayBeScheduled<span class="token punctuation">)</span>
+                        queue<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>queue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                        <span class="token keyword">break</span><span class="token punctuation">;</span> 
+
+                    <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span> executionTime<span class="token punctuation">;</span>
+
+                    <span class="token comment" spellcheck="true">// 获取时间最近的任务</span>
+                    task <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">getMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">synchronized</span><span class="token punctuation">(</span>task<span class="token punctuation">.</span>lock<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>task<span class="token punctuation">.</span>state <span class="token operator">==</span> TimerTask<span class="token punctuation">.</span>CANCELLED<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                            queue<span class="token punctuation">.</span><span class="token function">removeMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                        <span class="token punctuation">}</span> 
+
+                        <span class="token comment" spellcheck="true">// 获取当前时间、任务执行时间</span>
+                        currentTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        executionTime <span class="token operator">=</span> task<span class="token punctuation">.</span>nextExecutionTime<span class="token punctuation">;</span>
+
+                        <span class="token comment" spellcheck="true">// 是否已经到达执行时间</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>taskFired <span class="token operator">=</span> <span class="token punctuation">(</span>executionTime<span class="token operator">&lt;=</span>currentTime<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                            <span class="token keyword">if</span> <span class="token punctuation">(</span>task<span class="token punctuation">.</span>period <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+
+                                <span class="token comment" spellcheck="true">// period 为0代表只执行一次，移出队列</span>
+                                queue<span class="token punctuation">.</span><span class="token function">removeMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                                task<span class="token punctuation">.</span>state <span class="token operator">=</span> TimerTask<span class="token punctuation">.</span>EXECUTED<span class="token punctuation">;</span>
+                            <span class="token punctuation">}</span>  <span class="token keyword">else</span> <span class="token punctuation">{</span>  
+
+                                <span class="token comment" spellcheck="true">// 计算下一次执行时间</span>
+                                queue<span class="token punctuation">.</span><span class="token function">rescheduleMin</span><span class="token punctuation">(</span>
+                                  task<span class="token punctuation">.</span>period<span class="token operator">&lt;</span><span class="token number">0</span> <span class="token operator">?</span> currentTime   <span class="token operator">-</span> task<span class="token punctuation">.</span>period
+                                                <span class="token operator">:</span> executionTime <span class="token operator">+</span> task<span class="token punctuation">.</span>period<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                            <span class="token punctuation">}</span> 
+                        <span class="token punctuation">}</span> 
+                    <span class="token punctuation">}</span> 
+
+                    <span class="token comment" spellcheck="true">// 未到达执行时间则等待</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>taskFired<span class="token punctuation">)</span> 
+                        queue<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span>executionTime <span class="token operator">-</span> currentTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> 
+
+                <span class="token comment" spellcheck="true">// 执行任务（在当前线程中执行，将会阻塞影响后续任务执行）</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>taskFired<span class="token punctuation">)</span>
+                    task<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>  <span class="token keyword">catch</span><span class="token punctuation">(</span>InterruptedException e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token punctuation">}</span> 
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> </code></pre>
+<h2 id="Quartz-任务调度"><a href="#Quartz-任务调度" class="headerlink" title="Quartz 任务调度"></a>Quartz 任务调度</h2><p><strong>Quartz 的核心类有以下三部分：</strong></p>
+<ul>
+<li><strong>任务 Job ：</strong> 需要实现的任务类，实现 <code>execute()</code> 方法，执行后完成任务。</li>
+<li><strong>触发器 Trigger ：</strong> 包括 <code>SimpleTrigger</code> 和 <code>CronTrigger</code>。</li>
+<li><strong>调度器 Scheduler ：</strong> 任务调度器，负责基于 <code>Trigger</code>触发器，来执行 Job任务。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913495268-891ed8f4-e835-47c4-a691-2c63b5b16854.png#averageHue=%23fafafa&clientId=ud2fe7890-5955-4&from=paste&height=406&id=ua5cbb706&originHeight=558&originWidth=1241&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=96811&status=done&style=none&taskId=u22cfe629-3ea8-4a6f-acc2-f61fac3adac&title=&width=902.5454545454545" alt="image.png" loading="lazy"></p>
+<blockquote>
+<p>基本使用</p>
+</blockquote>
+<p>1、导入依赖</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-quartz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>2、直接在 service 中使用</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JobHandler</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Resource</span>
+    <span class="token keyword">private</span> Scheduler scheduler<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@PostConstruct</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> SchedulerException <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 1、定义 job</span>
+        JobDetail jobDetail <span class="token operator">=</span> JobBuilder
+        <span class="token punctuation">.</span><span class="token function">newJob</span><span class="token punctuation">(</span>JobOne<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"jobName"</span><span class="token punctuation">,</span> <span class="token string">"jobGroup"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 2、定义触发器</span>
+        Trigger trigger <span class="token operator">=</span> TriggerBuilder<span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"triggerName"</span><span class="token punctuation">,</span> <span class="token string">"triggerGroup"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span>CronScheduleBuilder<span class="token punctuation">.</span><span class="token function">cronSchedule</span><span class="token punctuation">(</span><span class="token string">"0/1 * * * * ?"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">withMisfireHandlingInstructionDoNothing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 3、放入调度器</span>
+        scheduler<span class="token punctuation">.</span><span class="token function">scheduleJob</span><span class="token punctuation">(</span>jobDetail<span class="token punctuation">,</span> trigger<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<h2 id="xxl-job-任务调度"><a href="#xxl-job-任务调度" class="headerlink" title="xxl-job 任务调度"></a>xxl-job 任务调度</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://www.xuxueli.com/xxl-job/#%E3%80%8A%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%B9%B3%E5%8F%B0XXL-JOB%E3%80%8B">https://www.xuxueli.com/xxl-job/#《分布式任务调度平台XXL-JOB》</a><br>仓库地址：<a target="_blank" rel="noopener" href="https://gitee.com/xuxueli0323/xxl-job.git">https://gitee.com/xuxueli0323/xxl-job.git</a></p>
+<h3 id="使用流程"><a href="#使用流程" class="headerlink" title="使用流程"></a>使用流程</h3><p>1、下载源码</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> clone https://gitee.com/xuxueli0323/xxl-job.git</code></pre>
+<p>2、使用 IDEA 打开项目</p>
+<pre class=" language-bash"><code class="language-bash">xxl-job-admin：调度中心
+xxl-job-core：公共依赖
+xxl-job-executor-samples：执行器Sample示例（选择合适的版本执行器，可直接使用，也可以参考其并将现有项目改造成执行器）
+    ：xxl-job-executor-sample-springboot：Springboot版本，通过Springboot管理执行器，推荐这种方式；
+    ：xxl-job-executor-sample-frameless：无框架版本；</code></pre>
+<p>3、创建对应的数据库 xxl_job ，执行 sql 文件<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913589775-861edf8a-0bd6-4e11-be59-b3d500bc38f2.png#averageHue=%235d665a&clientId=ud2fe7890-5955-4&from=paste&height=435&id=uc4c1c374&originHeight=598&originWidth=1204&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=267449&status=done&style=none&taskId=u8e7d8b64-e9af-4b7b-ae56-59e21cc533f&title=&width=875.6363636363636" alt="image.png" loading="lazy"><br>4、修改配置文件中的账号密码信息<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913601868-23e847ec-1cff-4963-bb20-848bf9655b14.png#averageHue=%23696c4b&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=ud9e83e73&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=315762&status=done&style=none&taskId=u02924076-33a4-4cfb-98ab-0ef1f8f66ae&title=&width=1861.8181818181818" alt="image.png" loading="lazy"><br>xxl-job-admin 是一个前后端不分离的项目，启动后访问 <a target="_blank" rel="noopener" href="http://localhost:8080/xxl-job-admin/toLogin">http://localhost:8080/xxl-job-admin/toLogin</a> 即可进入调度中心页面，账号密码：admin/123456<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913611813-2312e1fd-73db-4315-8915-e8c10ee493b2.png#averageHue=%23d0d5dd&clientId=ud2fe7890-5955-4&from=paste&height=340&id=ub4c76639&originHeight=468&originWidth=1047&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=12169&status=done&style=none&taskId=u4bdc6a82-d614-4a05-9fca-794e147828b&title=&width=761.4545454545455" alt="image.png" loading="lazy"></p>
+<h3 id="执行器配置"><a href="#执行器配置" class="headerlink" title="执行器配置"></a>执行器配置</h3><p>任务也是配置在执行器中<br>1、参考 xxl-job-executor-sample-springboot 示例代码，导入依赖</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- http://repo1.maven.org/maven2/com/xuxueli/xxl-job-core/ --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.xuxueli<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>xxl-job-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>${ 最新稳定版本} <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>2、修改配置文件</p>
+<ul>
+<li>xxl.job.admin.addresses：指定调度中心的地址 </li>
+<li>xxl.job.accessToken：调度中心 token </li>
+<li>xxl.job.executor.appname：执行器名称 </li>
+<li>xxl.job.executor.ip：执行器 ip 可自动获取，可不填 </li>
+<li>xxl.job.executor.port：执行器端口需指定（对应 netty 端口） </li>
+</ul>
+<p>调度中心触发任务的时候，会直接向 executor 的 ip + 端口 发送请求，由 netty 对内容进行读取并转发到对应的方法上<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913638373-1856141c-6ccf-4a4f-b138-dd089a26c3c9.png#averageHue=%235a5942&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u98fb5b9a&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=290280&status=done&style=none&taskId=u92b2ed95-dbde-4c3d-9585-4ad2683b53b&title=&width=1861.8181818181818" alt="image.png" loading="lazy"><br>3、新增 XxlJobConfig 配置类，创建 XxlJobSpringExecutor 实例<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913764775-820c2756-026b-46b4-982f-3586640bd093.png#averageHue=%236c6b4d&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u1f59d499&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=343436&status=done&style=none&taskId=uf210beaa-b3df-4c08-a597-8afba6cd348&title=&width=1861.8181818181818" alt="image.png" loading="lazy"><br>4、创建任务，在需要被调度的方法上新增 @XxlJob 注解即可被标识<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913775005-9a3645c5-f572-446d-92e1-dde5e9ffaa85.png#averageHue=%23656948&clientId=ud2fe7890-5955-4&from=paste&height=1018&id=u72c8750d&originHeight=1400&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=331672&status=done&style=none&taskId=uea649f9f-e667-4bbd-9c84-c74cea87e51&title=&width=1861.8181818181818" alt="image.png" loading="lazy"><br>5、启动该执行器项目，即可在调度中心中查看到注册进来的调度器了<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913783355-0a2db06c-294c-4ec2-92cc-2fd29ad7180d.png#averageHue=%238e9599&clientId=ud2fe7890-5955-4&from=paste&height=962&id=u5a329f7e&originHeight=1323&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=62638&status=done&style=none&taskId=u90b42f69-3210-4bbb-b01e-3b1c6b594f7&title=&width=1861.8181818181818" alt="image.png" loading="lazy"><br>6、添加任务，指定执行器、cron、执行方法 即可<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913792288-97ccf3f0-3bcd-4ba4-ac57-e8c7e0910ffe.png#averageHue=%231a7b51&clientId=ud2fe7890-5955-4&from=paste&height=962&id=ua8f07da0&originHeight=1323&originWidth=2560&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=91377&status=done&style=none&taskId=ub4f393e4-b5aa-4a05-9aee-47767537cc9&title=&width=1861.8181818181818" alt="image.png" loading="lazy"></p>
+<h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p><strong>xxl-job-admin</strong><br>admin 中定义了对应的线程用于循环监听 job，其中 JobScheduleHelper 类中定义了一个线程用于循环监听 job 是否临近触发<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913812180-f7ed0945-a721-46be-8f58-0543066b3e80.png#averageHue=%233d4043&clientId=ud2fe7890-5955-4&from=paste&height=529&id=u92578f5d&originHeight=727&originWidth=606&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=33124&status=done&style=none&taskId=ufd654650-c33b-4f04-9b06-41daaf1bb36&title=&width=440.72727272727275" alt="image.png" loading="lazy"><br>在 com/xxl/job/admin/core/thread/JobScheduleHelper.java:80 中循环读取近 5 秒内将触发的任务，然后依次处理并更新下一次执行时间<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913822083-660a1870-0ee5-4646-b789-c3cb4a6bf496.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=490&id=u3788d152&originHeight=674&originWidth=2206&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=121225&status=done&style=none&taskId=ud1f29ca2-0c0f-47be-964e-a4bf2c280e7&title=&width=1604.3636363636363" alt="image.png" loading="lazy"><br>所以当我们在后台中新增任务的时候，其实也就是往数据库的 xxl_job_info 新增一条记录而已，这样就可以在 JobScheduleHelper 线程中读取到任务<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913829348-9d813d97-5806-4404-b9de-46277e8ace89.png#averageHue=%230e7344&clientId=ud2fe7890-5955-4&from=paste&height=955&id=u1a8dc396&originHeight=1313&originWidth=1787&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=87511&status=done&style=none&taskId=uf8132309-eb88-482e-9506-9f0f595791f&title=&width=1299.6363636363637" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913833823-362cf046-f9d4-48a4-8631-566186c4727c.png#averageHue=%232d2d2c&clientId=ud2fe7890-5955-4&from=paste&height=313&id=uc3a32686&originHeight=430&originWidth=1345&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=66596&status=done&style=none&taskId=u348831cd-7593-46b6-b3b7-7b16c02d8a9&title=&width=978.1818181818181" alt="image.png" loading="lazy"></p>
+<p><strong>xxl-job-executor-sample-springboot</strong><br>执行器注册流程<br>在 XxlJobConfig 配置类中定义了 xxlJobExecutor 这个 bean，所以在项目启动的过程中就会自动实例化一个 XxlJobSpringExecutor 对象<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913844372-d1f8c735-6f26-4526-9d1b-c9466e894b97.png#averageHue=%236e6a4c&clientId=ud2fe7890-5955-4&from=paste&height=508&id=ue47b8a16&originHeight=699&originWidth=2023&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=164511&status=done&style=none&taskId=u93718e89-643f-49a9-a77a-87dcf364322&title=&width=1471.2727272727273" alt="image.png" loading="lazy"><br>而在 XxlJobSpringExecutor 实例化过程中则会调用两个初始化方法：<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913851176-1197225b-2fd2-4ac8-943c-080c9e64ae5b.png#averageHue=%232f2e2c&clientId=ud2fe7890-5955-4&from=paste&height=704&id=u7130c5a8&originHeight=968&originWidth=1101&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=117756&status=done&style=none&taskId=uf6b9aad8-d356-4821-8c4a-7f44008f896&title=&width=800.7272727272727" alt="image.png" loading="lazy"><br>XxlJobSpringExecutor：用于读取所有包含 XxlJob 注解的方法，并添加到 jobHandlerRepository 这个 map 中<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913861711-fd47e994-5fc2-4f8f-878c-5ae992f4b49a.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=657&id=uf04b9f95&originHeight=904&originWidth=1495&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=131034&status=done&style=none&taskId=u21c62131-e942-4f01-a062-3a771103c4a&title=&width=1087.2727272727273" alt="image.png" loading="lazy"><br>start：调用父类 XxlJobExecutor 的方法，用于注册执行器，配置 netty 的地址<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712913872756-ce830314-c6d1-4ef7-bfdb-4390e1dc7a7e.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=514&id=u778a9345&originHeight=707&originWidth=1126&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=84892&status=done&style=none&taskId=u91954f67-6906-4549-84e7-eedcf1c5458&title=&width=818.9090909090909" alt="image.png" loading="lazy"></p>
+<h3 id="任务触发过程"><a href="#任务触发过程" class="headerlink" title="任务触发过程"></a>任务触发过程</h3><p>1、在 com/xxl/job/admin/core/thread/JobScheduleHelper.java:80 代码中读取到任务之后，会对任务触发时间进行判断，然后采用不同的触发方式<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914225668-4beb1ec0-6ff2-4c50-b807-6ff9c2c91f42.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=901&id=u89b3b272&originHeight=1239&originWidth=1895&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=278907&status=done&style=none&taskId=uabda308f-5a32-4ddb-b288-df91f342cd7&title=&width=1378.1818181818182" alt="image.png" loading="lazy"><br>2、而触发的任务是交给了 JobTriggerPoolHelper 线程<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914279896-4d589ee6-b91c-4bb8-908e-b32a38cdb2eb.png#averageHue=%232c2c2b&clientId=ud2fe7890-5955-4&from=paste&height=659&id=uf13e5328&originHeight=906&originWidth=1932&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=145555&status=done&style=none&taskId=u1ba50917-3623-49cb-bf7f-8072b35bc1b&title=&width=1405.090909090909" alt="image.png" loading="lazy"><br>3、在 JobTriggerPoolHelper 添加触发任务的时候会根据任务的执行时间判断使用哪个线程池<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914414164-fb144da2-3662-40a1-9084-c5cd79569b7c.png#averageHue=%232d2c2b&clientId=ud2fe7890-5955-4&from=paste&height=518&id=u593c0504&originHeight=712&originWidth=1706&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=124669&status=done&style=none&taskId=u06d3d88d-1877-4f3e-a839-bdf7a374de6&title=&width=1240.7272727272727" alt="image.png" loading="lazy"><br>这里定义了 fastTriggerPool 和 slowTriggerPool，两个线程的主要不同是 <strong>最大线程数量</strong> 和 <strong>等待队列大小</strong></p>
+<ul>
+<li>slowTriggerPool：一分钟内，超过 10 运行时间大于 500 毫秒就属于 slowTriggerPool，拥有更大的 线程数量 和 等待队列</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712914555635-37778e7d-c04e-4250-bd23-e34e872cfedd.png#averageHue=%232c2b2b&clientId=ud2fe7890-5955-4&from=paste&height=763&id=ub112e888&originHeight=1049&originWidth=1710&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=196400&status=done&style=none&taskId=uf2dc6edc-48ce-4963-b1a1-6b465fa13be&title=&width=1243.6363636363637" alt="image.png" loading="lazy"></p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2024/04/12/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/" title="任务调度">https://lxjblog.gitee.io/2024/04/12/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2024/06/03/netty/" rel="prev" title="netty"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">netty</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/04/12/OAuth2/" rel="next" title="OAuth2"><span class="post-nav-text">OAuth2</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2024 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>Security | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="Security 配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Security">
+<meta property="og:url" content="https://lxjblog.gitee.io/2024/04/09/Security/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="Security 配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339139951-1418837d-11d4-4c86-973d-5166f2d1a9d8.png#averageHue=%23ededed&clientId=u49bc4a5d-380f-4&from=paste&height=564&id=u7adbde37&originHeight=846&originWidth=1920&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=53046&status=done&style=none&taskId=uec41e74a-ed57-40b1-913a-3c63e3db945&title=&width=1280">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339275965-8e7a4c11-0672-4e96-b843-cb45e63a4640.png#averageHue=%23fbf6f5&clientId=u49bc4a5d-380f-4&from=paste&height=415&id=u2380a506&originHeight=622&originWidth=1086&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=89062&status=done&style=none&taskId=u55d31a3c-53c6-4212-a8b7-64edf25ccec&title=&width=724">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339306555-e684c912-c190-456f-850e-81d4cfb37fe9.png#averageHue=%23f8f1ef&clientId=u49bc4a5d-380f-4&from=paste&height=201&id=u37857f8c&originHeight=301&originWidth=1344&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=61545&status=done&style=none&taskId=u3e190b2c-2482-4f12-aaf0-def6be99ad3&title=&width=896">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339515169-2f063173-ecad-42c9-bccc-d1598d19f25a.png#averageHue=%23f7dfd3&clientId=u49bc4a5d-380f-4&from=paste&height=427&id=u6bc4e915&originHeight=576&originWidth=676&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=47779&status=done&style=none&taskId=u3164cbc8-55ed-4f50-8ae6-6132ed058ed&title=&width=500.74077611434205">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340149246-600d60af-e1f8-4a4f-b177-0d0b99384e03.png#averageHue=%23f3e2da&clientId=u49bc4a5d-380f-4&from=paste&height=422&id=u0582f682&originHeight=570&originWidth=922&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=225695&status=done&style=none&taskId=uaf907c9e-3301-41fb-8833-e097fb02a48&title=&width=682.9630112092061">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340887431-d4e27894-21ce-4d15-8a9b-49f3bca7965a.png#averageHue=%23faf9f7&clientId=u49bc4a5d-380f-4&from=paste&height=639&id=u87df51fe&originHeight=862&originWidth=1308&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=178377&status=done&style=none&taskId=uf41a610b-d6e7-4210-943b-38c392b268d&title=&width=968.8889573336677">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340910342-55b50a66-14ff-43b8-b289-f610e469b273.png#averageHue=%23faf8f7&clientId=u49bc4a5d-380f-4&from=paste&height=358&id=u0f5fa89b&originHeight=483&originWidth=756&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=51057&status=done&style=none&taskId=u71ec5568-09c4-4a7e-9aa5-37a3e5c2c4f&title=&width=560.0000395598263">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710341595536-d47413dd-623b-4c6d-883c-94fd43afafd6.png#averageHue=%23f2f1f0&clientId=u49bc4a5d-380f-4&from=paste&height=127&id=u54d9a9f5&originHeight=172&originWidth=420&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=7725&status=done&style=none&taskId=u62f1ecee-f705-46fa-bd86-5e0d4a90f70&title=&width=311.11113308879237">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342487471-0c34bdd5-91d6-4431-8940-51327396440a.png#averageHue=%23fcfbfa&clientId=u49bc4a5d-380f-4&from=paste&height=209&id=IrPop&originHeight=282&originWidth=790&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=37970&status=done&style=none&taskId=ub12a0b5a-4985-4ea0-be0b-68bcf387c1b&title=&width=585.1852265241571">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342506485-9a76ada9-ba15-4ad1-9adf-cc5e08101741.png#averageHue=%23fdf9f7&clientId=u49bc4a5d-380f-4&from=paste&height=253&id=TpJrn&originHeight=342&originWidth=847&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=35764&status=done&style=none&taskId=ue950d467-b082-439a-a366-d28e3697083&title=&width=627.4074517290646">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342514599-960d0abb-1ba5-4cab-99f6-f304f2e4abec.png#averageHue=%23fbfaf7&clientId=u49bc4a5d-380f-4&from=paste&height=120&id=qL1OZ&originHeight=162&originWidth=1071&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=28820&status=done&style=none&taskId=u308e0daf-6f19-4533-a161-68e81d2cd2c&title=&width=793.3333893764205">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342548586-ee73a2ef-247a-4b22-9181-31712f8315fa.png#averageHue=%23fbfaf7&clientId=u49bc4a5d-380f-4&from=paste&height=544&id=u81a14fc4&originHeight=735&originWidth=1192&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=142177&status=done&style=none&taskId=uc103e0aa-be0e-4470-b032-723aadc3faf&title=&width=882.9630253377155">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710341638524-78b395ec-e689-46c0-9b7a-02a98b850794.png#averageHue=%23fbf9de&clientId=u49bc4a5d-380f-4&from=paste&height=258&id=ue7dc86fc&originHeight=348&originWidth=994&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=74118&status=done&style=none&taskId=u24838171-0642-44ab-b3a6-2b3d516ba0d&title=&width=736.296348310142">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402846350-21030ac3-d6f2-4ffa-bda5-8f3ed472d022.png#averageHue=%232d2c2c&clientId=u47704f2d-50ba-4&from=paste&height=791&id=ub7e2168f&originHeight=1088&originWidth=1590&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=209284&status=done&style=none&taskId=u1c9955f4-6005-457d-a5e6-2ae2df0f8cf&title=&width=1156.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402894893-400b6035-b2c9-4b5e-8f83-7fd025305df9.png#averageHue=%23dfba7d&clientId=u47704f2d-50ba-4&from=paste&height=84&id=ubcaa175e&originHeight=115&originWidth=562&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=6964&status=done&style=none&taskId=u58a58f25-8873-40e0-975d-2ffa66fd655&title=&width=408.72727272727275">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402931561-d89cc9ea-6acd-4fed-8a3f-39f2ddb962da.png#averageHue=%236b754a&clientId=u47704f2d-50ba-4&from=paste&height=673&id=u73f46de8&originHeight=926&originWidth=1385&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=154928&status=done&style=none&taskId=u20e51b20-e887-42cd-b865-9a3427e99ce&title=&width=1007.2727272727273">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402993055-80b9655f-5e59-420e-9767-7e1522f3e4b3.png#averageHue=%23fefdfd&clientId=u47704f2d-50ba-4&from=paste&height=416&id=ub35fc352&originHeight=572&originWidth=707&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=26840&status=done&style=none&taskId=u4bffef45-7d39-471b-9619-7de000a0488&title=&width=514.1818181818181">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710403085171-4a22f462-51a7-41ed-af83-35a198de6567.png#averageHue=%232d2c2b&clientId=u47704f2d-50ba-4&from=paste&height=642&id=ua5c96147&originHeight=883&originWidth=1757&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=180865&status=done&style=none&taskId=uc00695e3-1fa2-4ad1-8ea6-62393be712f&title=&width=1277.8181818181818">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710403205004-99d977fc-c1e8-452e-89e0-f047203564ba.png#averageHue=%23fdfdfd&clientId=u47704f2d-50ba-4&from=paste&height=188&id=u68749b1c&originHeight=259&originWidth=727&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=12785&status=done&style=none&taskId=u1d64ee4d-7372-4e3a-8f1c-697d0de95da&title=&width=528.7272727272727">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711203415799-91e06f41-a277-43de-982b-13340b1eccc0.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=502&id=u671de7be&originHeight=690&originWidth=1209&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=110019&status=done&style=none&taskId=u34d8d491-b2df-4a36-bbc2-18d2a40516b&title=&width=879.2727272727273">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711204165565-7e897db1-c286-47a3-9cf3-1800198a97b3.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=168&id=ua30cb563&originHeight=216&originWidth=872&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=22182&status=done&style=none&taskId=u03f1d95a-bed6-49d1-8ac9-c527cf12ee9&title=&width=680.1818237304688">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711204206175-b29ed830-0915-4020-9785-908e930ca52a.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=471&id=ud8cccf00&originHeight=647&originWidth=1483&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=107632&status=done&style=none&taskId=ub9d5a369-6f29-46ae-9788-b3e5b8b0afb&title=&width=1078.5454545454545">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514637821-cb542872-b245-494b-83ae-4f0bbd1652a4.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=399&id=u739c79d8&originHeight=548&originWidth=1595&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=86194&status=done&style=none&taskId=ua7ac29c5-be93-46de-aa55-a855aea24b6&title=&width=1160">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514689644-07040572-24ca-499f-b937-bedb8134cf24.png#averageHue=%232e2d2b&clientId=u27a35257-efa1-4&from=paste&height=292&id=uce551a66&originHeight=401&originWidth=1295&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=66849&status=done&style=none&taskId=ue5e79053-152a-4215-9074-e6bcae49229&title=&width=941.8181818181819">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514798793-e1c7331a-9f29-48d3-9cef-1966042a760c.png#averageHue=%232e2e2d&clientId=u27a35257-efa1-4&from=paste&height=272&id=ua18c1db4&originHeight=374&originWidth=1925&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=85330&status=done&style=none&taskId=u68b1d204-4101-4f91-819c-d4d70bf8c2e&title=&width=1400">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514927331-a24b1870-b62f-4cf1-b4eb-3ae21a9a488e.png#averageHue=%232d2c2c&clientId=u27a35257-efa1-4&from=paste&height=807&id=u02117bca&originHeight=1109&originWidth=1542&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=186136&status=done&style=none&taskId=ued417082-bef8-4c12-8945-557ebdff8b0&title=&width=1121.4545454545455">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514957094-1176320c-db44-4e56-9fb5-38f5a73ac3a1.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=278&id=uecbc77eb&originHeight=382&originWidth=1138&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=62931&status=done&style=none&taskId=ub7dc6bd5-2cbb-4e36-8a6d-505bc49d53a&title=&width=827.6363636363636">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514970380-dcd39f7a-e814-487b-afb5-c4efac4fef74.png#averageHue=%23302e2d&clientId=u27a35257-efa1-4&from=paste&height=121&id=ue3b06645&originHeight=166&originWidth=1391&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=33432&status=done&style=none&taskId=u516f4a02-66af-41af-b682-c7749d3ceda&title=&width=1011.6363636363636">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713515036974-6eff5b89-15bc-4c4f-9ec7-85591c68cb4e.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=402&id=u5c214165&originHeight=553&originWidth=1818&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=92286&status=done&style=none&taskId=u271ea206-dc42-4b12-a624-b2c22c2100a&title=&width=1322.1818181818182">
+<meta property="article:published_time" content="2024-04-09T12:46:10.000Z">
+<meta property="article:modified_time" content="2024-08-04T10:12:34.661Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339139951-1418837d-11d4-4c86-973d-5166f2d1a9d8.png#averageHue=%23ededed&clientId=u49bc4a5d-380f-4&from=paste&height=564&id=u7adbde37&originHeight=846&originWidth=1920&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=53046&status=done&style=none&taskId=uec41e74a-ed57-40b1-913a-3c63e3db945&title=&width=1280"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">70</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">57</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%99%BB%E5%BD%95%E7%9A%84%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81"><span class="toc-text">配置登录的账号密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E7%9A%84%E7%94%A8%E6%88%B7%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="toc-text">基于内存的用户认证流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E7%BD%AE%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81"><span class="toc-text">通过数据库设置账号密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security%E9%85%8D%E7%BD%AE"><span class="toc-text">Security配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3"><span class="toc-text">配置登录接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80"><span class="toc-text">方式一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-text">方式二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">示例代码</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2024/04/09/Security/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Security</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2024-04-09 20:46:10" itemprop="dateCreated datePublished" datetime="2024-04-09T20:46:10+08:00">2024-04-09</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2024-08-04 18:12:34" itemprop="dateModified" datetime="2024-08-04T18:12:34+08:00">2024-08-04</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%90%8E%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">后端</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/java/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">java</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://xiaojiang-l.github.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>1、导入依赖</p>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-security<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>2、直接启动springboot项目，此时的security就会生效，并使用自带的过滤器<br>3、访问当前项目的任一请求，就会出现自带的登陆页面<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339139951-1418837d-11d4-4c86-973d-5166f2d1a9d8.png#averageHue=%23ededed&clientId=u49bc4a5d-380f-4&from=paste&height=564&id=u7adbde37&originHeight=846&originWidth=1920&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=53046&status=done&style=none&taskId=uec41e74a-ed57-40b1-913a-3c63e3db945&title=&width=1280" alt="image.png" loading="lazy"><br>4、账号密码存在当前项目的内存中即 InMemoryUserDetailsManager，账号为 user，密码在控制台输出<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339275965-8e7a4c11-0672-4e96-b843-cb45e63a4640.png#averageHue=%23fbf6f5&clientId=u49bc4a5d-380f-4&from=paste&height=415&id=u2380a506&originHeight=622&originWidth=1086&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=89062&status=done&style=none&taskId=u55d31a3c-53c6-4212-a8b7-64edf25ccec&title=&width=724" alt="image.png" loading="lazy"><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339306555-e684c912-c190-456f-850e-81d4cfb37fe9.png#averageHue=%23f8f1ef&clientId=u49bc4a5d-380f-4&from=paste&height=201&id=u37857f8c&originHeight=301&originWidth=1344&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=61545&status=done&style=none&taskId=u3e190b2c-2482-4f12-aaf0-def6be99ad3&title=&width=896" alt="image.png" loading="lazy"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>官方文档：<br><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/architecture.html">Architecture :: Spring Security</a></p>
+<blockquote>
+<p>HTTP请求的处理程序的典型分层</p>
+</blockquote>
+<p>一般的http请求，客户端向应用程序发送一个请求，容器创建一个FilterChain，其中包含Filter实例和Servlet，它们应该根据请求URI的路径来处理HttpServlet请求。在Spring MVC应用程序中，Servlet是DispatcherServlet的一个实例。一个Servlet最多可以处理一个HttpServlet请求和HttpServlet响应。<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710339515169-2f063173-ecad-42c9-bccc-d1598d19f25a.png#averageHue=%23f7dfd3&clientId=u49bc4a5d-380f-4&from=paste&height=427&id=u6bc4e915&originHeight=576&originWidth=676&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=47779&status=done&style=none&taskId=u3164cbc8-55ed-4f50-8ae6-6132ed058ed&title=&width=500.74077611434205" alt="image.png" loading="lazy"></p>
+<blockquote>
+<p>委托代理过滤器</p>
+</blockquote>
+<p>在security中，使用了以下几个过滤器用于动态配置过滤器链</p>
+<ul>
+<li><strong>DelegatingFilterProxy</strong>：Spring提供了一个名为DelegatingFilterProxy的Filter实现，它允许Servlet容器的生命周期和Spring的ApplicationContext之间进行桥接</li>
+<li><strong>FilterChainProxy</strong>: 是Spring Security提供的一种特殊过滤器，允许通过SecurityFilterChain将其委托给许多过滤器实例。由于FilterChainProxy是一个Bean，它通常被包装在DelegatingFilterProxy中</li>
+<li><strong>SecurityFilterChain</strong>：FilterChainProxy使用SecurityFilterChain来确定应为当前请求调用哪些Spring Security Filter实例</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340149246-600d60af-e1f8-4a4f-b177-0d0b99384e03.png#averageHue=%23f3e2da&clientId=u49bc4a5d-380f-4&from=paste&height=422&id=u0582f682&originHeight=570&originWidth=922&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=225695&status=done&style=none&taskId=uaf907c9e-3301-41fb-8833-e097fb02a48&title=&width=682.9630112092061" alt="image.png" loading="lazy"><br>安全过滤器通过SecurityFilterChain API插入到FilterChainProxy中。这些过滤器可以用于多种不同的目的，如身份验证、授权、漏洞保护等。过滤器按特定顺序执行，以确保它们在正确的时间被调用，例如，执行身份验证的过滤器应在执行授权的过滤器之前被调用。通常不需要知道Spring Security的过滤器的顺序。但是，有时了解排序是有益的，如果您想了解它们，可以检查FilterOrderRegistration代码。</p>
+<blockquote>
+<p>默认过滤器链</p>
+</blockquote>
+<p>1、DefaultSecurityFilterChain 就是一个默认的 SecurityFilterChain<br>2、在 DefaultSecurityFilterChain 类中打断点测试<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340887431-d4e27894-21ce-4d15-8a9b-49f3bca7965a.png#averageHue=%23faf9f7&clientId=u49bc4a5d-380f-4&from=paste&height=639&id=u87df51fe&originHeight=862&originWidth=1308&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=178377&status=done&style=none&taskId=uf41a610b-d6e7-4210-943b-38c392b268d&title=&width=968.8889573336677" alt="image.png" loading="lazy"><br>3、默认的15个过滤器<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710340910342-55b50a66-14ff-43b8-b289-f610e469b273.png#averageHue=%23faf8f7&clientId=u49bc4a5d-380f-4&from=paste&height=358&id=u0f5fa89b&originHeight=483&originWidth=756&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=51057&status=done&style=none&taskId=u71ec5568-09c4-4a7e-9aa5-37a3e5c2c4f&title=&width=560.0000395598263" alt="image.png" loading="lazy"></p>
+<h2 id="配置登录的账号密码"><a href="#配置登录的账号密码" class="headerlink" title="配置登录的账号密码"></a>配置登录的账号密码</h2><p>官方文档：<br><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/index.html">Username/Password Authentication :: Spring Security</a><br>1、创建配置类，并创建 UserDetailsService 的 bean，这样就会使用自定义的这个 bean 去进行校验</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> UserDetailsService <span class="token function">userDetailsService</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        UserDetails userDetails <span class="token operator">=</span> User<span class="token punctuation">.</span><span class="token function">withDefaultPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">username</span><span class="token punctuation">(</span><span class="token string">"user"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">password</span><span class="token punctuation">(</span><span class="token string">"password"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">roles</span><span class="token punctuation">(</span><span class="token string">"USER"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">InMemoryUserDetailsManager</span><span class="token punctuation">(</span>userDetails<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、以上是创建了一个 InMemoryUserDetailsManager 的 bean 对象，将账号密码写在代码中<br>3、此时重新启动项目，登录的账号密码就被设置好了<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710341595536-d47413dd-623b-4c6d-883c-94fd43afafd6.png#averageHue=%23f2f1f0&clientId=u49bc4a5d-380f-4&from=paste&height=127&id=u54d9a9f5&originHeight=172&originWidth=420&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=7725&status=done&style=none&taskId=u62f1ecee-f705-46fa-bd86-5e0d4a90f70&title=&width=311.11113308879237" alt="image.png" loading="lazy"></p>
+<h2 id="基于内存的用户认证流程"><a href="#基于内存的用户认证流程" class="headerlink" title="基于内存的用户认证流程"></a>基于内存的用户认证流程</h2><p>程序启动时：</p>
+<ul>
+<li>创建 InMemoryUserDetailsManager 对象</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342487471-0c34bdd5-91d6-4431-8940-51327396440a.png#averageHue=%23fcfbfa&clientId=u49bc4a5d-380f-4&from=paste&height=209&id=IrPop&originHeight=282&originWidth=790&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=37970&status=done&style=none&taskId=ub12a0b5a-4985-4ea0-be0b-68bcf387c1b&title=&width=585.1852265241571" alt="image.png" loading="lazy"></p>
+<ul>
+<li>创建 User 对象，封装用户名密码</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342506485-9a76ada9-ba15-4ad1-9adf-cc5e08101741.png#averageHue=%23fdf9f7&clientId=u49bc4a5d-380f-4&from=paste&height=253&id=TpJrn&originHeight=342&originWidth=847&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=35764&status=done&style=none&taskId=ue950d467-b082-439a-a366-d28e3697083&title=&width=627.4074517290646" alt="image.png" loading="lazy"></p>
+<ul>
+<li>使用 InMemoryUserDetailsManager 将 User 存入内存</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342514599-960d0abb-1ba5-4cab-99f6-f304f2e4abec.png#averageHue=%23fbfaf7&clientId=u49bc4a5d-380f-4&from=paste&height=120&id=qL1OZ&originHeight=162&originWidth=1071&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=28820&status=done&style=none&taskId=u308e0daf-6f19-4533-a161-68e81d2cd2c&title=&width=793.3333893764205" alt="image.png" loading="lazy"><br>校验用户时：</p>
+<ul>
+<li>UsernamePasswordAuthenticationFilter 过滤器调用 attemptAuthentication 方法进行校验</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710342548586-ee73a2ef-247a-4b22-9181-31712f8315fa.png#averageHue=%23fbfaf7&clientId=u49bc4a5d-380f-4&from=paste&height=544&id=u81a14fc4&originHeight=735&originWidth=1192&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=142177&status=done&style=none&taskId=uc103e0aa-be0e-4470-b032-723aadc3faf&title=&width=882.9630253377155" alt="image.png" loading="lazy"></p>
+<ul>
+<li>调用 InMemoryUserDetailsManager 的 loadUserByUsername 方法从内存中获取 User 对象</li>
+</ul>
+<h2 id="通过数据库设置账号密码"><a href="#通过数据库设置账号密码" class="headerlink" title="通过数据库设置账号密码"></a>通过数据库设置账号密码</h2><p>1、查看 UserDetailsService 接口的实现类，<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710341638524-78b395ec-e689-46c0-9b7a-02a98b850794.png#averageHue=%23fbf9de&clientId=u49bc4a5d-380f-4&from=paste&height=258&id=ue7dc86fc&originHeight=348&originWidth=994&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=74118&status=done&style=none&taskId=u24838171-0642-44ab-b3a6-2b3d516ba0d&title=&width=736.296348310142" alt="image.png" loading="lazy"><br>2、创建 UserDetailsService 实现类</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserDetailsServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">UserDetailsService</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Resource</span>
+    <span class="token keyword">private</span> SysUserService sysUserService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> UserDetails <span class="token function">loadUserByUsername</span><span class="token punctuation">(</span>String username<span class="token punctuation">)</span> <span class="token keyword">throws</span> UsernameNotFoundException <span class="token punctuation">{</span> 
+        SysUser user <span class="token operator">=</span> Optional<span class="token punctuation">.</span><span class="token function">ofNullable</span><span class="token punctuation">(</span>username<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>it <span class="token operator">-</span><span class="token operator">></span> sysUserService<span class="token punctuation">.</span><span class="token function">getOne</span><span class="token punctuation">(</span>Wrappers<span class="token punctuation">.</span>&lt;SysUser<span class="token operator">></span><span class="token function">lambdaQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">eq</span><span class="token punctuation">(</span>SysUser<span class="token operator">:</span><span class="token operator">:</span>getName<span class="token punctuation">,</span> it<span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">last</span><span class="token punctuation">(</span><span class="token string">"limit 1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">orElseThrow</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"获取用户信息失败"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 转为 UserDetails 对象</span>
+        <span class="token keyword">return</span> LoginUser<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">sysUser</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、创建 UserDetails 实现类</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@Builder</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoginUser</span> <span class="token keyword">implements</span> <span class="token class-name">UserDetails</span> <span class="token punctuation">{</span> 
+    <span class="token comment" spellcheck="true">/**
+     * 系统用户
+     */</span>
+    <span class="token keyword">private</span> SysUser sysUser<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Collection<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">GrantedAuthority</span><span class="token operator">></span> <span class="token function">getAuthorities</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">getPassword</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> sysUser<span class="token punctuation">.</span><span class="token function">getPassword</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">getUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> sysUser<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isAccountNonExpired</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isAccountNonLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isCredentialsNonExpired</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>4、增加配置类，设置密码加密的 bean</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token punctuation">{</span> 
+
+    <span class="token comment" spellcheck="true">/**
+     * 强散列哈希加密实现
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> BCryptPasswordEncoder <span class="token function">bCryptPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BCryptPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>5、现在登录功能就是使用数据库中获取的用户信息了</p>
+<h2 id="Security配置"><a href="#Security配置" class="headerlink" title="Security配置"></a>Security配置</h2><p>1、创建 WebSecurityConfigurerAdapter 实现类，重写 configure(HttpSecurity http) 方法，就可以配置过滤器链，设置请求过滤、登录页、登录页、添加过滤器等操作</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token keyword">extends</span> <span class="token class-name">WebSecurityConfigurerAdapter</span> <span class="token punctuation">{</span> 
+
+    <span class="token comment" spellcheck="true">/**
+     * 强散列哈希加密实现
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> BCryptPasswordEncoder <span class="token function">bCryptPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BCryptPasswordEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span>HttpSecurity http<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        http
+            <span class="token comment" spellcheck="true">// 过滤请求</span>
+            <span class="token punctuation">.</span><span class="token function">authorizeRequests</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true">// 对以下接口放行</span>
+            <span class="token punctuation">.</span><span class="token function">antMatchers</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">,</span> <span class="token string">"/login"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">permitAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true">// 除上面外的所有请求全部需要鉴权认证</span>
+            <span class="token punctuation">.</span><span class="token function">anyRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">authenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">headers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">frameOptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">disable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 去掉这一行就没有默认的登录页面了</span>
+        http<span class="token punctuation">.</span><span class="token function">formLogin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>2、配置自定义过滤器，新增 JwtAuthenticationTokenFilter 模仿使用 jwt 进行拦截</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JwtAuthenticationTokenFilter</span> <span class="token keyword">extends</span> <span class="token class-name">OncePerRequestFilter</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doFilterInternal</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> HttpServletResponse response<span class="token punctuation">,</span> FilterChain filterChain<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">//获取请求携带的令牌</span>
+        String token <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getHeader</span><span class="token punctuation">(</span><span class="token string">"Authorization"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//放行</span>
+        filterChain<span class="token punctuation">.</span><span class="token function">doFilter</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、在 SecurityConfig 配置类中添加过滤器<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402846350-21030ac3-d6f2-4ffa-bda5-8f3ed472d022.png#averageHue=%232d2c2c&clientId=u47704f2d-50ba-4&from=paste&height=791&id=ub7e2168f&originHeight=1088&originWidth=1590&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=209284&status=done&style=none&taskId=u1c9955f4-6005-457d-a5e6-2ae2df0f8cf&title=&width=1156.3636363636363" alt="image.png" loading="lazy"><br>4、这个时候把默认的登录页去掉，然后进行访问测试<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402894893-400b6035-b2c9-4b5e-8f83-7fd025305df9.png#averageHue=%23dfba7d&clientId=u47704f2d-50ba-4&from=paste&height=84&id=ubcaa175e&originHeight=115&originWidth=562&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=6964&status=done&style=none&taskId=u58a58f25-8873-40e0-975d-2ffa66fd655&title=&width=408.72727272727275" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402931561-d89cc9ea-6acd-4fed-8a3f-39f2ddb962da.png#averageHue=%236b754a&clientId=u47704f2d-50ba-4&from=paste&height=673&id=u73f46de8&originHeight=926&originWidth=1385&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=154928&status=done&style=none&taskId=u20e51b20-e887-42cd-b865-9a3427e99ce&title=&width=1007.2727272727273" alt="image.png" loading="lazy"><br>5、直接访问放行的端口是正常并且每个请求都会经过自定义的过滤器<br>6、但是如果访问未放行的路径则会报错，提示“未获权限”<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710402993055-80b9655f-5e59-420e-9767-7e1522f3e4b3.png#averageHue=%23fefdfd&clientId=u47704f2d-50ba-4&from=paste&height=416&id=ub35fc352&originHeight=572&originWidth=707&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=26840&status=done&style=none&taskId=u4bffef45-7d39-471b-9619-7de000a0488&title=&width=514.1818181818181" alt="image.png" loading="lazy"><br>7、这个时候如果在 jwt 过滤器中往 security 的上下文设置 Authentication，则所有请求都会获取访问权限<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710403085171-4a22f462-51a7-41ed-af83-35a198de6567.png#averageHue=%232d2c2b&clientId=u47704f2d-50ba-4&from=paste&height=642&id=ua5c96147&originHeight=883&originWidth=1757&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=180865&status=done&style=none&taskId=uc00695e3-1fa2-4ad1-8ea6-62393be712f&title=&width=1277.8181818181818" alt="image.png" loading="lazy"><br>8、再次访问未放行的路径则可以正常进入<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1710403205004-99d977fc-c1e8-452e-89e0-f047203564ba.png#averageHue=%23fdfdfd&clientId=u47704f2d-50ba-4&from=paste&height=188&id=u68749b1c&originHeight=259&originWidth=727&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=12785&status=done&style=none&taskId=u1d64ee4d-7372-4e3a-8f1c-697d0de95da&title=&width=528.7272727272727" alt="image.png" loading="lazy"><br>9、只不过 jwt 过滤器中的登录信息需要从 token 中获取并验证是否有效，是否过期然后再放行<br>10、至此，还需要配置一个登录接口，用户登录成功之后放回一个 jwt 的 token 给前端，后续前端请求的时候携带上这个 token 即可继续访问<br>11、在 SecurityConfig 配置类中配置登出接口，创建 logoutSuccessHandler 登出处理类，在登出时候将 jwt 的 token 删除掉</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ * 登出成功处理
+ */</span>
+<span class="token annotation punctuation">@Autowired</span>
+<span class="token keyword">private</span> LogoutSuccessHandler logoutSuccessHandler<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 添加Logout filter</span>
+http<span class="token punctuation">.</span><span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">logoutUrl</span><span class="token punctuation">(</span><span class="token string">"/sys/user/logout"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">logoutSuccessHandler</span><span class="token punctuation">(</span>logoutSuccessHandler<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>12、创建登出处理类</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LogoutSuccessHandlerImpl</span> <span class="token keyword">implements</span> <span class="token class-name">LogoutSuccessHandler</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> JwtUtils jwtUtils<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> RedisService redisService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onLogoutSuccess</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> HttpServletResponse response<span class="token punctuation">,</span> Authentication authentication<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">,</span> ServletException <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 获取请求携带的令牌</span>
+        String token <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getHeader</span><span class="token punctuation">(</span><span class="token string">"Authorization"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Payload payload <span class="token operator">=</span> jwtUtils<span class="token punctuation">.</span><span class="token function">validate</span><span class="token punctuation">(</span>token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String key <span class="token operator">=</span> payload<span class="token punctuation">.</span><span class="token function">getUuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 删除用户记录</span>
+        redisService<span class="token punctuation">.</span><span class="token function">removeKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 继续响应</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+            response<span class="token punctuation">.</span><span class="token function">setStatus</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            response<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            response<span class="token punctuation">.</span><span class="token function">setCharacterEncoding</span><span class="token punctuation">(</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"注销成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+
+<span class="token punctuation">}</span> </code></pre>
+<h2 id="配置登录接口"><a href="#配置登录接口" class="headerlink" title="配置登录接口"></a>配置登录接口</h2><h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><p>在 security 中，都是通过调用 <code>AuthenticationManager</code> 接口的 authenticate 方法进行鉴权的，所以我们只需要在我们自己的登录接口中调用到这个鉴权方法即可<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711203415799-91e06f41-a277-43de-982b-13340b1eccc0.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=502&id=u671de7be&originHeight=690&originWidth=1209&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=110019&status=done&style=none&taskId=u34d8d491-b2df-4a36-bbc2-18d2a40516b&title=&width=879.2727272727273" alt="image.png" loading="lazy"><br>1、AuthenticationManager 是一个 security 的接口，所以我们需要找到他的实现类，而在 <code>WebSecurityConfigurerAdapter</code> 类中，存在一个方法用于创建 AuthenticationManager 对象，但这个对象并未被注册成为 bean，所以还无法直接使用<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711204165565-7e897db1-c286-47a3-9cf3-1800198a97b3.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=168&id=ua30cb563&originHeight=216&originWidth=872&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=22182&status=done&style=none&taskId=u03f1d95a-bed6-49d1-8ac9-c527cf12ee9&title=&width=680.1818237304688" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711204206175-b29ed830-0915-4020-9785-908e930ca52a.png#averageHue=%232d2d2c&clientId=u82ac9648-9bdb-4&from=paste&height=471&id=ud8cccf00&originHeight=647&originWidth=1483&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=107632&status=done&style=none&taskId=ub9d5a369-6f29-46ae-9788-b3e5b8b0afb&title=&width=1078.5454545454545" alt="image.png" loading="lazy"><br>2、同时 <code>WebSecurityConfigurerAdapter</code> 也是我们配置 security 时需要继承的类，所以只需要在我们自定义的 security 配置类中重写这个方法并注册为 bean 即可</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableAuthorizationServer</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SecurityConfig</span> <span class="token keyword">extends</span> <span class="token class-name">WebSecurityConfigurerAdapter</span> <span class="token punctuation">{</span> 
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> AuthenticationManager <span class="token function">authenticationManagerBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">authenticationManagerBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>3、配置自定义登录接口</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/sys/user"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SysUserController</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> SysUserService sysUserService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">"/login"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> ResponseData<span class="token operator">&lt;</span>Authentication<span class="token operator">></span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Validated</span> <span class="token annotation punctuation">@RequestBody</span> SysLoginBody body<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">return</span> ResponseData<span class="token punctuation">.</span><span class="token function">success</span><span class="token punctuation">(</span>sysUserService<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SysUserService</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> AuthenticationManager authenticationManager<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> Authentication <span class="token function">login</span><span class="token punctuation">(</span>SysLoginBody body<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        Authentication authentication<span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+            UsernamePasswordAuthenticationToken authenticationToken <span class="token operator">=</span>
+                    <span class="token keyword">new</span> <span class="token class-name">UsernamePasswordAuthenticationToken</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 调用登录鉴权方法</span>
+            authentication <span class="token operator">=</span> authenticationManager<span class="token punctuation">.</span><span class="token function">authenticate</span><span class="token punctuation">(</span>authenticationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">BadCredentialsException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">FlowException</span><span class="token punctuation">(</span><span class="token string">"密码有误"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">FlowException</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+        <span class="token keyword">return</span> authentication<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p>通过自定义过滤器进行拦截</p>
+<ol>
+<li><p>创建 AbstractHttpConfigurer 继承类，添加自定义过滤器 WebPageLoginFilter，配置在 UsernamePasswordAuthenticationFilter 之前，即不用默认的登录过滤器了</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Slf4j</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoginFilterDsl</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractHttpConfigurer</span><span class="token operator">&lt;</span>LoginFilterDsl<span class="token punctuation">,</span> HttpSecurity<span class="token operator">></span> <span class="token punctuation">{</span> 
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span>HttpSecurity builder<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+     <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>builder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span>HttpSecurity builder<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+     <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span>builder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"[{ } ] configure"</span><span class="token punctuation">,</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     ApplicationContext context <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">getSharedObject</span><span class="token punctuation">(</span>ApplicationContext<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     WebLoginFilter webLoginFilter <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span>WebLoginFilter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     builder<span class="token punctuation">.</span><span class="token function">addFilterBefore</span><span class="token punctuation">(</span>webLoginFilter<span class="token punctuation">,</span> UsernamePasswordAuthenticationFilter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> LoginFilterDsl <span class="token function">webLoginFilterDsl</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">LoginFilterDsl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> 
+</code></pre>
+</li>
+</ol>
+<pre><code>
+2. 仿照 UsernamePasswordAuthenticationFilter 过滤器，新增 AbstractAuthenticationProcessingFilter 实现类的过滤器，创建构造方法，实现 attemptAuthentication() 鉴权方法
+```java
+public class WebLoginFilter extends AbstractAuthenticationProcessingFilter { 
+
+    private static final AntPathRequestMatcher MATCHER = new AntPathRequestMatcher(&quot;/web-login&quot;, HttpMethod.POST.name());
+
+    public WebLoginFilter() { 
+        super(MATCHER);
+    } 
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException { 
+        return null;
+    } 
+} </code></pre>
+<ol start="3">
+<li><p>在 WebSecurityConfig 配置类中使用 LoginFilterDsl 配置类即可</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WebSecurityConfig</span> <span class="token keyword">extends</span> <span class="token class-name">WebSecurityConfigurerAdapter</span> <span class="token punctuation">{</span> 
+
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span>HttpSecurity http<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+     <span class="token comment" spellcheck="true">// 获取直接在这里添加过滤器也可以，就不用创建 LoginFilterDsl 配置类了</span>
+     http<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token function">webLoginFilterDsl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+</li>
+</ol>
+<blockquote>
+<p>原理解释</p>
+</blockquote>
+<ol>
+<li>因为继承了 AbstractAuthenticationProcessingFilter 过滤器，并调用了父类的构造方法，所以会将我们自定义的登录路径配置进去</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514637821-cb542872-b245-494b-83ae-4f0bbd1652a4.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=399&id=u739c79d8&originHeight=548&originWidth=1595&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=86194&status=done&style=none&taskId=ua7ac29c5-be93-46de-aa55-a855aea24b6&title=&width=1160" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514689644-07040572-24ca-499f-b937-bedb8134cf24.png#averageHue=%232e2d2b&clientId=u27a35257-efa1-4&from=paste&height=292&id=uce551a66&originHeight=401&originWidth=1295&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=66849&status=done&style=none&taskId=ue5e79053-152a-4215-9074-e6bcae49229&title=&width=941.8181818181819" alt="image.png" loading="lazy"></p>
+<ol start="2">
+<li>而 AbstractAuthenticationProcessingFilter 是实现了 Filter 接口</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514798793-e1c7331a-9f29-48d3-9cef-1966042a760c.png#averageHue=%232e2e2d&clientId=u27a35257-efa1-4&from=paste&height=272&id=ua18c1db4&originHeight=374&originWidth=1925&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=85330&status=done&style=none&taskId=u68b1d204-4101-4f91-819c-d4d70bf8c2e&title=&width=1400" alt="image.png" loading="lazy"></p>
+<ol start="3">
+<li>所以 AbstractAuthenticationProcessingFilter 就会被调用 doFilter() 方法，判断当前路径是否为登录路径，是的话就会调用 attemptAuthentication() 方法进行登录</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514927331-a24b1870-b62f-4cf1-b4eb-3ae21a9a488e.png#averageHue=%232d2c2c&clientId=u27a35257-efa1-4&from=paste&height=807&id=u02117bca&originHeight=1109&originWidth=1542&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=186136&status=done&style=none&taskId=ued417082-bef8-4c12-8945-557ebdff8b0&title=&width=1121.4545454545455" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514957094-1176320c-db44-4e56-9fb5-38f5a73ac3a1.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=278&id=uecbc77eb&originHeight=382&originWidth=1138&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=62931&status=done&style=none&taskId=ub7dc6bd5-2cbb-4e36-8a6d-505bc49d53a&title=&width=827.6363636363636" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713514970380-dcd39f7a-e814-487b-afb5-c4efac4fef74.png#averageHue=%23302e2d&clientId=u27a35257-efa1-4&from=paste&height=121&id=ue3b06645&originHeight=166&originWidth=1391&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=33432&status=done&style=none&taskId=u516f4a02-66af-41af-b682-c7749d3ceda&title=&width=1011.6363636363636" alt="image.png" loading="lazy"></p>
+<ol start="4">
+<li>所以当我们访问 <code>/web-login</code> 路径的时候就会调用我们自定义的登陆方法</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1713515036974-6eff5b89-15bc-4c4f-9ec7-85591c68cb4e.png#averageHue=%232d2c2b&clientId=u27a35257-efa1-4&from=paste&height=402&id=u5c214165&originHeight=553&originWidth=1818&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=92286&status=done&style=none&taskId=u271ea206-dc42-4b12-a624-b2c22c2100a&title=&width=1322.1818181818182" alt="image.png" loading="lazy"></p>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><p><a target="_blank" rel="noopener" href="https://gitee.com/lxjblog/spring-security-test">晓江/spring-security-test</a></p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2024/04/09/Security/" title="Security">https://lxjblog.gitee.io/2024/04/09/Security/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2024/04/10/ThreadPool/" rel="prev" title="ThreadPool"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">ThreadPool</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2023/12/27/mongodb/" rel="next" title="Mongodb"><span class="post-nav-text">Mongodb</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2024 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>

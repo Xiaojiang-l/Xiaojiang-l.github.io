@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="晓江"><meta name="copyright" content="晓江"><meta name="generator" content="Hexo 5.0.0"><meta name="theme" content="hexo-theme-yun"><title>SpringBoot 源码 | 云端小站</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.16/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script><!-- hexo-inject:begin --><!-- hexo-inject:end -->const a = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link class="aplayer-style-marker" rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css"><script class="aplayer-script-marker" src="https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><link rel="shortcut icon" type="image/svg+xml" href="/icon.jpg"><link rel="mask-icon" href="/icon.jpg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="云端小站" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云端小站","version":"0.9.4","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"}};
+  </script><meta name="description" content="SpringBoot 源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 源码">
+<meta property="og:url" content="https://lxjblog.gitee.io/2024/07/12/Springboot%E6%BA%90%E7%A0%81/index.html">
+<meta property="og:site_name" content="云端小站">
+<meta property="og:description" content="SpringBoot 源码">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712480863186-f3a421fc-2d63-429a-9a5d-b874c9d48ae4.png#averageHue=%23fdfdfd&clientId=u8648e328-a885-4&from=paste&height=549&id=u3e77ad19&originHeight=741&originWidth=976&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=70280&status=done&style=none&taskId=u703f18f8-f3bd-4446-9576-32f34760ef9&title=&width=722.963014034908">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482377447-5dfa524d-67c6-4fb9-b5bb-d273ab223530.png#averageHue=%23f8f6f5&clientId=u8648e328-a885-4&from=paste&height=558&id=ueb95633f&originHeight=753&originWidth=1882&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=156275&status=done&style=none&taskId=u417718bf-f48f-42f3-8d46-99204ebe490&title=&width=1394.0741725550172">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482484337-d437ca33-32e1-43ae-8536-b07e1fd04490.png#averageHue=%23f8f7f6&clientId=u8648e328-a885-4&from=paste&height=554&id=ud21c762f&originHeight=748&originWidth=1792&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=183604&status=done&style=none&taskId=ud2f79e00-6f63-4edc-a3e7-1d8a01f4781&title=&width=1327.4075011788475">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482568637-88cfc804-3c91-41b7-be15-b92edf79e627.png#averageHue=%23f9f7f6&clientId=u8648e328-a885-4&from=paste&height=614&id=u201482d1&originHeight=829&originWidth=1836&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=188921&status=done&style=none&taskId=ua83cc378-a6b1-4be0-8ba2-7980d1273d7&title=&width=1360.000096073864">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482756678-1ca510b1-8b82-48ca-93fb-4887bf7c0d8b.png#averageHue=%23f6f4f3&clientId=u8648e328-a885-4&from=paste&height=754&id=u5012725c&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=275174&status=done&style=none&taskId=uc26f494b-34b6-4031-b866-94c6c3ca9ab&title=&width=1422.2223226916224">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482874909-4cc36834-c278-429c-81fe-f08d474ffa31.png#averageHue=%23f7f5f4&clientId=u8648e328-a885-4&from=paste&height=681&id=u82b87ce8&originHeight=919&originWidth=1911&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=244457&status=done&style=none&taskId=u2aa73604-ee94-44b6-8093-d0cd017ee7b&title=&width=1415.5556555540054">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482998728-55c6031c-495e-4e92-a4b6-b6407fd1870d.png#averageHue=%23f8f7f6&clientId=u8648e328-a885-4&from=paste&height=654&id=u6dd3e075&originHeight=883&originWidth=1858&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=194477&status=done&style=none&taskId=u6ea55ccf-4107-400e-b257-a74ee788852&title=&width=1376.296393521372">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483095615-5a59592d-f8c9-48b3-8ff9-a7250139c47d.png#averageHue=%23f9f8f7&clientId=u8648e328-a885-4&from=paste&height=623&id=u28f5f35d&originHeight=841&originWidth=1845&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=177405&status=done&style=none&taskId=u56ec7c03-6b42-412f-8b21-4c9cb3c5bbc&title=&width=1366.6667632114809">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483250191-fdc788d3-e8a8-4a48-bc53-c14a28569984.png#averageHue=%23f6f5f3&clientId=u8648e328-a885-4&from=paste&height=754&id=ub526b152&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=269990&status=done&style=none&taskId=u58e808b6-d80d-4694-9105-53b943ccf06&title=&width=1422.2223226916224">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483323574-31b0e1c0-f80c-46e4-ac37-7431b6071ad1.png#averageHue=%23f6f5f3&clientId=u8648e328-a885-4&from=paste&height=754&id=u3f9a2f57&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=268988&status=done&style=none&taskId=ub308f228-700f-4145-b8ba-fc76f4988e6&title=&width=1422.2223226916224">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005526005-79e12a71-bac2-4a5b-a001-6142a5cb9483.png#averageHue=%235a5544&clientId=u4cfe1d50-a7f5-4&from=paste&height=460&id=u57298cbc&originHeight=632&originWidth=1987&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=140941&status=done&style=none&taskId=ue37848a0-a7ab-44fb-8106-c619d745393&title=&width=1445.090909090909">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005649869-7292b205-94ce-42e7-98b2-3351a37fa996.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=268&id=u3860f889&originHeight=369&originWidth=1474&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=74723&status=done&style=none&taskId=u386d2b6f-96dd-447d-9f63-dd492073c68&title=&width=1072">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005673550-624d0841-3dbf-46f6-bd6d-8a7af059e046.png#averageHue=%232c2b2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=559&id=u6a27cf74&originHeight=768&originWidth=1289&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=106836&status=done&style=none&taskId=u9abb5011-258a-4e33-8551-46f68c95b67&title=&width=937.4545454545455">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005762943-995bc494-c191-451e-becc-dbf5f7ba0ffb.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=811&id=u8601648b&originHeight=1115&originWidth=1689&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=204192&status=done&style=none&taskId=ud7e3ca5c-c5b3-4286-93f3-c1934efb8b4&title=&width=1228.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005823074-73812379-bb51-4e5e-be31-134f34eabff9.png#averageHue=%232e2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=255&id=u92bf00a6&originHeight=351&originWidth=1854&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=90806&status=done&style=none&taskId=u3ff31579-f3f6-4fc9-aa33-c639f925caa&title=&width=1348.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005886700-a938f72d-65d5-47e5-8bab-96f06f71f6c7.png#averageHue=%232d2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=500&id=ua9d8d57e&originHeight=688&originWidth=1444&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=129244&status=done&style=none&taskId=ud51cff93-0c41-4e5b-9fd1-b752a14168e&title=&width=1050.1818181818182">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005945950-afbc3a44-63f1-4498-985d-cc7220da32c5.png#averageHue=%232d2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=450&id=uac58545f&originHeight=619&originWidth=1700&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=134992&status=done&style=none&taskId=u3b712f19-54f5-4816-8ecb-0859019b91d&title=&width=1236.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006025161-0f007e09-5729-434f-8fc5-1666ba5167a0.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=433&id=ucb4dccf5&originHeight=595&originWidth=1601&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=116188&status=done&style=none&taskId=u5d8d15bc-e95a-4604-9085-2e282affa9d&title=&width=1164.3636363636363">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006065884-de0eaa44-a987-4f54-87e2-290f8445735f.png#averageHue=%232e2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=523&id=u30bc0753&originHeight=719&originWidth=1541&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=170998&status=done&style=none&taskId=u08f8f9ea-b982-4f04-889a-f0cc064860c&title=&width=1120.7272727272727">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006147014-13b198c1-b55d-4112-b027-ccef5e0b7fcf.png#averageHue=%232f2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=93&id=u4ac9fa6e&originHeight=128&originWidth=1226&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=21387&status=done&style=none&taskId=u85200848-2f57-4978-9b84-12ef2724cef&title=&width=891.6363636363636">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712496299480-daf2360d-1f33-42b8-91af-08765816a663.png#averageHue=%23fcfbfa&clientId=u8648e328-a885-4&from=paste&height=85&id=u5ca2c7f2&originHeight=115&originWidth=1077&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=20572&status=done&style=none&taskId=u7a529b91-eb12-4454-9227-e5d1378fb91&title=&width=797.7778341348319">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712496794928-ad2410ab-e160-4e3d-86d9-cbf2537d481b.png#averageHue=%23fbf9f7&clientId=u8648e328-a885-4&from=paste&height=260&id=uacde0c27&originHeight=351&originWidth=1140&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=95132&status=done&style=none&taskId=uc69ec72e-80a9-4bb7-9318-b87c4ed3f84&title=&width=844.4445040981508">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712499949636-e4b13ef5-76cc-4f1f-91af-00007b5618c5.png#averageHue=%23faf9f6&clientId=u8648e328-a885-4&from=paste&height=187&id=u3c1066e5&originHeight=252&originWidth=1123&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=57274&status=done&style=none&taskId=u4e6c5880-d793-4944-8f00-1b2fe5bb689&title=&width=831.8519106159854">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712500177859-f5d5fb4b-f78b-464a-b050-1b9e75510b0f.png#averageHue=%23fcfbf9&clientId=u8648e328-a885-4&from=paste&height=254&id=u2fcd5e75&originHeight=343&originWidth=1285&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=62921&status=done&style=none&taskId=ub6d0e46e-c6ef-4a8d-a44f-21af2db9ab8&title=&width=951.8519190930909">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501385862-608ffe9c-e113-4733-a79e-a3531395008f.png#averageHue=%23f2f2f1&clientId=u8648e328-a885-4&from=paste&height=747&id=u0877a04d&originHeight=1008&originWidth=1587&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=125889&status=done&style=none&taskId=u787311f5-79ac-4171-b40e-0cc060b5f08&title=&width=1175.555638599794">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501398643-a6c3b221-a9a4-4a57-91ff-bc2e560b323f.png#averageHue=%23fcfbfb&clientId=u8648e328-a885-4&from=paste&height=130&id=u3713998d&originHeight=175&originWidth=609&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=13787&status=done&style=none&taskId=ua0d6e9e3-b6d9-4a41-bf1a-2df4e0c895f&title=&width=451.11114297874894">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501462506-f5feb2df-a267-4fa6-a5e5-8b6cd4c05e66.png#averageHue=%23fbfaf9&clientId=u8648e328-a885-4&from=paste&height=54&id=u6de61545&originHeight=73&originWidth=571&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=6848&status=done&style=none&taskId=ue4444744-8e6d-470e-8bf4-6359fcbce67&title=&width=422.96299284214393">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712502187518-db72ea1b-6153-4ebb-97e6-687f6976e7cd.png#averageHue=%23fdfcfb&clientId=u8648e328-a885-4&from=paste&height=190&id=uf16c0cfb&originHeight=256&originWidth=948&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=32435&status=done&style=none&taskId=uede28b5a-88e0-4df6-9b05-f1155719fc8&title=&width=702.2222718289885">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501873665-6514f358-c32d-4ee7-ab06-2f7d0e8a21b1.png#averageHue=%23fbfaf7&clientId=u8648e328-a885-4&from=paste&height=159&id=u21c5e0df&originHeight=214&originWidth=1110&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=34327&status=done&style=none&taskId=uea0dd640-e864-423e-b5c7-76f1fc04eb8&title=&width=822.2222803060941">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501850037-0fa2b682-daae-44f7-818f-ba7d61c8c8b3.png#averageHue=%23f9f7f6&clientId=u8648e328-a885-4&from=paste&height=312&id=u06ed340e&originHeight=421&originWidth=1375&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=50018&status=done&style=none&taskId=u0d03f5bc-71ac-4515-bf03-21546a9abdc&title=&width=1018.5185904692607">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712502463341-10580c77-ad39-49fc-9b15-29699159eb17.png#averageHue=%23fdfcfb&clientId=u8648e328-a885-4&from=paste&height=192&id=ub59f05cb&originHeight=259&originWidth=898&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=32027&status=done&style=none&taskId=ud0132953-d62b-4a75-8097-4b089467931&title=&width=665.1852321755608">
+<meta property="article:published_time" content="2024-07-12T15:26:10.000Z">
+<meta property="article:modified_time" content="2024-08-04T10:18:36.773Z">
+<meta property="article:author" content="晓江">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712480863186-f3a421fc-2d63-429a-9a5d-b874c9d48ae4.png#averageHue=%23fdfdfd&clientId=u8648e328-a885-4&from=paste&height=549&id=u3e77ad19&originHeight=741&originWidth=976&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=70280&status=done&style=none&taskId=u703f18f8-f3bd-4446-9576-32f34760ef9&title=&width=722.963014034908"><script src="/js/ui/mode.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info mickey-mouse"><a class="site-author-avatar" href="/about/" title="晓江"><img width="96" loading="lazy" src="/icon.jpg" alt="晓江"></a><div class="site-author-name"><a href="/about/">晓江</a></div><a class="site-name" href="/about/site.html">云端小站</a><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">70</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">57</span></a></div><a class="site-state-item hty-icon-button" href="https://lxjblog.gitee.io/myblog" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-clipboard-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/wechat/" title="微信" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1256240778&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Xiaojiang-l" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/playlist?id=5157675042" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:1256240778@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%B3%A8%E8%A7%A3"><span class="toc-text">条件注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPI%E6%9C%BA%E5%88%B6"><span class="toc-text">SPI机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">启动过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%89%8D%E9%85%8D%E7%BD%AE"><span class="toc-text">容器初始化前配置</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://lxjblog.gitee.io/2024/07/12/Springboot%E6%BA%90%E7%A0%81/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="晓江"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="云端小站"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">SpringBoot 源码</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2024-07-12 23:26:10" itemprop="dateCreated datePublished" datetime="2024-07-12T23:26:10+08:00">2024-07-12</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2024-08-04 18:18:36" itemprop="dateModified" datetime="2024-08-04T18:18:36+08:00">2024-08-04</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E5%90%8E%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">后端</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/java/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">java</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://xiaojiang-l.github.io/icon.jpg"></div><span class="author-name">晓江</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h2 id="条件注解"><a href="#条件注解" class="headerlink" title="条件注解"></a>条件注解</h2><ol>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><li><p><strong>@ConditionalOnClass</strong>：当指定的类在类路径上可用时，才创建 Bean</p>
+</li>
+<li><p><strong>@ConditionalOnMissingClass</strong>：当指定的类在类路径上不可用时，才创建 Bean</p>
+</li>
+<li><p><strong>@ConditionalOnProperty</strong>：指定的属性存在且具有特定的值时，才创建 Bean，注意 havingValue 才是指定属性值</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> @<span class="token keyword">interface</span> <span class="token class-name">ConditionalOnProperty</span> <span class="token punctuation">{</span> 
+
+ <span class="token comment" spellcheck="true">/**
+  * Alias for { @link #name()} .
+  * @return the names
+  */</span>
+ String<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span> <span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">/**
+  * 配置文件的属性前缀
+  */</span>
+ String <span class="token function">prefix</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">/**
+  * 配置文件的属性名（key）
+  */</span>
+ String<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span> <span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">/**
+  * 配置文件中的属性值（value）
+  */</span>
+ String <span class="token function">havingValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">/**
+  * 如果未设置属性，条件是否应匹配。默认为false
+  */</span>
+ <span class="token keyword">boolean</span> <span class="token function">matchIfMissing</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ol>
+<p>}</p>
+<pre><code>
+4. **@ConditionalOnResource**：当指定的资源存在时，才创建 Bean
+5. **@ConditionalOnExpression**：当指定的 SpEL（Spring Expression Language）表达式计算结果为 true 时，才创建 Bean
+6. **@ConditionalOnJava**：当 Java 版本满足特定条件时，才创建 Bean
+```java
+@Bean  
+@ConditionalOnJava(JavaVersion.EIGHT)  
+public MyBean myBean() {   
+    return new MyBean();  
+} </code></pre>
+<p>在 springboot 中是通过判断是否存在指定类且存在指定方法，从高到低去判断 java 版本的<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712480863186-f3a421fc-2d63-429a-9a5d-b874c9d48ae4.png#averageHue=%23fdfdfd&clientId=u8648e328-a885-4&from=paste&height=549&id=u3e77ad19&originHeight=741&originWidth=976&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=70280&status=done&style=none&taskId=u703f18f8-f3bd-4446-9576-32f34760ef9&title=&width=722.963014034908" alt="image.png" loading="lazy"></p>
+<ol start="7">
+<li><strong>@ConditionalOnSingleCandidate</strong>：当指定的 Bean 在容器中只有一个候选者时，才创建 Bean</li>
+<li><strong>@ConditionalOnWebApplication</strong>：当前项目为 web 项目的时候，才创建 Bean</li>
+<li><strong>@ConditionalOnNotWebApplication</strong>：当前项目不为 web 项目的时候，才创建 Bean</li>
+</ol>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>springboot 项目默认会使用 resources 目录下的 application.properties 作为配置文件，当然也可以直接使用注解指定，例如 springcloud 项目就会多指定一个 bootstrap.yaml 作为配置文件</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@PropertySource</span><span class="token punctuation">(</span><span class="token string">"classpath:application.properties"</span><span class="token punctuation">)</span></code></pre>
+<p>默认配置文件官方文档：<br><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config">Core Features</a><br><strong>优先级顺序：</strong></p>
+<ol>
+<li><strong>命令行参数</strong>：命令行参数具有最高的优先级，可以覆盖其他任何配置文件中的设置</li>
+<li><strong>系统环境变量</strong>：系统环境变量在优先级上仅次于命令行参数，同样可以覆盖其他配置文件中的设置（虽然是读取环境变量的值，但是项目启动后，并不可以通过修改环境变量动态修改变量值）</li>
+<li><strong>配置文件</strong>：配置文件的优先级受到其<strong>类型</strong>和<strong>位置</strong>的影响（在相同的位置和类型下，.properties格式的配置文件优先级高于.yaml或.yml格式的配置文件）</li>
+</ol>
+<p>命令行参数 &gt; 系统环境变量 &gt; 外部指定配置文件 &gt; jar包外部的特定配置文件 &gt; jar包外部的普通配置文件 &gt; jar包内部的指定配置文件 &gt; jar包内部的普通配置文件 &gt; 默认配置</p>
+<p><strong>位置影响：</strong></p>
+<ol>
+<li>内部配置文件位置优先级：config 目录下的配置文件优先级更高</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482377447-5dfa524d-67c6-4fb9-b5bb-d273ab223530.png#averageHue=%23f8f6f5&clientId=u8648e328-a885-4&from=paste&height=558&id=ueb95633f&originHeight=753&originWidth=1882&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=156275&status=done&style=none&taskId=u417718bf-f48f-42f3-8d46-99204ebe490&title=&width=1394.0741725550172" alt="image.png" loading="lazy"></p>
+<ol start="2">
+<li>在同目录下，指定环境的配置内容会优先于默认配置</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482484337-d437ca33-32e1-43ae-8536-b07e1fd04490.png#averageHue=%23f8f7f6&clientId=u8648e328-a885-4&from=paste&height=554&id=ud21c762f&originHeight=748&originWidth=1792&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=183604&status=done&style=none&taskId=ud2f79e00-6f63-4edc-a3e7-1d8a01f4781&title=&width=1327.4075011788475" alt="image.png" loading="lazy"></p>
+<ol start="3">
+<li>jar 包外部的配置文件优先级会高于内部，所以我们可以在 jar 包的同级目录下创建配置文件，从而覆盖默认的配置内容</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482568637-88cfc804-3c91-41b7-be15-b92edf79e627.png#averageHue=%23f9f7f6&clientId=u8648e328-a885-4&from=paste&height=614&id=u201482d1&originHeight=829&originWidth=1836&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=188921&status=done&style=none&taskId=ua83cc378-a6b1-4be0-8ba2-7980d1273d7&title=&width=1360.000096073864" alt="image.png" loading="lazy"></p>
+<ol start="4">
+<li>外部目录 config 下的配置文件优先级更高</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482756678-1ca510b1-8b82-48ca-93fb-4887bf7c0d8b.png#averageHue=%23f6f4f3&clientId=u8648e328-a885-4&from=paste&height=754&id=u5012725c&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=275174&status=done&style=none&taskId=uc26f494b-34b6-4031-b866-94c6c3ca9ab&title=&width=1422.2223226916224" alt="image.png" loading="lazy"></p>
+<ol start="5">
+<li>而在 config 目录下的任意目录，优先级更高</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482874909-4cc36834-c278-429c-81fe-f08d474ffa31.png#averageHue=%23f7f5f4&clientId=u8648e328-a885-4&from=paste&height=681&id=u82b87ce8&originHeight=919&originWidth=1911&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=244457&status=done&style=none&taskId=u2aa73604-ee94-44b6-8093-d0cd017ee7b&title=&width=1415.5556555540054" alt="image.png" loading="lazy"></p>
+<ol start="6">
+<li>如果 config 目录下存在多个二级目录，则会取目录文件名排序较大的优先</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712482998728-55c6031c-495e-4e92-a4b6-b6407fd1870d.png#averageHue=%23f8f7f6&clientId=u8648e328-a885-4&from=paste&height=654&id=u6dd3e075&originHeight=883&originWidth=1858&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=194477&status=done&style=none&taskId=u6ea55ccf-4107-400e-b257-a74ee788852&title=&width=1376.296393521372" alt="image.png" loading="lazy"></p>
+<ol start="7">
+<li>但是如果我在二级目录 bbb 下又创建一个目录，则这个目录的配置文件不会被读取到</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483095615-5a59592d-f8c9-48b3-8ff9-a7250139c47d.png#averageHue=%23f9f8f7&clientId=u8648e328-a885-4&from=paste&height=623&id=u28f5f35d&originHeight=841&originWidth=1845&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=177405&status=done&style=none&taskId=u56ec7c03-6b42-412f-8b21-4c9cb3c5bbc&title=&width=1366.6667632114809" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483250191-fdc788d3-e8a8-4a48-bc53-c14a28569984.png#averageHue=%23f6f5f3&clientId=u8648e328-a885-4&from=paste&height=754&id=ub526b152&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=269990&status=done&style=none&taskId=u58e808b6-d80d-4694-9105-53b943ccf06&title=&width=1422.2223226916224" alt="image.png" loading="lazy"></p>
+<ol start="8">
+<li>最后就是 .properties 配置文件优先级比 .yaml 优先级高</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712483323574-31b0e1c0-f80c-46e4-ac37-7431b6071ad1.png#averageHue=%23f6f5f3&clientId=u8648e328-a885-4&from=paste&height=754&id=u3f9a2f57&originHeight=1018&originWidth=1920&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=268988&status=done&style=none&taskId=ub308f228-700f-4145-b8ba-fc76f4988e6&title=&width=1422.2223226916224" alt="image.png" loading="lazy"></p>
+<h2 id="SPI机制"><a href="#SPI机制" class="headerlink" title="SPI机制"></a>SPI机制</h2><p>springboot项目默认自带的自动配置功能，自动扫描导入依赖的 META-INF/spring.factories 文件，将 EnableAutoConfiguration 对应的所有类进行扫描，注册为配置类<img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005526005-79e12a71-bac2-4a5b-a001-6142a5cb9483.png#averageHue=%235a5544&clientId=u4cfe1d50-a7f5-4&from=paste&height=460&id=u57298cbc&originHeight=632&originWidth=1987&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=140941&status=done&style=none&taskId=ue37848a0-a7ab-44fb-8106-c619d745393&title=&width=1445.090909090909" alt="image.png" loading="lazy"></p>
+<blockquote>
+<p>实现原理</p>
+</blockquote>
+<p>1、在 <code>@SpringBootApplication</code> 注解中都会默认导入 <code>@EnableAutoConfiguration</code> 注解表示开启自动配置功能<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005649869-7292b205-94ce-42e7-98b2-3351a37fa996.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=268&id=u3860f889&originHeight=369&originWidth=1474&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=74723&status=done&style=none&taskId=u386d2b6f-96dd-447d-9f63-dd492073c68&title=&width=1072" alt="image.png" loading="lazy"><br>2、查看自动配置类，其中导入了 <code>AutoConfigurationImportSelector</code> 类用于扫描依赖的配置文件<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005673550-624d0841-3dbf-46f6-bd6d-8a7af059e046.png#averageHue=%232c2b2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=559&id=u6a27cf74&originHeight=768&originWidth=1289&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=106836&status=done&style=none&taskId=u9abb5011-258a-4e33-8551-46f68c95b67&title=&width=937.4545454545455" alt="image.png" loading="lazy"><br>3、在这个类的 selectImports 方法用于扫描，其中会先调用 isEnabled 方法判断是否开启<img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005762943-995bc494-c191-451e-becc-dbf5f7ba0ffb.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=811&id=u8601648b&originHeight=1115&originWidth=1689&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=204192&status=done&style=none&taskId=ud7e3ca5c-c5b3-4286-93f3-c1934efb8b4&title=&width=1228.3636363636363" alt="image.png" loading="lazy"><br>所以我们可以在配置文件中指定 spring.boot.enableautoconfiguration = false 用于关闭自动配置功能<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005823074-73812379-bb51-4e5e-be31-134f34eabff9.png#averageHue=%232e2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=255&id=u92bf00a6&originHeight=351&originWidth=1854&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=90806&status=done&style=none&taskId=u3ff31579-f3f6-4fc9-aa33-c639f925caa&title=&width=1348.3636363636363" alt="image.png" loading="lazy"><br>4、而在 getAutoConfigurationEntry 方法中通过 getCandidateConfigurations 方法获取候选的自动配置类<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005886700-a938f72d-65d5-47e5-8bab-96f06f71f6c7.png#averageHue=%232d2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=500&id=ua9d8d57e&originHeight=688&originWidth=1444&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=129244&status=done&style=none&taskId=ud51cff93-0c41-4e5b-9fd1-b752a14168e&title=&width=1050.1818181818182" alt="image.png" loading="lazy"><br>5、getCandidateConfigurations 方法中指定加载 key 的名字为 EnableAutoConfiguration 的配置内容<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711005945950-afbc3a44-63f1-4498-985d-cc7220da32c5.png#averageHue=%232d2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=450&id=uac58545f&originHeight=619&originWidth=1700&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=134992&status=done&style=none&taskId=u3b712f19-54f5-4816-8ecb-0859019b91d&title=&width=1236.3636363636363" alt="image.png" loading="lazy"><br>6、在 loadFactoryNames 方法中通过 loadSpringFactories 方法将  META-INF/spring.factories 文件读取为一个 Map 对象，然后读取 key 为 org.springframework.boot.autoconfigure.EnableAutoConfiguration 的内容<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006025161-0f007e09-5729-434f-8fc5-1666ba5167a0.png#averageHue=%232c2c2b&clientId=u4cfe1d50-a7f5-4&from=paste&height=433&id=ucb4dccf5&originHeight=595&originWidth=1601&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=116188&status=done&style=none&taskId=u5d8d15bc-e95a-4604-9085-2e282affa9d&title=&width=1164.3636363636363" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006065884-de0eaa44-a987-4f54-87e2-290f8445735f.png#averageHue=%232e2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=523&id=u30bc0753&originHeight=719&originWidth=1541&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=170998&status=done&style=none&taskId=u08f8f9ea-b982-4f04-889a-f0cc064860c&title=&width=1120.7272727272727" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1711006147014-13b198c1-b55d-4112-b027-ccef5e0b7fcf.png#averageHue=%232f2d2c&clientId=u4cfe1d50-a7f5-4&from=paste&height=93&id=u4ac9fa6e&originHeight=128&originWidth=1226&originalType=binary&ratio=1.375&rotation=0&showTitle=false&size=21387&status=done&style=none&taskId=u85200848-2f57-4978-9b84-12ef2724cef&title=&width=891.6363636363636" alt="image.png" loading="lazy"></p>
+<h2 id="启动过程"><a href="#启动过程" class="headerlink" title="启动过程"></a>启动过程</h2><pre class=" language-bash"><code class="language-bash">1. 创建 SpringApplication 对象
+2. 运行 run<span class="token punctuation">(</span><span class="token punctuation">)</span> 方法</code></pre>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712496299480-daf2360d-1f33-42b8-91af-08765816a663.png#averageHue=%23fcfbfa&clientId=u8648e328-a885-4&from=paste&height=85&id=u5ca2c7f2&originHeight=115&originWidth=1077&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=20572&status=done&style=none&taskId=u7a529b91-eb12-4454-9227-e5d1378fb91&title=&width=797.7778341348319" alt="image.png" loading="lazy"><br><strong>创建 SpringApplication 对象</strong></p>
+<ol>
+<li>保存配置类 primarySources</li>
+<li>推断 web 类型（判断是 REACTIVE 还是 SERVLET 或是为 NONE）</li>
+<li>通过 SPI 获取 BootstrapRegistryInitializer、ApplicationContextInitializer、ApplicationListener 类型的 bean（getSpringFactoriesInstances() 方法同样也是去读取 META-INF/spring.factories 文件的内容）</li>
+<li>推断主启动类</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712496794928-ad2410ab-e160-4e3d-86d9-cbf2537d481b.png#averageHue=%23fbf9f7&clientId=u8648e328-a885-4&from=paste&height=260&id=uacde0c27&originHeight=351&originWidth=1140&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=95132&status=done&style=none&taskId=uc69ec72e-80a9-4bb7-9318-b87c4ed3f84&title=&width=844.4445040981508" alt="image.png" loading="lazy"></p>
+<p><strong>运行 run() 方法</strong></p>
+<ol>
+<li><p>获取运行监听器，即获取 spi 中的 SpringApplicationRunListener 的 bean，调用 starting() 方法发布 ApplicationStartingEvent 事件</p>
+</li>
+<li><p>获取运行参数和配置内容</p>
+</li>
+<li><p>打印 banner 内容</p>
+</li>
+<li><p>创建 spring 容器</p>
+</li>
+<li><p>准备容器内容（这一步在下面讲）</p>
+</li>
+<li><p>启动 spring 容器</p>
+</li>
+<li><p>循环调用运行监听器的 started() 方法，发布 ApplicationStartedEvent 事件</p>
+</li>
+<li><p>对运行参数的处理（这一步也在下面讲）</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ConfigurableApplicationContext <span class="token function">run</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+ <span class="token comment" spellcheck="true">// 获取开始时间</span>
+ <span class="token keyword">long</span> startTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ DefaultBootstrapContext bootstrapContext <span class="token operator">=</span> <span class="token function">createBootstrapContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ ConfigurableApplicationContext context <span class="token operator">=</span> null<span class="token punctuation">;</span>
+ <span class="token function">configureHeadlessProperty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">// 获取运行监听器，即获取 spi 中的 SpringApplicationRunListener 的 bean，并循环调用这些监听器的 starting() 方法</span>
+ SpringApplicationRunListeners listeners <span class="token operator">=</span> <span class="token function">getRunListeners</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ listeners<span class="token punctuation">.</span><span class="token function">starting</span><span class="token punctuation">(</span>bootstrapContext<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>mainApplicationClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+
+     <span class="token comment" spellcheck="true">// 获取运行参数和配置内容</span>
+     ApplicationArguments applicationArguments <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultApplicationArguments</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     ConfigurableEnvironment environment <span class="token operator">=</span> <span class="token function">prepareEnvironment</span><span class="token punctuation">(</span>listeners<span class="token punctuation">,</span> bootstrapContext<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token function">configureIgnoreBeanInfo</span><span class="token punctuation">(</span>environment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment" spellcheck="true">// 打印 banner 内容</span>
+     Banner printedBanner <span class="token operator">=</span> <span class="token function">printBanner</span><span class="token punctuation">(</span>environment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment" spellcheck="true">// 创建 spring 容器</span>
+     context <span class="token operator">=</span> <span class="token function">createApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     context<span class="token punctuation">.</span><span class="token function">setApplicationStartup</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>applicationStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment" spellcheck="true">// 准备容器内容（这一步在下面讲）</span>
+     <span class="token function">prepareContext</span><span class="token punctuation">(</span>bootstrapContext<span class="token punctuation">,</span> context<span class="token punctuation">,</span> environment<span class="token punctuation">,</span> listeners<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">,</span> printedBanner<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token comment" spellcheck="true">// 启动 spring 容器</span>
+     <span class="token function">refreshContext</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token comment" spellcheck="true">// 容器启动后处理，该方法为空，需要继承 SpringApplication 后扩展</span>
+     <span class="token function">afterRefresh</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     Duration timeTakenToStartup <span class="token operator">=</span> Duration<span class="token punctuation">.</span><span class="token function">ofNanos</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> startTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>logStartupInfo<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+         <span class="token keyword">new</span> <span class="token class-name">StartupInfoLogger</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>mainApplicationClass<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">logStarted</span><span class="token punctuation">(</span><span class="token function">getApplicationLog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> timeTakenToStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span> 
+
+     <span class="token comment" spellcheck="true">// 循环调用运行监听器的 started()，表示启动完成</span>
+     listeners<span class="token punctuation">.</span><span class="token function">started</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> timeTakenToStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment" spellcheck="true">// 对运行参数的处理（这一步也在下面讲）</span>
+     <span class="token function">callRunners</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> ex<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     <span class="token function">handleRunFailure</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> ex<span class="token punctuation">,</span> listeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">try</span> <span class="token punctuation">{</span> 
+     Duration timeTakenToReady <span class="token operator">=</span> Duration<span class="token punctuation">.</span><span class="token function">ofNanos</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> startTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     listeners<span class="token punctuation">.</span><span class="token function">ready</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> timeTakenToReady<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> ex<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     <span class="token function">handleRunFailure</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> ex<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">return</span> context<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+</li>
+</ol>
+<p><strong>准备容器内容</strong></p>
+<ol>
+<li><p>调用 initialize() 方法</p>
+</li>
+<li><p>发布初始化事件 ApplicationContextInitializedEvent</p>
+</li>
+<li><p>获取启动时传入的配置类，并将其注册为 bean</p>
+</li>
+<li><p>发布初始化容器完成事件 ApplicationPreparedEvent</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">prepareContext</span><span class="token punctuation">(</span>DefaultBootstrapContext bootstrapContext<span class="token punctuation">,</span> ConfigurableApplicationContext context<span class="token punctuation">,</span>
+     ConfigurableEnvironment environment<span class="token punctuation">,</span> SpringApplicationRunListeners listeners<span class="token punctuation">,</span>
+     ApplicationArguments applicationArguments<span class="token punctuation">,</span> Banner printedBanner<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+ context<span class="token punctuation">.</span><span class="token function">setEnvironment</span><span class="token punctuation">(</span>environment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token function">postProcessApplicationContext</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">// 调用初始化方法，获取 SPI 中的 ApplicationContextInitializer 的 bean，调用 initialize() 方法</span>
+ <span class="token function">applyInitializers</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">// 发布初始化事件 ApplicationContextInitializedEvent</span>
+ listeners<span class="token punctuation">.</span><span class="token function">contextPrepared</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ bootstrapContext<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>logStartupInfo<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     <span class="token function">logStartupInfo</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token function">logStartupProfileInfo</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ ConfigurableListableBeanFactory beanFactory <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ beanFactory<span class="token punctuation">.</span><span class="token function">registerSingleton</span><span class="token punctuation">(</span><span class="token string">"springApplicationArguments"</span><span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>printedBanner <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     beanFactory<span class="token punctuation">.</span><span class="token function">registerSingleton</span><span class="token punctuation">(</span><span class="token string">"springBootBanner"</span><span class="token punctuation">,</span> printedBanner<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>beanFactory <span class="token keyword">instanceof</span> <span class="token class-name">AbstractAutowireCapableBeanFactory</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     <span class="token punctuation">(</span><span class="token punctuation">(</span>AbstractAutowireCapableBeanFactory<span class="token punctuation">)</span> beanFactory<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setAllowCircularReferences</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>allowCircularReferences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>beanFactory <span class="token keyword">instanceof</span> <span class="token class-name">DefaultListableBeanFactory</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+         <span class="token punctuation">(</span><span class="token punctuation">(</span>DefaultListableBeanFactory<span class="token punctuation">)</span> beanFactory<span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">setAllowBeanDefinitionOverriding</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>allowBeanDefinitionOverriding<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span> 
+ <span class="token punctuation">}</span> 
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>lazyInitialization<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+     context<span class="token punctuation">.</span><span class="token function">addBeanFactoryPostProcessor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">LazyInitializationBeanFactoryPostProcessor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span> 
+ context<span class="token punctuation">.</span><span class="token function">addBeanFactoryPostProcessor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PropertySourceOrderingBeanFactoryPostProcessor</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">// 获取启动时传入的配置类，并将其注册为 bean</span>
+ Set<span class="token operator">&lt;</span>Object<span class="token operator">></span> sources <span class="token operator">=</span> <span class="token function">getAllSources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ Assert<span class="token punctuation">.</span><span class="token function">notEmpty</span><span class="token punctuation">(</span>sources<span class="token punctuation">,</span> <span class="token string">"Sources must not be empty"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token function">load</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> sources<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment" spellcheck="true">// 发布初始化容器完成事件 ApplicationPreparedEvent</span>
+ listeners<span class="token punctuation">.</span><span class="token function">contextLoaded</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> </code></pre>
+<p>调用初始化方法<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712499949636-e4b13ef5-76cc-4f1f-91af-00007b5618c5.png#averageHue=%23faf9f6&clientId=u8648e328-a885-4&from=paste&height=187&id=u3c1066e5&originHeight=252&originWidth=1123&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=57274&status=done&style=none&taskId=u4e6c5880-d793-4944-8f00-1b2fe5bb689&title=&width=831.8519106159854" alt="image.png" loading="lazy"><br>将传入的配置类注册为 bean<br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712500177859-f5d5fb4b-f78b-464a-b050-1b9e75510b0f.png#averageHue=%23fcfbf9&clientId=u8648e328-a885-4&from=paste&height=254&id=u2fcd5e75&originHeight=343&originWidth=1285&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=62921&status=done&style=none&taskId=ub6d0e46e-c6ef-4a8d-a44f-21af2db9ab8&title=&width=951.8519190930909" alt="image.png" loading="lazy"></p>
+</li>
+</ol>
+<p><strong>对运行参数的处理</strong><br>这一步是获取 ApplicationRunner 和 CommandLineRunner 类型的所有 bean，并调用其 run() 方法，默认是不存在这两种类型的 bean 的，但是可以我们自己扩展</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">callRunners</span><span class="token punctuation">(</span>ApplicationContext context<span class="token punctuation">,</span> ApplicationArguments args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+    List<span class="token operator">&lt;</span>Object<span class="token operator">></span> runners <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 获取 ApplicationRunner 和 CommandLineRunner 类型的所有 bean，并调用其 run() 方法</span>
+    runners<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBeansOfType</span><span class="token punctuation">(</span>ApplicationRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    runners<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getBeansOfType</span><span class="token punctuation">(</span>CommandLineRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    AnnotationAwareOrderComparator<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>runners<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>Object runner <span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">LinkedHashSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>runners<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>runner <span class="token keyword">instanceof</span> <span class="token class-name">ApplicationRunner</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token function">callRunner</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ApplicationRunner<span class="token punctuation">)</span> runner<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>runner <span class="token keyword">instanceof</span> <span class="token class-name">CommandLineRunner</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            <span class="token function">callRunner</span><span class="token punctuation">(</span><span class="token punctuation">(</span>CommandLineRunner<span class="token punctuation">)</span> runner<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p>创建 ApplicationRunner 类型的 bean，并设置启动参数</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplicationRunner</span> <span class="token keyword">implements</span> <span class="token class-name">ApplicationRunner</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span>ApplicationArguments args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 获取不符合格式的参数</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span><span class="token function">getNonOptionArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取参数 key</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span><span class="token function">getOptionNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取指定参数的值</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span><span class="token function">getOptionValues</span><span class="token punctuation">(</span><span class="token string">"k1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取参数源内容</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>String sourceArg <span class="token operator">:</span> args<span class="token punctuation">.</span><span class="token function">getSourceArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>sourceArg <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501385862-608ffe9c-e113-4733-a79e-a3531395008f.png#averageHue=%23f2f2f1&clientId=u8648e328-a885-4&from=paste&height=747&id=u0877a04d&originHeight=1008&originWidth=1587&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=125889&status=done&style=none&taskId=u787311f5-79ac-4171-b40e-0cc060b5f08&title=&width=1175.555638599794" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501398643-a6c3b221-a9a4-4a57-91ff-bc2e560b323f.png#averageHue=%23fcfbfb&clientId=u8648e328-a885-4&from=paste&height=130&id=u3713998d&originHeight=175&originWidth=609&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=13787&status=done&style=none&taskId=ua0d6e9e3-b6d9-4a41-bf1a-2df4e0c895f&title=&width=451.11114297874894" alt="image.png" loading="lazy"></p>
+<p>创建 CommandLineRunner 类型的 bean</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyCommandLineRunner</span> <span class="token keyword">implements</span> <span class="token class-name">CommandLineRunner</span> <span class="token punctuation">{</span> 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span> 
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>String arg <span class="token operator">:</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>arg <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> 
+    <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span> </code></pre>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501462506-f5feb2df-a267-4fa6-a5e5-8b6cd4c05e66.png#averageHue=%23fbfaf9&clientId=u8648e328-a885-4&from=paste&height=54&id=u6de61545&originHeight=73&originWidth=571&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=6848&status=done&style=none&taskId=ue4444744-8e6d-470e-8bf4-6359fcbce67&title=&width=422.96299284214393" alt="image.png" loading="lazy"></p>
+<h2 id="容器初始化前配置"><a href="#容器初始化前配置" class="headerlink" title="容器初始化前配置"></a>容器初始化前配置</h2><p>通过分析上面的启动过程，可知：<br><strong>创建容器前：</strong></p>
+<ol>
+<li>通过监听 ApplicationStartingEvent 事件进行处理，不过通过以下方式并没有监听到（后续再看）</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712502187518-db72ea1b-6153-4ebb-97e6-687f6976e7cd.png#averageHue=%23fdfcfb&clientId=u8648e328-a885-4&from=paste&height=190&id=uf16c0cfb&originHeight=256&originWidth=948&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=32435&status=done&style=none&taskId=uede28b5a-88e0-4df6-9b05-f1155719fc8&title=&width=702.2222718289885" alt="image.png" loading="lazy"><br><strong>容器启动前：</strong></p>
+<ol>
+<li>可以创建 ApplicationContextInitializer 类型的 bean，会被自动调用 initialize() 方法</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501873665-6514f358-c32d-4ee7-ab06-2f7d0e8a21b1.png#averageHue=%23fbfaf7&clientId=u8648e328-a885-4&from=paste&height=159&id=u21c5e0df&originHeight=214&originWidth=1110&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=34327&status=done&style=none&taskId=uea0dd640-e864-423e-b5c7-76f1fc04eb8&title=&width=822.2222803060941" alt="image.png" loading="lazy"><br><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712501850037-0fa2b682-daae-44f7-818f-ba7d61c8c8b3.png#averageHue=%23f9f7f6&clientId=u8648e328-a885-4&from=paste&height=312&id=u06ed340e&originHeight=421&originWidth=1375&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=50018&status=done&style=none&taskId=u0d03f5bc-71ac-4515-bf03-21546a9abdc&title=&width=1018.5185904692607" alt="image.png" loading="lazy"></p>
+<ol start="2">
+<li>监听 ApplicationContextInitializedEvent 事件</li>
+<li>监听 ApplicationPreparedEvent 事件</li>
+</ol>
+<p><strong>容器启动完成：</strong></p>
+<ol>
+<li>监听 ApplicationStartedEvent 事件</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/29201208/1712502463341-10580c77-ad39-49fc-9b15-29699159eb17.png#averageHue=%23fdfcfb&clientId=u8648e328-a885-4&from=paste&height=192&id=ub59f05cb&originHeight=259&originWidth=898&originalType=binary&ratio=1.3499999046325684&rotation=0&showTitle=false&size=32027&status=done&style=none&taskId=ud0132953-d62b-4a75-8097-4b089467931&title=&width=665.1852321755608" alt="image.png" loading="lazy"></p>
+<blockquote>
+<p>发现只有容器启动完成的 ApplicationStartedEvent 事件是可以监听到的<br>其他事件是通过 this.initialMulticaster.multicastEvent 发布的，不确定其监听方式，后续再看</p>
+</blockquote>
+<p>后续来啦<br>其实并不是事件无法监听到，而是通过注解配置的监听器在 spring 容器创建前是不生效的（因为这些监听器还没有被扫描到并注册）<br>正确的使用方法如下：</p>
+<ol>
+<li><p>创建 META-INF/spring.factories 配置文件，在这里指定监听器</p>
+<pre class=" language-java"><code class="language-java">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>ApplicationListener<span class="token operator">=</span>\
+cn<span class="token punctuation">.</span>com<span class="token punctuation">.</span>config<span class="token punctuation">.</span>MyApplicationListener</code></pre>
+</li>
+<li><p>创建监听器</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>com<span class="token punctuation">.</span>config<span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ol>
+<p>import org.springframework.boot.context.event.ApplicationStartingEvent;<br>import org.springframework.context.ApplicationListener;</p>
+<p>public class MyApplicationListener<br>        implements ApplicationListener<ApplicationStartingEvent> {<br>    @Override<br>    public void onApplicationEvent(ApplicationStartingEvent event) {<br>        System.out.println(“spring boot 启动”);<br>    }<br>}</ApplicationStartingEvent></p>
+<pre><code>
+3. 启动项目，就会发现已经监听到了
+
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/29201208/1712884965198-7b3be45d-0b37-4ad4-abdc-fece72ff7fe4.png#averageHue=%23a08a6d&amp;clientId=u78b9c04f-c1b9-4&amp;from=paste&amp;height=209&amp;id=u5961e29d&amp;originHeight=287&amp;originWidth=1450&amp;originalType=binary&amp;ratio=1.375&amp;rotation=0&amp;showTitle=false&amp;size=59113&amp;status=done&amp;style=none&amp;taskId=u4e7ec961-7e22-4dd3-93b1-c64313ff387&amp;title=&amp;width=1054.5454545454545)
+</code></pre>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">谢谢光临~</div><div id="qr" style="display:none;"><div style="display:inline-block"></div><div style="display:inline-block"></div><div style="display:inline-block"></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>晓江</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://lxjblog.gitee.io/2024/07/12/Springboot%E6%BA%90%E7%A0%81/" title="SpringBoot 源码">https://lxjblog.gitee.io/2024/07/12/Springboot%E6%BA%90%E7%A0%81/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2024/07/16/%E5%AF%BC%E5%87%BA%20Word%20%E6%96%87%E6%A1%A3/" rel="prev" title="导出 Word 文档"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">导出 Word 文档</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2024/07/11/SpringCloud%E9%85%8D%E7%BD%AE/" rel="next" title="SpringCloud 配置"><span class="post-nav-text">SpringCloud 配置</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>可以直接写评论内容喔~</span><br></div><div id="valine-container"></div><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function initValine() {
+  const valineConfig = {"enable":true,"appId":"71BKFg13iJQvNsFNLGzHmK67-gzGzoHsz","appKey":"IiQx2mfEEjefvbUfSd66nBHd","placeholder":"留下你的评论呗","avatar":"robohash","pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = window.location.pathname
+  new Valine(valineConfig)
+}
+setTimeout(initValine, 1000)</script></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2020 – 2024 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 晓江</span></div><div class="live_time"><span>本博客已运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>const a = 1;
+function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2020-08-04T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div><script>let date = new Date();
+let today = (date.getMonth() + 1) + "-" + date.getDate()
+if ("4-4,9-18".indexOf(today) !== -1) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script><div class="aplayer no-destroy" id="aplayer" data-id="5157675042" data-server="netease" data-type="playlist" data-fixed="true" data-theme="#0078E7" data-loop="all" data-order="random" data-preload="auto" data-volume="0.7" data-mutex data-lrctype="1" data-listmaxheight="340px" data-storagename="metingjs"></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body></html>
